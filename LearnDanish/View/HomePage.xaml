@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:LearnDanish.ViewModel"
+             xmlns:controls="clr-namespace:LearnDanish.Controls"
              xmlns:helpers="clr-namespace:LearnDanish.Helpers"
              x:DataType="viewmodel:HomeViewModel"
              x:Class="LearnDanish.View.HomePage"
@@ -14,20 +15,12 @@
             VerticalOptions="Center">
 
             <HorizontalStackLayout Spacing="10">
-                <Grid VerticalOptions="Center">
-                    <Frame HeightRequest="30"
-                         WidthRequest="30"
-                         CornerRadius="15"
-                         BackgroundColor="Blue" />
-                    <Label 
-                        FontFamily="MaterialDesignIcons"
-                        Text="{x:Static helpers:MaterialDesignIconsFont.VolumeHigh }"
-                        FontSize="20"
-                        TextColor="White"
-                        VerticalOptions="CenterAndExpand"
-                        HorizontalOptions="CenterAndExpand" />
-
-                </Grid>
+                <controls:CircleIcon
+                    IconText="{x:Static helpers:MaterialDesignIconsFont.VolumeHigh}"
+                    LabelFontSize="25"
+                    LabelTextColor="White"
+                    FrameColor="Blue"
+                    FrameSize="40" />
                 
                 <Label
                     Text="{Binding Sentence}"
