@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:LearnDanish.ViewModel"
+             xmlns:helpers="clr-namespace:LearnDanish.Helpers"
+             x:DataType="viewmodel:HomeViewModel"
+             x:Class="LearnDanish.View.HomePage"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <HorizontalStackLayout Spacing="10">
+                <Grid VerticalOptions="Center">
+                    <Frame HeightRequest="30"
+                         WidthRequest="30"
+                         CornerRadius="15"
+                         BackgroundColor="Blue" />
+                    <Label 
+                        FontFamily="MaterialDesignIcons"
+                        Text="{x:Static helpers:MaterialDesignIconsFont.VolumeHigh }"
+                        FontSize="20"
+                        TextColor="White"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand" />
+
+                </Grid>
+                
+                <Label
+                    Text="{Binding Sentence}"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
+
