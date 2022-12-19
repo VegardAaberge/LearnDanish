@@ -10,9 +10,13 @@ public partial class HomeViewModel : BaseViewModel
 	{
 		Title = "Home";
 		Sentence = "En hund løber gennem gaderne i en lille by.";
+		IsRecording = true;
     }
 
 	[ObservableProperty]
 	string sentence;
+
+	[ObservableProperty]
+	bool isRecording;
 }
 

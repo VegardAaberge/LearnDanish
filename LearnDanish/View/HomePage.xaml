@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodel="clr-namespace:LearnDanish.ViewModel"
              xmlns:controls="clr-namespace:LearnDanish.Controls"
              xmlns:helpers="clr-namespace:LearnDanish.Helpers"
@@ -8,24 +9,71 @@
              x:Class="LearnDanish.View.HomePage"
              Title="{Binding Title}">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ScrollView>
         <VerticalStackLayout
-            Spacing="25"
+            Spacing="16"
             Padding="30,0"
             VerticalOptions="Center">
 
-            <HorizontalStackLayout Spacing="10">
+            <HorizontalStackLayout
+                Spacing="8"
+                IsVisible="{Binding IsRecording}">
+
+                <Frame
+                    VerticalOptions="Center"
+                    HeightRequest="20"
+                    WidthRequest="20"
+                    CornerRadius="10"
+                    BackgroundColor="Red" />
+
+                <Label
+                    Text="Recording"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    VerticalOptions="CenterAndExpand" />
+
+            </HorizontalStackLayout>
+
+            <Label
+                IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
+                Text="Speak this sentence"
+                FontAttributes="Bold"
+                FontSize="18"
+                VerticalOptions="Center" />
+
+            <HorizontalStackLayout Spacing="8">
                 <controls:CircleIcon
                     IconText="{x:Static helpers:MaterialDesignIconsFont.VolumeHigh}"
                     LabelFontSize="25"
                     LabelTextColor="White"
                     FrameColor="Blue"
-                    FrameSize="40" />
+                    FrameSize="40">
+
+                </controls:CircleIcon>
                 
                 <Label
                     Text="{Binding Sentence}"
                     VerticalOptions="Center" />
             </HorizontalStackLayout>
+
+            <controls:CircleIcon
+                IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
+                LabelFontSize="160"
+                LabelTextColor="White"
+                FrameColor="Blue"
+                FrameSize="200">
+
+                <controls:CircleIcon.GestureRecognizers>
+
+                </controls:CircleIcon.GestureRecognizers>
+
+            </controls:CircleIcon>
             
 
         </VerticalStackLayout>
