@@ -1,13 +1,14 @@
-﻿using Microsoft.Maui.Controls;
+﻿using System.Collections.ObjectModel;
+using Microsoft.Maui.Controls;
 
 namespace LearnDanish.Controls;
 
 public partial class CircleIcon : ContentView
 {
-	public CircleIcon()
-	{
-		InitializeComponent();
-	}
+    public CircleIcon()
+    {
+        InitializeComponent();
+    }
 
     /// <summary>
     /// The Icon Displayed on the Frame
@@ -62,10 +63,18 @@ public partial class CircleIcon : ContentView
     /// </summary>
     public static readonly BindableProperty FrameSizeProperty =
         BindableProperty.Create(nameof(FrameSize), typeof(double), typeof(CircleIcon), default(double));
-     
+
     public double FrameSize
     {
         get { return (double)GetValue(FrameSizeProperty); }
         set { SetValue(FrameSizeProperty, value); }
+    }
+
+    void PressedGestureRecognizer_Pressed(System.Object sender, System.EventArgs e)
+    {
+    }
+
+    void ReleasedGestureRecognizer_Released(System.Object sender, System.EventArgs e)
+    {
     }
 }

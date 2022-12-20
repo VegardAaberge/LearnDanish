@@ -72,6 +72,8 @@
 	  <None Remove="Controls\" />
 	  <None Remove="Converters\" />
 	  <None Remove="CommunityToolkit.Maui" />
+	  <None Remove="Platforms\Android\Renderers\" />
+	  <None Remove="Platforms\iOS\Renderers\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="View\" />
@@ -80,6 +82,8 @@
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Controls\" />
 	  <Folder Include="Converters\" />
+	  <Folder Include="Platforms\Android\Renderers\" />
+	  <Folder Include="Platforms\iOS\Renderers\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="View\MainPage.xaml">

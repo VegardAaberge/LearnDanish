@@ -62,19 +62,13 @@
                     VerticalOptions="Center" />
             </HorizontalStackLayout>
 
+
             <controls:CircleIcon
-                IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
-                LabelFontSize="160"
-                LabelTextColor="White"
-                FrameColor="Blue"
-                FrameSize="200">
-
-                <controls:CircleIcon.GestureRecognizers>
-
-                </controls:CircleIcon.GestureRecognizers>
-
-            </controls:CircleIcon>
-            
+                    IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
+                    LabelFontSize="160"
+                    LabelTextColor="White"
+                    FrameColor="Blue"
+                    FrameSize="200" />
 
         </VerticalStackLayout>
     </ScrollView>

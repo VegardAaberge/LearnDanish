@@ -1,5 +1,6 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LearnDanish.ViewModel.Base;
 
 namespace LearnDanish.ViewModel;
@@ -18,5 +19,17 @@ public partial class HomeViewModel : BaseViewModel
 
 	[ObservableProperty]
 	bool isRecording;
+
+	[RelayCommand]
+	public async Task StartRecordingAsync()
+	{
+		await Task.Yield();
+	}
+
+	[RelayCommand]
+    public async Task StopRecordingAsync()
+    {
+        await Task.Yield();
+    }
 }
 
