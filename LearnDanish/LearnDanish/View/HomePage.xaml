@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:viewmodel="clr-namespace:LearnDanish.ViewModel"
+             xmlns:helpers="clr-namespace:LearnDanish.Helpers"
+             xmlns:controls="clr-namespace:LearnDanish.Controls"
+             x:DataType="viewmodel:HomeViewModel"
+             x:Class="LearnDanish.MainPage"
+             Title="{Binding Title }">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <StackLayout
+            Orientation="Vertical"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+
+            <StackLayout
+                Spacing="8"
+                Orientation="Horizontal"
+                IsVisible="{Binding IsRecording}">
+
+                <Grid
+                    HeightRequest="20"
+                    WidthRequest="20">
+
+                    <Frame
+                        CornerRadius="10"
+                        BackgroundColor="Red" />
+                </Grid>
+
+
+                <Label
+                    Text="Recording"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    VerticalOptions="CenterAndExpand" />
+
+            </StackLayout>
+
+            <Label
+                IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
+                Text="Speak this sentence"
+                FontAttributes="Bold"
+                FontSize="18"
+                VerticalOptions="Center" />
+
+            <StackLayout
+                Orientation="Horizontal"
+                Spacing="8">
+
+                <controls:CircleIcon
+                    IconText="{x:Static helpers:MaterialDesignIconsFont.VolumeHigh}"
+                    LabelFontSize="25"
+                    LabelTextColor="White"
+                    FrameColor="Blue"
+                    FrameSize="40">
+
+                </controls:CircleIcon>
+                
+                <Label
+                    Text="{Binding Sentence}"
+                    VerticalOptions="Center" />
+            </StackLayout>
+
+            <controls:CircleIcon
+                IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
+                LabelFontSize="160"
+                LabelTextColor="White"
+                FrameColor="Red"
+                FrameSize="200">
+
+                <controls:CircleIcon.FrameGestureRecognizers>
+                    <controls:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
+                    <controls:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
+                </controls:CircleIcon.FrameGestureRecognizers>
+
+            </controls:CircleIcon>
+        </StackLayout>
+    </ScrollView>
+    
+
+</ContentPage>
+
