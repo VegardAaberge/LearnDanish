@@ -11,11 +11,11 @@ namespace LearnDanish
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
-        }
-
-        protected override void OnStart ()
-        {
+            MainPage = new NavigationPage(new MainPage())
+            {
+                BarBackgroundColor = Color.Blue,
+                BarTextColor = Color.White,
+            };
         }
 
         protected override void OnSleep ()
