@@ -5,13 +5,17 @@
              xmlns:viewmodel="clr-namespace:LearnDanish.ViewModel"
              xmlns:helpers="clr-namespace:LearnDanish.Helpers"
              xmlns:controls="clr-namespace:LearnDanish.Controls"
+             xmlns:converters="clr-namespace:LearnDanish.Converters"
              x:DataType="viewmodel:HomeViewModel"
              x:Class="LearnDanish.MainPage"
+             
              Title="{Binding Title }">
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <Color x:Key="BlueColor">#0000FF</Color>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -27,6 +31,7 @@
                 IsVisible="{Binding IsRecording}">
 
                 <Grid
+                    VerticalOptions="Center"
                     HeightRequest="20"
                     WidthRequest="20">
 
@@ -37,7 +42,7 @@
 
 
                 <Label
-                    Text="Recording"
+                    Text="{Binding CountSeconds, StringFormat='Recording ({0} seconds)'}"
                     FontAttributes="Bold"
                     FontSize="18"
                     VerticalOptions="CenterAndExpand" />
@@ -73,7 +78,7 @@
                 IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
                 LabelFontSize="160"
                 LabelTextColor="White"
-                FrameColor="Red"
+                FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
                 FrameSize="200">
 
                 <controls:CircleIcon.FrameGestureRecognizers>

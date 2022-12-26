@@ -29,6 +29,7 @@
     <None Remove="ViewModel\Base\" />
     <None Remove="CommunityToolkit.Mvvm" />
     <None Remove="Xamarin.CommunityToolkit" />
+    <None Remove="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
@@ -37,6 +38,7 @@
     <Folder Include="ViewModel\" />
     <Folder Include="View\" />
     <Folder Include="ViewModel\Base\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Helpers\materialdesignicons-webfont.ttf" />

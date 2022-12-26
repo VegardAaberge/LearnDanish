@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using LearnDanish.ViewModel.Base;
 using System.Windows.Input;
+using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LearnDanish.ViewModel
 {
@@ -12,14 +15,25 @@ namespace LearnDanish.ViewModel
         {
             Title = "Home";
             Sentence = "En hund løber gennem gaderne i en lille by.";
-            IsRecording = true;
+            IsRecording = false;
 
-            StartRecordingCommand = new Command(async () => await StartRecordingAsync());
-            StopRecordingCommand = new Command(async () => await StopRecordingAsync());
+            StartRecordingCommand = new Command(async () => await StartRecordingAsync(), () => !_isRecording);
+            StopRecordingCommand = new Command(async () => await StopRecordingAsync(), () => _isRecording);
         }
 
         public Command StartRecordingCommand { get; set; }
         public Command StopRecordingCommand { get; set; }
+
+        private int _countSeconds;
+        public int CountSeconds
+        {
+            get { return _countSeconds; }
+            set
+            {
+                _countSeconds = value;
+                OnPropertyChanged(nameof(CountSeconds));
+            }
+        }
 
         private string _sentence;
         public string Sentence
@@ -43,14 +57,43 @@ namespace LearnDanish.ViewModel
             }
         }
 
+        private CancellationTokenSource timerCancellationToken = null;
+
         public async Task StartRecordingAsync()
         {
+            if (timerCancellationToken != null)
+                return;
+
             await Task.Yield();
+            timerCancellationToken = new CancellationTokenSource();
+
+            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            {
+                CountSeconds = CountSeconds + 1;
+                if(_countSeconds > 20)
+                {
+                    StopRecordingCommand.Execute(null);
+                }
+
+                var isCancelled = timerCancellationToken.IsCancellationRequested;
+                if (isCancelled)
+                {
+                    timerCancellationToken = null;
+                    return false;
+                }
+                return true;
+            });
+
+            IsRecording = true;
         }
 
         public async Task StopRecordingAsync()
         {
             await Task.Yield();
+
+            timerCancellationToken.Cancel();
+            CountSeconds = 0;
+            IsRecording = false;
         }
     }
 }
