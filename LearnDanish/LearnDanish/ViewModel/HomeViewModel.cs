@@ -10,6 +10,9 @@ using Xamarin.Essentials;
 using LearnDanish.Services;
 using LearnDanish.Domain;
 using LearnDanish.Domain.Models;
+using Timer = System.Timers.Timer;
+using LearnDanish.Helpers;
+using System.Reflection;
 
 namespace LearnDanish.ViewModel
 {
@@ -24,8 +27,13 @@ namespace LearnDanish.ViewModel
         private int _countSeconds;
         private string _sentence;
         private bool _isRecording;
+        private string _volumeIcon;
 
-        private CancellationTokenSource _timerCancellationToken = null;
+        private int _volumeCounter = 1;
+        private Timer _volumeTimer = new Timer(300);
+        private Timer _countdownTimer = new Timer(1000);
+
+        private CancellationTokenSource _cancelSpeakTokenSource = null;
 
         public HomeViewModel(
             IRecordingService recordingService,
@@ -44,6 +52,8 @@ namespace LearnDanish.ViewModel
             StartRecordingCommand = new Command(async () => await StartRecordingAsync(), () => !_isRecording);
             StopRecordingCommand = new Command(async () => await StopRecordingAsync(), () => _isRecording);
             NewSentenceCommand = new Command(async () => await NewSentenceAsync());
+
+            VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
         }
 
         public Command SpeakSentenceCommand { get; set; }
@@ -51,13 +61,23 @@ namespace LearnDanish.ViewModel
         public Command StopRecordingCommand { get; set; }
         public Command NewSentenceCommand { get; set; }
 
-        
+
+        public string VolumeIcon
+        {
+            get { return _volumeIcon; }
+            set
+            {
+                _volumeIcon = value;
+                OnPropertyChanged(nameof(VolumeIcon));
+            }
+        }
+
         public bool IsSpeaking
         {
             get { return _isSpeaking; }
             set
             {
-                _isSpeaking = true;
+                _isSpeaking = value;
                 OnPropertyChanged(nameof(IsSpeaking));
             }
         }
@@ -94,13 +114,7 @@ namespace LearnDanish.ViewModel
 
         public async Task SpeakSentenceAsync()
         {
-            var speechStatus = await Permissions.CheckStatusAsync<Permissions.Speech>();
-            if(speechStatus != PermissionStatus.Granted)
-            {
-                speechStatus = await Permissions.RequestAsync<Permissions.Speech>();
-                if (speechStatus != PermissionStatus.Granted)
-                    return;
-            }
+            _cancelSpeakTokenSource?.Cancel();
 
             var locales = await TextToSpeech.GetLocalesAsync();
             var locale = locales.FirstOrDefault(x => x.Language == "da");
@@ -108,19 +122,57 @@ namespace LearnDanish.ViewModel
             if (locale == null)
             {
                 _ttsDataInstaller.InstallTtsData();
+                return;
             }
-            else
+
+            try
             {
+                _volumeTimer.Stop();
+                _volumeTimer = new Timer(300);
+                _volumeTimer.Elapsed += VolumeTimer_Elapsed;
+                _volumeTimer.Start();
+
                 await TextToSpeech.SpeakAsync(Sentence, new SpeechOptions
                 {
                     Locale = locale
-                });
+                }, _cancelSpeakTokenSource.Token);
+            }
+            catch (TaskCanceledException)
+            {
+
+            }
+            finally
+            {
+                _volumeTimer.Stop();
+                VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
+            }
+        }
+
+        private void VolumeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            switch (_volumeCounter)
+            {
+                case 1:
+                    VolumeIcon = MaterialDesignIconsFont.VolumeLow;
+                    break;
+                case 2:
+                    VolumeIcon = MaterialDesignIconsFont.VolumeMedium;
+                    break;
+                case 3:
+                    VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
+                    break;
+            }
+
+            _volumeCounter++;
+            if (_volumeCounter == 4)
+            {
+                _volumeCounter = 1;
             }
         }
 
         public async Task StartRecordingAsync()
         {
-            if (_timerCancellationToken != null)
+            if (_countdownTimer.Enabled)
                 return;
 
             var microphoneStatus = await Permissions.CheckStatusAsync<Permissions.Microphone>();
@@ -134,35 +186,28 @@ namespace LearnDanish.ViewModel
                 return;
             }
 
-            _timerCancellationToken = new CancellationTokenSource();
-
             _filepath = await _audioRecorder.StartRecordingAudio("recording");
 
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-            {
-                CountSeconds = CountSeconds + 1;
-                if(_countSeconds > 20)
-                {
-                    StopRecordingCommand.Execute(null);
-                }
-
-                var isCancelled = _timerCancellationToken.IsCancellationRequested;
-                if (isCancelled)
-                {
-                    _timerCancellationToken = null;
-                    return false;
-                }
-                return true;
-            });
-
+            _countdownTimer = new Timer(1000);
+            _countdownTimer.Elapsed += CountdownTimer_Elapsed;
+            _countdownTimer.Start();
             IsRecording = true;
+        }
+
+        private void CountdownTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            CountSeconds = CountSeconds + 1;
+            if (_countSeconds > 20)
+            {
+                StopRecordingCommand.Execute(null);
+            }
         }
 
         public async Task StopRecordingAsync()
         {
             await _audioRecorder.StopRecordingAudio(_filepath);
 
-            _timerCancellationToken.Cancel();
+            _countdownTimer.Stop();
             CountSeconds = 0;
             IsRecording = false;
         }
@@ -179,7 +224,7 @@ namespace LearnDanish.ViewModel
             );
 
             _filepath = "";
-            _timerCancellationToken = null;
+            _cancelSpeakTokenSource = null;
 
             IsSpeaking = false;
             CountSeconds = 0;

@@ -65,7 +65,7 @@
                 </StackLayout.GestureRecognizers>
 
                 <controls:CircleIcon
-                    IconText="{x:Static helpers:MaterialDesignIconsFont.VolumeHigh}"
+                    IconText="{Binding VolumeIcon}"
                     LabelFontSize="25"
                     LabelTextColor="White"
                     FrameColor="Blue"
