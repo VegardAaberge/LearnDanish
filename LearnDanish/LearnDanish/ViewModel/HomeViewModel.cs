@@ -27,10 +27,14 @@ namespace LearnDanish.ViewModel
 
         private CancellationTokenSource _timerCancellationToken = null;
 
-        public HomeViewModel()
+        public HomeViewModel(
+            IRecordingService recordingService,
+            ITtsDataInstaller ttsDataInstaller,
+            IAudioRecorder audioRecorder)
         {
-            _ttsDataInstaller = DependencyService.Resolve<ITtsDataInstaller>();
-            _audioRecorder = DependencyService.Resolve<IAudioRecorder>();
+            _recordingService = recordingService;
+            _ttsDataInstaller = ttsDataInstaller;
+            _audioRecorder = audioRecorder;
 
             Title = "Home";
             Sentence = "En hund løber gennem gaderne i en lille by.";
@@ -40,8 +44,6 @@ namespace LearnDanish.ViewModel
             StartRecordingCommand = new Command(async () => await StartRecordingAsync(), () => !_isRecording);
             StopRecordingCommand = new Command(async () => await StopRecordingAsync(), () => _isRecording);
             NewSentenceCommand = new Command(async () => await NewSentenceAsync());
-
-            _recordingService = new RecordingService();
         }
 
         public Command SpeakSentenceCommand { get; set; }

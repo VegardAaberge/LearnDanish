@@ -5,7 +5,6 @@ using LearnDanish.Droid.Services;
 using LearnDanish.Services;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(TtsDataInstaller))]
 namespace LearnDanish.Droid.Services
 {
 	public class TtsDataInstaller : ITtsDataInstaller

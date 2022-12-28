@@ -15,7 +15,7 @@ namespace LearnDanish
         {
             InitializeComponent();
 
-            BindingContext = new HomeViewModel();
+            BindingContext = AppContainer.GetService<HomeViewModel>();
         }
     }
 }

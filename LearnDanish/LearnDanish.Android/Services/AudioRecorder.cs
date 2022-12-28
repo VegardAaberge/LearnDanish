@@ -8,7 +8,6 @@ using LearnDanish.Services;
 using Xamarin.Forms;
 using Android.OS;
 
-[assembly: Dependency(typeof(AudioRecorder))]
 namespace LearnDanish.Droid.Services
 {
 	public class AudioRecorder : IAudioRecorder

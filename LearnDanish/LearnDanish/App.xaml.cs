@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,9 +8,11 @@ namespace LearnDanish
 {
     public partial class App : Application
     {
-        public App ()
+        public App (Action<IServiceCollection> addPlatformServices = null)
         {
             InitializeComponent();
+
+            AppContainer.SetupServices(addPlatformServices);
 
             MainPage = new NavigationPage(new MainPage())
             {
