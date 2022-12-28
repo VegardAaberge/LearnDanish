@@ -91,6 +91,9 @@
                 </controls:CircleIcon.FrameGestureRecognizers>
 
             </controls:CircleIcon>
+
+            <Button Text="Save Recording"
+                    Command="{Binding NewSentenceCommand}" />
         </StackLayout>
     </ScrollView>
     

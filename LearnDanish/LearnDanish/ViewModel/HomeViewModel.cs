@@ -8,15 +8,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
 using LearnDanish.Services;
+using LearnDanish.Domain;
+using LearnDanish.Domain.Models;
 
 namespace LearnDanish.ViewModel
 {
     public class HomeViewModel : BaseViewModel
     {
-        ITtsDataInstaller _ttsDataInstaller;
-        IAudioRecorder _audioRecorder;
+        private ITtsDataInstaller _ttsDataInstaller;
+        private IAudioRecorder _audioRecorder;
+        private IRecordingService _recordingService;
 
-        string _filepath;
+        private string _filepath;
+        private bool _isSpeaking;
+        private int _countSeconds;
+        private string _sentence;
+        private bool _isRecording;
+
+        private CancellationTokenSource _timerCancellationToken = null;
 
         public HomeViewModel()
         {
@@ -30,13 +39,17 @@ namespace LearnDanish.ViewModel
             SpeakSentenceCommand = new Command(async () => await SpeakSentenceAsync(), () => !_isSpeaking);
             StartRecordingCommand = new Command(async () => await StartRecordingAsync(), () => !_isRecording);
             StopRecordingCommand = new Command(async () => await StopRecordingAsync(), () => _isRecording);
+            NewSentenceCommand = new Command(async () => await NewSentenceAsync());
+
+            _recordingService = new RecordingService();
         }
 
         public Command SpeakSentenceCommand { get; set; }
         public Command StartRecordingCommand { get; set; }
         public Command StopRecordingCommand { get; set; }
+        public Command NewSentenceCommand { get; set; }
 
-        private bool _isSpeaking;
+        
         public bool IsSpeaking
         {
             get { return _isSpeaking; }
@@ -46,8 +59,7 @@ namespace LearnDanish.ViewModel
                 OnPropertyChanged(nameof(IsSpeaking));
             }
         }
-
-        private int _countSeconds;
+        
         public int CountSeconds
         {
             get { return _countSeconds; }
@@ -57,8 +69,7 @@ namespace LearnDanish.ViewModel
                 OnPropertyChanged(nameof(CountSeconds));
             }
         }
-
-        private string _sentence;
+        
         public string Sentence
         {
             get { return _sentence; }
@@ -68,8 +79,7 @@ namespace LearnDanish.ViewModel
                 OnPropertyChanged(nameof(Sentence));
             }
         }
-
-        private bool _isRecording;
+        
         public bool IsRecording
         {
             get { return _isRecording; }
@@ -80,34 +90,27 @@ namespace LearnDanish.ViewModel
             }
         }
 
-        private CancellationTokenSource timerCancellationToken = null;
-
-        public Task SpeakSentenceAsync()
+        public async Task SpeakSentenceAsync()
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            var locales = await TextToSpeech.GetLocalesAsync();
+            var locale = locales.FirstOrDefault(x => x.Language == "da");
+
+            if (locale == null)
             {
-                var locales = await TextToSpeech.GetLocalesAsync();
-                var locale = locales.FirstOrDefault(x => x.Language == "da");
-
-                if (locale == null)
+                _ttsDataInstaller.InstallTtsData();
+            }
+            else
+            {
+                await TextToSpeech.SpeakAsync(Sentence, new SpeechOptions
                 {
-                    _ttsDataInstaller.InstallTtsData();
-                }
-                else
-                {
-                    await TextToSpeech.SpeakAsync(Sentence, new SpeechOptions
-                    {
-                        Locale = locale
-                    });
-                }
-            });
-
-            return Task.FromResult(0);
+                    Locale = locale
+                });
+            }
         }
 
         public async Task StartRecordingAsync()
         {
-            if (timerCancellationToken != null)
+            if (_timerCancellationToken != null)
                 return;
 
             var microphoneStatus = await Permissions.CheckStatusAsync<Permissions.Microphone>();
@@ -121,7 +124,7 @@ namespace LearnDanish.ViewModel
                 return;
             }
 
-            timerCancellationToken = new CancellationTokenSource();
+            _timerCancellationToken = new CancellationTokenSource();
 
             _filepath = await _audioRecorder.StartRecordingAudio("recording");
 
@@ -133,10 +136,10 @@ namespace LearnDanish.ViewModel
                     StopRecordingCommand.Execute(null);
                 }
 
-                var isCancelled = timerCancellationToken.IsCancellationRequested;
+                var isCancelled = _timerCancellationToken.IsCancellationRequested;
                 if (isCancelled)
                 {
-                    timerCancellationToken = null;
+                    _timerCancellationToken = null;
                     return false;
                 }
                 return true;
@@ -149,9 +152,31 @@ namespace LearnDanish.ViewModel
         {
             await _audioRecorder.StopRecordingAudio(_filepath);
 
-            timerCancellationToken.Cancel();
+            _timerCancellationToken.Cancel();
             CountSeconds = 0;
             IsRecording = false;
+        }
+
+        public async Task NewSentenceAsync()
+        {
+            await _recordingService.InsertRecordingAsync(
+                new Recording
+                {
+                    FilePath = _filepath,
+                    Sentence = _sentence,
+                    Created = DateTime.Now
+                }
+            );
+
+            _filepath = "";
+            _timerCancellationToken = null;
+
+            IsSpeaking = false;
+            CountSeconds = 0;
+            IsRecording = false;
+            Sentence = "New Sentence";
+
+            var recordings = await _recordingService.GetRecordingsAsync();
         }
     }
 }

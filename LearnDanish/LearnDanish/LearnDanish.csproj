@@ -46,4 +46,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Helpers\materialdesignicons-webfont.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LearnDanish.Domain\LearnDanish.Domain.csproj" />
+    <ProjectReference Include="..\LearnDanish.Data\LearnDanish.Data.csproj" />
+  </ItemGroup>
 </Project>
