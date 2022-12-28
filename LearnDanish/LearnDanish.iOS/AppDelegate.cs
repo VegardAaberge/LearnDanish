@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using LearnDanish.iOS.Services;
+using LearnDanish.Services;
+using Microsoft.Extensions.DependencyInjection;
 using UIKit;
 
 namespace LearnDanish.iOS
@@ -23,9 +26,15 @@ namespace LearnDanish.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+            LoadApplication(new App(AddServices));
 
             return base.FinishedLaunching(app, options);
+        }
+
+        private void AddServices(IServiceCollection services)
+        {
+            services.AddSingleton<IAudioRecorder, AudioRecorder>();
+            services.AddSingleton<ITtsDataInstaller, TtsDataInstaller>();
         }
     }
 }

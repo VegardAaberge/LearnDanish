@@ -69,6 +69,8 @@
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\PressableFrameRenderer.cs" />
+    <Compile Include="Services\AudioRecorder.cs" />
+    <Compile Include="Services\TtsDataInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -136,5 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Renderers\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

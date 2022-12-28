@@ -9,7 +9,7 @@ namespace LearnDanish.Droid.Services
 {
 	public class TtsDataInstaller : ITtsDataInstaller
     {
-        void ITtsDataInstaller.InstallTtsData()
+        public void InstallTtsData()
         {
             Intent intent = new Intent(TextToSpeech.Engine.ActionInstallTtsData);
 

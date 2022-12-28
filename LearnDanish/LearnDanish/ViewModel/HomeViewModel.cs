@@ -94,6 +94,14 @@ namespace LearnDanish.ViewModel
 
         public async Task SpeakSentenceAsync()
         {
+            var speechStatus = await Permissions.CheckStatusAsync<Permissions.Speech>();
+            if(speechStatus != PermissionStatus.Granted)
+            {
+                speechStatus = await Permissions.RequestAsync<Permissions.Speech>();
+                if (speechStatus != PermissionStatus.Granted)
+                    return;
+            }
+
             var locales = await TextToSpeech.GetLocalesAsync();
             var locale = locales.FirstOrDefault(x => x.Language == "da");
 

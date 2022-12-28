@@ -32,7 +32,6 @@ namespace LearnDanish
 		{
 			return _serviceProvider.GetService<T>();
 		}
-
     }
 }
 
