@@ -127,6 +127,7 @@ namespace SpeakDanish.ViewModel
 
             try
             {
+                _cancelSpeakTokenSource = new CancellationTokenSource();
                 _volumeTimer.Stop();
                 _volumeTimer = new Timer(300);
                 _volumeTimer.Elapsed += VolumeTimer_Elapsed;
