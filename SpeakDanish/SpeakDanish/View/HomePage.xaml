@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModel"
+             xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
+             xmlns:controls="clr-namespace:SpeakDanish.Controls"
+             xmlns:converters="clr-namespace:SpeakDanish.Converters"
+             x:DataType="viewmodel:HomeViewModel"
+             x:Class="SpeakDanish.MainPage"
+             
+             Title="{Binding Title }">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="BlueColor">#0000FF</Color>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <StackLayout
+            Orientation="Vertical"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+
+            <StackLayout
+                Spacing="8"
+                Orientation="Horizontal"
+                IsVisible="{Binding IsRecording}">
+
+                <Grid
+                    VerticalOptions="Center"
+                    HeightRequest="20"
+                    WidthRequest="20">
+
+                    <Frame
+                        CornerRadius="10"
+                        BackgroundColor="Red" />
+                </Grid>
+
+
+                <Label
+                    Text="{Binding CountSeconds, StringFormat='Recording ({0} seconds)'}"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    VerticalOptions="CenterAndExpand" />
+
+            </StackLayout>
+
+            <Label
+                IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
+                Text="Speak this sentence"
+                FontAttributes="Bold"
+                FontSize="18"
+                VerticalOptions="Center" />
+
+            <StackLayout
+                Orientation="Horizontal"
+                Spacing="8">
+
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
+                </StackLayout.GestureRecognizers>
+
+                <controls:CircleIcon
+                    IconText="{Binding VolumeIcon}"
+                    LabelFontSize="25"
+                    LabelTextColor="White"
+                    FrameColor="Blue"
+                    FrameSize="40">
+
+                </controls:CircleIcon>
+                
+                <Label
+                    Text="{Binding Sentence}"
+                    VerticalOptions="Center" />
+            </StackLayout>
+
+            <controls:CircleIcon
+                IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
+                LabelFontSize="160"
+                LabelTextColor="White"
+                FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
+                FrameSize="200">
+
+                <controls:CircleIcon.FrameGestureRecognizers>
+                    <controls:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
+                    <controls:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
+                </controls:CircleIcon.FrameGestureRecognizers>
+
+            </controls:CircleIcon>
+
+            <Button Text="Save Recording"
+                    Command="{Binding NewSentenceCommand}" />
+        </StackLayout>
+    </ScrollView>
+    
+
+</ContentPage>
+
