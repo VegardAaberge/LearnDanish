@@ -34,6 +34,7 @@
     <None Remove="Extensions\" />
     <None Remove="Autofac" />
     <None Remove="Microsoft.Extensions.DependencyInjection" />
+    <None Remove="Services\Enums\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
@@ -43,6 +44,7 @@
     <Folder Include="View\" />
     <Folder Include="ViewModel\Base\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Services\Enums\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Helpers\materialdesignicons-webfont.ttf" />

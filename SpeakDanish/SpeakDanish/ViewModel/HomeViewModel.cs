@@ -13,6 +13,9 @@ using SpeakDanish.Domain.Models;
 using Timer = System.Timers.Timer;
 using SpeakDanish.Helpers;
 using System.Reflection;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.CommunityToolkit.Extensions;
+using SpeakDanish.Services.Enums;
 
 namespace SpeakDanish.ViewModel
 {
@@ -21,6 +24,7 @@ namespace SpeakDanish.ViewModel
         private ITtsDataInstaller _ttsDataInstaller;
         private IAudioRecorder _audioRecorder;
         private IRecordingService _recordingService;
+        private IAlertService _alertService;
 
         private string _filepath;
         private bool _isSpeaking;
@@ -38,11 +42,13 @@ namespace SpeakDanish.ViewModel
         public HomeViewModel(
             IRecordingService recordingService,
             ITtsDataInstaller ttsDataInstaller,
-            IAudioRecorder audioRecorder)
+            IAudioRecorder audioRecorder,
+            IAlertService alertService)
         {
             _recordingService = recordingService;
             _ttsDataInstaller = ttsDataInstaller;
             _audioRecorder = audioRecorder;
+            _alertService = alertService;
 
             Title = "Home";
             Sentence = "En hund løber gennem gaderne i en lille by.";
@@ -122,7 +128,15 @@ namespace SpeakDanish.ViewModel
             if (locale == null)
             {
                 _ttsDataInstaller.InstallTtsData();
-                return;
+
+                locales = await TextToSpeech.GetLocalesAsync();
+                locale = locales.FirstOrDefault(x => x.Language == "da");
+
+                if(locale == null)
+                {
+                    await _alertService.ShowToast("No Danish language found");
+                    return;
+                }
             }
 
             try
@@ -137,10 +151,6 @@ namespace SpeakDanish.ViewModel
                 {
                     Locale = locale
                 }, _cancelSpeakTokenSource.Token);
-            }
-            catch (TaskCanceledException)
-            {
-
             }
             finally
             {

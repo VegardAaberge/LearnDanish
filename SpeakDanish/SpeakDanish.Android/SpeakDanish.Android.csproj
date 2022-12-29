@@ -66,6 +66,7 @@
     <Compile Include="Renderers\PressableFrameRenderer.cs" />
     <Compile Include="Services\TtsDataInstaller.cs" />
     <Compile Include="Services\AudioRecorder.cs" />
+    <Compile Include="Services\AlertService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

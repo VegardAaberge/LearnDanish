@@ -21,8 +21,8 @@
 
     <ScrollView>
         <StackLayout
+            Padding="16"
             Orientation="Vertical"
-            VerticalOptions="Center"
             HorizontalOptions="Center">
 
             <StackLayout
