@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using SpeakDanish.ViewModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,6 +20,8 @@ namespace SpeakDanish
                 BarBackgroundColor = Color.Blue,
                 BarTextColor = Color.White,
             };
+
+            MainPage.BindingContext = AppContainer.GetService<HomeViewModel>();
         }
 
         protected override void OnSleep ()

@@ -14,8 +14,6 @@ namespace SpeakDanish
         public MainPage()
         {
             InitializeComponent();
-
-            BindingContext = AppContainer.GetService<HomeViewModel>();
         }
     }
 }

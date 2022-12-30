@@ -19,6 +19,10 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Recordings" Command="{Binding NavigateToRecordingsCommand}" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView>
         <StackLayout
             Padding="16"

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
+using SpeakDanish.View;
 using SpeakDanish.Services;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
@@ -25,6 +26,7 @@ namespace SpeakDanish.ViewModel
         private IAudioRecorder _audioRecorder;
         private IRecordingService _recordingService;
         private IAlertService _alertService;
+        private INavigation _navigation;
 
         private string _filepath;
         private bool _isSpeaking;
@@ -43,12 +45,14 @@ namespace SpeakDanish.ViewModel
             IRecordingService recordingService,
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
-            IAlertService alertService)
+            IAlertService alertService,
+            INavigation navigation)
         {
             _recordingService = recordingService;
             _ttsDataInstaller = ttsDataInstaller;
             _audioRecorder = audioRecorder;
             _alertService = alertService;
+            _navigation = navigation;
 
             Title = "Home";
             Sentence = "En hund løber gennem gaderne i en lille by.";
@@ -58,6 +62,7 @@ namespace SpeakDanish.ViewModel
             StartRecordingCommand = new Command(async () => await StartRecordingAsync(), () => !_isRecording);
             StopRecordingCommand = new Command(async () => await StopRecordingAsync(), () => _isRecording);
             NewSentenceCommand = new Command(async () => await NewSentenceAsync());
+            NavigateToRecordingsCommand = new Command(async () => await NavigateToRecordingsAsync());
 
             VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
         }
@@ -66,6 +71,7 @@ namespace SpeakDanish.ViewModel
         public Command StartRecordingCommand { get; set; }
         public Command StopRecordingCommand { get; set; }
         public Command NewSentenceCommand { get; set; }
+        public Command NavigateToRecordingsCommand { get; set; }
 
 
         public string VolumeIcon
@@ -243,6 +249,11 @@ namespace SpeakDanish.ViewModel
             Sentence = "New Sentence";
 
             var recordings = await _recordingService.GetRecordingsAsync();
+        }
+
+        public async Task NavigateToRecordingsAsync()
+        {
+            await _navigation.PushAsync(new RecordingsPage());
         }
     }
 }

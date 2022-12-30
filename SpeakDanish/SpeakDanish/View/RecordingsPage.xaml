@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModel"
+    x:DataType="viewmodel:RecordingsViewModel"
+    x:Class="SpeakDanish.View.RecordingsPage"
+    Title="{Binding Title}">
+
+    <CollectionView x:Name="MyCollectionView"
+                    SelectionMode="Single"
+                    ItemsSource="{Binding Items}">
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="viewmodel:RecordingItem">
+                <Grid HeightRequest="100" BackgroundColor="AliceBlue">
+                    <Label Text="{Binding RecordingName}" />
+                </Grid> 
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+    
+</ContentPage>
+

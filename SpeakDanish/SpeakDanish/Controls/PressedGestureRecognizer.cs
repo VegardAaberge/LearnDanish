@@ -25,7 +25,7 @@ namespace SpeakDanish.Controls
 
         public event EventHandler Pressed;
 
-        public void SendPressed(View sender)
+        public void SendPressed(VisualElement sender)
         {
             ICommand cmd = Command;
             if (cmd != null && cmd.CanExecute(CommandParameter))

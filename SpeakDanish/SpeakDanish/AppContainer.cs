@@ -3,6 +3,7 @@ using SpeakDanish.Domain;
 using SpeakDanish.Services;
 using SpeakDanish.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
+using Xamarin.Forms;
 
 namespace SpeakDanish
 {
@@ -26,6 +27,9 @@ namespace SpeakDanish
 			services.AddTransient<IRecordingService, RecordingService>();
 
 			services.AddSingleton<HomeViewModel>();
+			services.AddSingleton<RecordingsViewModel>();
+
+            services.AddSingleton<INavigation>(s => Application.Current.MainPage.Navigation);
         }
 
 		public static T GetService<T>()
