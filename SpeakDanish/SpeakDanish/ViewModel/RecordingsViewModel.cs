@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using SpeakDanish.Domain;
+using SpeakDanish.Domain.Models;
+using SpeakDanish.Services;
+using SpeakDanish.Helpers;
 using SpeakDanish.ViewModel.Base;
 using Xamarin.Forms;
 
@@ -8,21 +13,82 @@ namespace SpeakDanish.ViewModel
 	public class RecordingsViewModel : BaseViewModel
 	{
         private INavigation _navigation;
+        private IAlertService _alertService;
+        private IRecordingService _recordingService;
 
-        public RecordingsViewModel(INavigation navigation)
-		{
-			_navigation = navigation;
+        private string _volumeIcon;
+        public ObservableCollection<Recording> _recordings;
 
-			Title = "Recordings";
+        public RecordingsViewModel(
+            INavigation navigation,
+            IAlertService alertService,
+            IRecordingService recordingService)
+        {
+            _navigation = navigation;
+            _alertService = alertService;
+            _recordingService = recordingService;
 
-			Items = new ObservableCollection<RecordingItem>
-			{
-				new RecordingItem{ RecordingName="Item 1"},
-				new RecordingItem{ RecordingName="Item 2"}
-			};
-		}
+            Title = "Recordings";
+            VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
 
-        public ObservableCollection<RecordingItem> Items { get; set; }
+            PlaySentenceCommand = new Command<Recording>(async (r) => await PlaySentenceAsync(r));
+            PlayAudioCommand = new Command<Recording>(async (r) => await PlayAudioAsync(r));
+            RedoCommand = new Command<Recording>(async (r) => await RedoAsync(r));
+
+            LoadRecordingsAsync().ConfigureAwait(false);
+        }
+
+        public Command PlaySentenceCommand { get; internal set; }
+        public Command PlayAudioCommand { get; internal set; }
+        public Command RedoCommand { get; internal set; }
+
+        public ObservableCollection<Recording> Recordings {
+            get { return _recordings; }
+            set {
+                _recordings = value;
+                OnPropertyChanged(nameof(Recordings));
+            }
+        }
+
+        public string VolumeIcon
+        {
+            get { return _volumeIcon; }
+            set
+            {
+                _volumeIcon = value;
+                OnPropertyChanged(nameof(VolumeIcon));
+            }
+        }
+
+        public async Task LoadRecordingsAsync()
+        {
+            try
+            {
+                IsBusy = true;
+                var records = await _recordingService.GetRecordingsAsync();
+                Recordings = new ObservableCollection<Recording>(records);
+            }
+            catch (Exception e)
+            {
+                await _alertService.ShowToast(e.Message);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task PlaySentenceAsync(Recording recording)
+        {
+        }
+
+        private async Task PlayAudioAsync(Recording recording)
+        {
+        }
+
+        private async Task RedoAsync(Recording recording)
+        {
+        }
     }
 }
 

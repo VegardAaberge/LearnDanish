@@ -27,7 +27,7 @@ namespace SpeakDanish
 			services.AddTransient<IRecordingService, RecordingService>();
 
 			services.AddSingleton<HomeViewModel>();
-			services.AddSingleton<RecordingsViewModel>();
+			services.AddTransient<RecordingsViewModel>();
 
             services.AddSingleton<INavigation>(s => Application.Current.MainPage.Navigation);
         }

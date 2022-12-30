@@ -23,7 +23,8 @@ namespace SpeakDanish.Data.Mappers
                 Id = entity.Id,
                 Sentence = entity.Sentence,
                 FilePath = entity.FilePath,
-                Created = entity.Created
+                Created = entity.Created,
+                VolumeIcon = "\U000f057e"
             };
         }
     }

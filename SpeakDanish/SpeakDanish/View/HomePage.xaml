@@ -60,27 +60,26 @@
                 FontSize="18"
                 VerticalOptions="Center" />
 
-            <StackLayout
-                Orientation="Horizontal"
-                Spacing="8">
-
-                <StackLayout.GestureRecognizers>
+            <Grid ColumnDefinitions="50, *">
+                <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
-                </StackLayout.GestureRecognizers>
+                </Grid.GestureRecognizers>
 
                 <controls:CircleIcon
-                    IconText="{Binding VolumeIcon}"
-                    LabelFontSize="25"
-                    LabelTextColor="White"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
                     FrameColor="Blue"
-                    FrameSize="40">
-
-                </controls:CircleIcon>
+                    LabelTextColor="White"
+                    FrameSize="35"
+                    LabelFontSize="22"
+                    IconText="{Binding VolumeIcon}" />
                 
                 <Label
+                    Grid.Column="1"
                     Text="{Binding Sentence}"
+                    HorizontalOptions="Start"
                     VerticalOptions="Center" />
-            </StackLayout>
+            </Grid>
 
             <controls:CircleIcon
                 IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"

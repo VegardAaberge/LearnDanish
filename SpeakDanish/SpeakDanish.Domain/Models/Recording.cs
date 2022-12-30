@@ -13,15 +13,7 @@ namespace SpeakDanish.Domain.Models
 
         public DateTime Created { get; set; }
 
-        public Recording FromRecording(Recording recording)
-        {
-            return new Recording
-            {
-                Sentence = recording.Sentence,
-                FilePath = recording.FilePath,
-                Created = recording.Created
-            };
-        }
+        public string VolumeIcon { get; set; }
     }
 }
 

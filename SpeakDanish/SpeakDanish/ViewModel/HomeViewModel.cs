@@ -55,7 +55,7 @@ namespace SpeakDanish.ViewModel
             _navigation = navigation;
 
             Title = "Home";
-            Sentence = "En hund løber gennem gaderne i en lille by.";
+            Sentence = "En hund løber gennem gaderne i en lille by. ";
             IsRecording = false;
 
             SpeakSentenceCommand = new Command(async () => await SpeakSentenceAsync(), () => !_isSpeaking);
