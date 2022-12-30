@@ -23,7 +23,7 @@ namespace SpeakDanish.Platforms.iOS.Renderers
 
             if (e.NewElement != null)
             {
-                GetControl().Layer.ShadowOpacity = 0.5f;
+                GetControl().Layer.ShadowOpacity = 0.3f;
             }
         }
 

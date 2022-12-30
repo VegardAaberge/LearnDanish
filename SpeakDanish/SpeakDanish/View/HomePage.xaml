@@ -95,9 +95,19 @@
 
             </controls:CircleIcon>
 
-            <Button Text="Save Recording"
-                    Command="{Binding NewSentenceCommand}" />
+            <Frame HasShadow="True" Margin="0" Padding="0" BackgroundColor="Transparent">
+                <Button
+                    Command="{Binding NewSentenceCommand}"
+                    Text="Save Recording"
+                    BackgroundColor="Blue"
+                    TextColor="White"
+                    CornerRadius="4"
+                    HeightRequest="40"
+                    Padding="8,0"
+                    FontSize="15" />
+            </Frame>
         </StackLayout>
+            
     </ScrollView>
     
 
