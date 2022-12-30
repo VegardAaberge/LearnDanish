@@ -36,6 +36,7 @@ namespace SpeakDanish.iOS
             services.AddSingleton<IAudioRecorder, AudioRecorder>();
             services.AddSingleton<ITtsDataInstaller, TtsDataInstaller>();
             services.AddSingleton<IAlertService, AlertService>();
+            services.AddSingleton<IFileService, FileService>();
         }
 
         public static UIViewController GetVisibleViewController()

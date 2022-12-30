@@ -18,7 +18,8 @@ namespace SpeakDanish.Data
         public static readonly AsyncLazy<SpeakDanishDatabase> Instance = new AsyncLazy<SpeakDanishDatabase>(async () => 
         {
             var instance = new SpeakDanishDatabase();
-            CreateTableResult result = await _database.CreateTableAsync<RecordingEntity>();
+            CreateTableResult result1 = await _database.CreateTableAsync<RecordingEntity>();
+            CreateTableResult result2 = await _database.CreateTableAsync<SentenceEntity>();
             return instance;
         });
 
@@ -42,6 +43,13 @@ namespace SpeakDanish.Data
             {
                 return _database.InsertAsync(item);
             }
+        }
+
+        public async Task<int> InsertAllItemsAsync<T>(List<T> items) where T : BaseEntity, new()
+        {
+            await _database.DeleteAllAsync<T>();
+
+            return await _database.InsertAllAsync(items);
         }
 
         public Task<int> DeleteItemAsync<T>(T item) where T : BaseEntity, new()

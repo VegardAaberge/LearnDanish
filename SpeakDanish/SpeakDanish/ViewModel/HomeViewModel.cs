@@ -17,6 +17,7 @@ using System.Reflection;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.CommunityToolkit.Extensions;
 using SpeakDanish.Services.Enums;
+using System.IO;
 
 namespace SpeakDanish.ViewModel
 {
@@ -46,6 +47,7 @@ namespace SpeakDanish.ViewModel
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
             IAlertService alertService,
+            IFileService fileService,
             INavigation navigation)
         {
             _recordingService = recordingService;
@@ -65,6 +67,20 @@ namespace SpeakDanish.ViewModel
             NavigateToRecordingsCommand = new Command(async () => await NavigateToRecordingsAsync());
 
             VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
+
+            Task.Run(async () =>
+            {
+                try
+                {
+                    Sentence = await _recordingService.GetRandomSentence(
+                        fileService.LoadFileAsync("sentences", "txt")
+                    );
+                }
+                catch (Exception e)
+                {
+
+                }
+            });
         }
 
         public Command SpeakSentenceCommand { get; set; }

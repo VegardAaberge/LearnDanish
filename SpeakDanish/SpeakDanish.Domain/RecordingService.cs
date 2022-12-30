@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using SpeakDanish.Data;
 using SpeakDanish.Data.Mappers;
+using SpeakDanish.Data.Models;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
 
@@ -11,7 +13,7 @@ namespace SpeakDanish.Domain
 {
     public class RecordingService : IRecordingService
     {
-        private  SpeakDanishDatabase _database;
+        private SpeakDanishDatabase _database;
 
         public RecordingService()
         {
@@ -42,6 +44,28 @@ namespace SpeakDanish.Domain
         public Task<int> DeleteRecordingAsync(Recording recording)
         {
             return _database.DeleteItemAsync(recording.ToRecordingEntity());
+        }
+
+        public async Task<string> GetRandomSentence(Task<string> getSentencesFromResources)
+        {
+            var sentences = await _database.GetItemsAsync<SentenceEntity>();
+            if(sentences.Count < 100)
+            {
+                var lines = (await getSentencesFromResources).Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
+                sentences = lines.Select(line => new SentenceEntity
+                {
+                    Sentence = line
+                }).ToList();
+
+                await _database.InsertAllItemsAsync(sentences);
+            }
+
+            if (sentences.Count == 0)
+                return string.Empty;
+
+            int index = new Random().Next(0, sentences.Count - 1);
+
+            return sentences[index].Sentence;
         }
     }
 }

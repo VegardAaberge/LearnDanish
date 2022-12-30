@@ -32,6 +32,7 @@ namespace SpeakDanish.Droid
             services.AddSingleton<IAudioRecorder, AudioRecorder>();
             services.AddSingleton<ITtsDataInstaller, TtsDataInstaller>();
             services.AddSingleton<IAlertService, AlertService>();
+            services.AddSingleton<IFileService, FileService>();
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

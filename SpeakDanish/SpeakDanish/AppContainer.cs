@@ -24,7 +24,7 @@ namespace SpeakDanish
 
         private static void ConfigureServices(IServiceCollection services)
 		{
-			services.AddTransient<IRecordingService, RecordingService>();
+			services.AddSingleton<IRecordingService, RecordingService>();
 
 			services.AddSingleton<HomeViewModel>();
 			services.AddTransient<RecordingsViewModel>();

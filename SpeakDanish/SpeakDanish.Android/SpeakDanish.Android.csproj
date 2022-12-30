@@ -67,6 +67,7 @@
     <Compile Include="Services\TtsDataInstaller.cs" />
     <Compile Include="Services\AudioRecorder.cs" />
     <Compile Include="Services\AlertService.cs" />
+    <Compile Include="Services\FileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -99,6 +100,9 @@
       <Project>{D972445A-ED0B-4383-9139-DE1022CA1D7F}</Project>
       <Name>SpeakDanish</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\sentences.txt" />
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

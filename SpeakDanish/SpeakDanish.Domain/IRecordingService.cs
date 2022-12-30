@@ -34,6 +34,13 @@ namespace SpeakDanish.Domain
         /// <param name="recording">The recording to delete.</param>
         /// <returns>The number of rows affected by the delete operation.</returns>
         Task<int> DeleteRecordingAsync(Recording recording);
+
+        /// <summary>
+        /// Retrieves a random sentence from a file.
+        /// </summary>
+        /// <param name="filepath">The path to the file containing the sentences.</param>
+        /// <returns>A random sentence from the file.</returns>
+        Task<string> GetRandomSentence(Task<string> getSentencesFromResources);
     }
 
 }

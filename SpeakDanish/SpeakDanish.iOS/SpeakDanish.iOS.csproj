@@ -72,6 +72,7 @@
     <Compile Include="Services\AudioRecorder.cs" />
     <Compile Include="Services\TtsDataInstaller.cs" />
     <Compile Include="Services\AlertService.cs" />
+    <Compile Include="Services\FileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -143,5 +144,8 @@
   <ItemGroup>
     <Folder Include="Renderers\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\sentences.txt" />
   </ItemGroup>
 </Project>
