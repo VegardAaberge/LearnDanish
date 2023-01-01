@@ -37,6 +37,10 @@
     <None Remove="Resources\" />
     <None Remove="Resources\sentences.txt" />
     <None Remove="Resources\materialdesignicons-webfont.ttf" />
+    <None Remove="View\Common\" />
+    <None Remove="Controls\Buttons\" />
+    <None Remove="Controls\ContentViews\" />
+    <None Remove="Controls\GestureRecognizers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
@@ -48,6 +52,10 @@
     <Folder Include="Extensions\" />
     <Folder Include="Services\Enums\" />
     <Folder Include="Resources\" />
+    <Folder Include="View\Common\" />
+    <Folder Include="Controls\Buttons\" />
+    <Folder Include="Controls\ContentViews\" />
+    <Folder Include="Controls\GestureRecognizers\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\sentences.txt" />
@@ -55,5 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeakDanish.Domain\SpeakDanish.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Controls\ContentViews\CircleIcon.xaml.cs">
+      <DependentUpon>CircleIcon.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

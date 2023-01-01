@@ -34,6 +34,7 @@ namespace SpeakDanish.ViewModel
             PlaySentenceCommand = new Command<Recording>(async (r) => await PlaySentenceAsync(r));
             PlayAudioCommand = new Command<Recording>(async (r) => await PlayAudioAsync(r));
             RedoCommand = new Command<Recording>(async (r) => await RedoAsync(r));
+            DeleteCommand = new Command<Recording>(async (r) => await DeleteAsync(r));
 
             LoadRecordingsAsync().ConfigureAwait(false);
         }
@@ -41,6 +42,7 @@ namespace SpeakDanish.ViewModel
         public Command PlaySentenceCommand { get; internal set; }
         public Command PlayAudioCommand { get; internal set; }
         public Command RedoCommand { get; internal set; }
+        public Command DeleteCommand { get; internal set; }
 
         public ObservableCollection<Recording> Recordings {
             get => _recordings;
@@ -80,6 +82,10 @@ namespace SpeakDanish.ViewModel
         }
 
         private async Task RedoAsync(Recording recording)
+        {
+        }
+
+        private async Task DeleteAsync(Recording recording)
         {
         }
     }

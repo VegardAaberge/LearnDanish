@@ -2,11 +2,10 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:common="clr-namespace:SpeakDanish.View.Common"
     xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModel"
-    xmlns:controls="clr-namespace:SpeakDanish.Controls"
-    xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
-    xmlns:models="clr-namespace:SpeakDanish.Domain.Models;assembly=SpeakDanish.Domain"
     x:DataType="viewmodel:RecordingsViewModel"
+    
     x:Class="SpeakDanish.View.RecordingsPage"
     Title="{Binding Title}">
 
@@ -14,78 +13,8 @@
                     SelectionMode="Single"
                     ItemsSource="{Binding Recordings}">
         <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="models:Recording">
-                <ContentView>
-                    <Grid RowDefinitions="*, 1">
-                        <Grid
-                            Grid.Row="0"
-                            Margin="12, 10"
-                            ColumnDefinitions="*,40,40">
-
-                            <Grid
-                                Grid.Column="0"
-                                ColumnDefinitions="50, *">
-
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Path=PlaySentenceCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
-                                        CommandParameter="{Binding .}">
-                                    </TapGestureRecognizer>
-                                </Grid.GestureRecognizers>
-
-                                <controls:CircleIcon
-                                    Grid.Column="0"
-                                    HorizontalOptions="Start"
-                                    FrameColor="Blue"
-                                    LabelTextColor="White"
-                                    FrameSize="35"
-                                    LabelFontSize="22"
-                                    IconText="{Binding VolumeIcon}" />
-
-                                <Label
-                                    Grid.Column="1"
-                                    Text="{Binding Sentence}"
-                                    HorizontalOptions="Start"
-                                    VerticalOptions="Center" />
-                            </Grid>
-
-
-                            <Button
-                                Grid.Column="1"
-                                Command="{Binding Path=PlayAudioCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}} }"
-                                CommandParameter="{Binding .}">
-                                <Button.ImageSource>
-                                    <FontImageSource
-                                        Glyph="{x:Static helpers:MaterialDesignIconsFont.PlayCircleOutline }"
-                                        Color="Green"
-                                        Size="30" 
-                                        FontFamily="MaterialDesignIcons" />
-                                </Button.ImageSource>
-                            </Button>
-
-                            <Button
-                                Grid.Column="2"
-                                Command="{Binding Path=PlaySentenceCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
-                                CommandParameter="{Binding .}">
-                                <Button.ImageSource>
-                                    <FontImageSource
-                                        Glyph="{x:Static helpers:MaterialDesignIconsFont.Refresh }"
-                                        Color="OrangeRed"
-                                        Size="30" 
-                                        FontFamily="MaterialDesignIcons" />
-                                </Button.ImageSource>
-                            </Button>
-                        </Grid>
-
-                        <BoxView
-                            Grid.Row="1"
-                            Margin="0"
-                            Color="LightGray"
-                            HeightRequest="1"
-                            VerticalOptions="FillAndExpand" />
-
-                    </Grid>
-                </ContentView>
+            <DataTemplate>
+                <common:RecordingItem />
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>

@@ -2,7 +2,7 @@
 using Android.Content;
 using Android.Views;
 using System.Linq;
-using SpeakDanish.Controls;
+using SpeakDanish.Controls.GestureRecognizers;
 using SpeakDanish.Platforms.Android.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android.AppCompat;

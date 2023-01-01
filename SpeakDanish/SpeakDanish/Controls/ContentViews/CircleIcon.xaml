@@ -2,9 +2,8 @@
 <ContentView
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:SpeakDanish.Controls"
     xmlns:converters="clr-namespace:SpeakDanish.Converters"
-    x:Class="SpeakDanish.Controls.CircleIcon"
+    x:Class="SpeakDanish.Controls.ContentViews.CircleIcon"
     x:Name="circleIcon">
 
     <ContentView.Resources>

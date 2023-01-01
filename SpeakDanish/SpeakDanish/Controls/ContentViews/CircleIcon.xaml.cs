@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace SpeakDanish.Controls
+namespace SpeakDanish.Controls.ContentViews
 {	
 	public partial class CircleIcon : ContentView
 	{	

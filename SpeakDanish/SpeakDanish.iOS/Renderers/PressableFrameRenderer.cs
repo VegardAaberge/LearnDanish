@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Foundation;
-using SpeakDanish.Controls;
+using SpeakDanish.Controls.GestureRecognizers;
 using SpeakDanish.Platforms.iOS.Renderers;
 using UIKit;
 using Xamarin.Forms;

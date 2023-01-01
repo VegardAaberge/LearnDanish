@@ -4,7 +4,9 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModel"
              xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
-             xmlns:controls="clr-namespace:SpeakDanish.Controls"
+             xmlns:gestureRecognizers="clr-namespace:SpeakDanish.Controls.GestureRecognizers"
+             xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
+             xmlns:buttons="clr-namespace:SpeakDanish.Controls.Buttons"
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
              x:DataType="viewmodel:HomeViewModel"
              x:Class="SpeakDanish.MainPage"
@@ -67,7 +69,7 @@
                 <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
             </Grid.GestureRecognizers>
 
-            <controls:CircleIcon
+            <contentViews:CircleIcon
                 Grid.Column="0"
                 HorizontalOptions="Start"
                 FrameColor="Blue"
@@ -83,7 +85,7 @@
                 VerticalOptions="Center" />
         </Grid>
 
-        <controls:CircleIcon
+        <contentViews:CircleIcon
             Grid.Row="2"
             IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
             LabelFontSize="200"
@@ -91,12 +93,12 @@
             FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
             FrameSize="250">
 
-            <controls:CircleIcon.FrameGestureRecognizers>
-                <controls:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
-                <controls:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
-            </controls:CircleIcon.FrameGestureRecognizers>
+            <contentViews:CircleIcon.FrameGestureRecognizers>
+                <gestureRecognizers:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
+                <gestureRecognizers:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
+            </contentViews:CircleIcon.FrameGestureRecognizers>
 
-        </controls:CircleIcon>
+        </contentViews:CircleIcon>
 
         <StackLayout Grid.Row="3">
 
@@ -119,7 +121,7 @@
                         </TapGestureRecognizer>
                     </Grid.GestureRecognizers>
 
-                    <controls:CircleIcon
+                    <contentViews:CircleIcon
                         Grid.Column="0"
                         HorizontalOptions="Start"
                         FrameColor="Blue"
@@ -137,18 +139,13 @@
             </Grid>
             
 
-            <Button
+            <buttons:MaterialsButton
                 Command="{Binding NewSentenceCommand}"
                 IsEnabled="{Binding HasRecording }"
-                VerticalOptions="Start"
                 Text="Save Recording"
-                BackgroundColor="{Binding HasRecording, Converter={StaticResource DisabledColorConverter}, ConverterParameter={StaticResource BlueColor}}"
-                TextColor="White"
-                CornerRadius="4"
-                HeightRequest="40"
-                Padding="8,0"
-                Margin="0,0,0,16"
-                FontSize="15" />
+                BackgroundColor="{Binding HasRecording, Converter={StaticResource DisabledColorConverter}, ConverterParameter={StaticResource BlueColor}}" />
+
+
         </StackLayout>
         
     </Grid>

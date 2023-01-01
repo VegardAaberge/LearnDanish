@@ -3,13 +3,13 @@ using System.ComponentModel;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace SpeakDanish.Controls
+namespace SpeakDanish.Controls.GestureRecognizers
 {
-	public sealed class ReleasedGestureRecognizer : GestureRecognizer
+    public sealed class PressedGestureRecognizer : GestureRecognizer
     {
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create("Command", typeof(ICommand), typeof(ReleasedGestureRecognizer), null);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create("Command", typeof(ICommand), typeof(PressedGestureRecognizer), null);
 
-        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create("CommandParameter", typeof(object), typeof(ReleasedGestureRecognizer), null);
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create("CommandParameter", typeof(object), typeof(PressedGestureRecognizer), null);
 
         public ICommand Command
         {
@@ -23,15 +23,15 @@ namespace SpeakDanish.Controls
             set { this.SetValue(CommandParameterProperty, value); }
         }
 
-        public event EventHandler Released;
+        public event EventHandler Pressed;
 
-        public void SendReleased(VisualElement sender)
+        public void SendPressed(VisualElement sender)
         {
             ICommand cmd = Command;
             if (cmd != null && cmd.CanExecute(CommandParameter))
                 cmd.Execute(CommandParameter);
 
-            EventHandler handler = Released;
+            EventHandler handler = Pressed;
             if (handler != null)
                 handler(sender, new TappedEventArgs(CommandParameter));
         }
