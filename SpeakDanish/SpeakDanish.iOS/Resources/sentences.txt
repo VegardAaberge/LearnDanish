@@ -98,3 +98,515 @@ Dette er et godt sted at holde fest.
 Denne bog har en god forfatter.
 Dagen har været god til at spille spil.
 Dette er en god cocktail til aftenen.
+Et glas vand vil være godt lige nu.
+Elefanten spiser mange blade hver dag.
+Et godt måltid skal have en hovedret og en dessert.
+Elefanten har store ører og en lang snabel.
+Et glas vand er godt for tørsten.
+Elefanten er verdens største landdyr.
+Et godt måltid skal også have et glas vin.
+Elefanten har en stærk hukommelse.
+Et glas vand er sundt og hydratiserende.
+Elefanten kan løfte ting med snablen.
+Et godt måltid skal også have en salat.
+Elefanten lever typisk i flokke.
+Et glas vand kan være en god start på dagen.
+Elefanten er kendt for sin store størrelse.
+Et godt måltid skal også have brød.
+Elefanten har en god hørelse og lugtesans.
+Et glas vand kan hjælpe på hovedpine.
+Elefanten har en lang levetid.
+Et godt måltid skal også have grøntsager.
+Elefanten er et symbol på visdom og styrke.
+Floden strømmer gennem byen.
+Frisk frugt er godt for kroppen.
+Festen starter kl. 20 i aften.
+Floden har mange små øer.
+Frisk frugt indeholder mange vitaminer.
+Festen har mange spændende aktiviteter.
+Floden har en god ørredbestand.
+Frisk frugt giver god energi.
+Festen byder på god musik og dans.
+Floden har mange vandfugle.
+Frisk frugt er sundt og lækkert.
+Festen har også en god buffet.
+Floden har et godt vandmiljø.
+Frisk frugt er godt for tænderne.
+Festen har også en god bar.
+Floden har mange dykkere.
+Frisk frugt giver en god fordøjelse.
+Festen har mange glade gæster.
+Floden har en god bæredygtig fiskeriindustri.
+Frisk frugt er godt for hud og hår.
+Gåtur i skoven er godt for kroppen.
+Grøntsager indeholder mange vitaminer.
+Gåtur i skoven er godt for sindet.
+Grøntsager er sunde og lækre.
+Gåtur i skoven er godt for humøret.
+Grøntsager er godt for tænderne.
+Gåtur i skoven er godt for konditionen.
+Grøntsager giver god energi.
+Gåtur i skoven er godt for fordøjelsen.
+Grøntsager er godt for hud og hår.
+Gåtur i skoven er godt for koncentrationen.
+Grøntsager indeholder mange mineraler.
+Gåtur i skoven er godt for søvnkvaliteten.
+Grøntsager er godt for tarmfloraen.
+Gåtur i skoven er godt for kroppens balance.
+Grøntsager indeholder mange antioxidantter.
+Gåtur i skoven er godt for kroppens velvære.
+Grøntsager er godt for kolesterolet.
+Gåtur i skoven er godt for sindets balance.
+Grøntsager er godt for blodsukkeret.
+Huset har en stor have med blomster.
+Hunden leger med sin bold.
+Huset har en god beliggenhed tæt på byen.
+Hunden er min bedste ven.
+Huset har en stor terrasse med udsigt.
+Hunden er altid glad og energisk.
+Huset har en stor garage til bilen.
+Hunden elsker at løbe i skoven.
+Huset har en god indretning og lysindfald.
+Hunden er god til at lytte og lære.
+Huset har en stor stue med brændeovn.
+Hunden elsker at være i selskab.
+Huset har en god opvarmning og ventilation.
+Hunden er god til at løse gåder og udfordringer.
+Huset har en stor køkken-alrum med plads til hele familien.
+Hunden er god til at fange sin bold.
+Huset har en god isolation og lydreduktion.
+Hunden elsker at få kærlighed og opmærksomhed.
+Huset har en stor have med frugttræer.
+Hunden er god til at beskytte sin familie.
+I dag skal vi på tur til stranden.
+Isen smager godt i denne varme dag.
+I dag er der godt vejr med solskin.
+Isen har mange smagsvarianter.
+I dag skal vi også på picnic i parken.
+Isen er lækker og kølende.
+I dag er der også godt med skygge på terrassen.
+Isen er også god til at dæmpe tørsten.
+I dag skal vi også besøge et museum.
+Isen kan også laves med frugt og bær.
+I dag skal vi også gå en tur i skoven.
+Isen er et godt alternativ til sodavand.
+I dag skal vi også spise en god middag.
+Isen er også god til at lindre hovedpine.
+I dag skal vi også se en film i biografen.
+Isen er et godt valg for diabetikere.
+I dag skal vi også hygge os med venner.
+Isen er også god til at lindre tør hud.
+I dag skal vi også nyde solen på terrassen.
+Isen kan også laves med skyr og proteinpulver.
+Jeg har en god dag.
+Jeg bor i en lille by.
+Jeg har et godt humør.
+Jeg spiser gerne frugt.
+Jeg har et godt arbejde.
+Jeg spiser gerne grøntsager.
+Jeg har en god hund.
+Jeg spiser gerne fisk.
+Jeg har en god bil.
+Jeg spiser gerne kød.
+Jeg elsker at læse en god bog.
+Jeg tager altid mine nøgler med.
+Jeg elsker at være ude i naturen.
+Jeg tager altid min telefon med.
+Jeg elsker at lave mad og bage.
+Jeg tager altid min pung med.
+Jeg elsker at rejse og opleve nye steder.
+Jeg tager altid min kalender med.
+Jeg elsker at være sammen med venner og familie.
+Jeg tager altid min paraply med.
+Jeg elsker at dyrke sport og holde mig aktiv.
+Jeg tager altid mine høretelefoner med.
+Jeg elsker at lære nye ting og udfordre mig selv.
+Jeg tager altid min vandflaske med.
+Jeg elsker at have et godt og harmonisk hjem.
+Jeg tager altid min lommelygte med.
+Jeg elsker at være kreativ og udtrykke mig gennem kunst.
+Jeg tager alt
+Kattene sover i kurven.
+Kagen smager dejligt.
+København er Danmarks hovedstad.
+Kortet viser vejen til huset.
+Køkkenet er på anden sal.
+Kontoret er lukket i dag.
+Kasketten er sort.
+Kufferten er fyldt med tøj.
+Køleskabet er tomt.
+Kaffen er varm.
+Kasketten passer godt.
+Købmanden sælger frugt.
+Køkkenhaven er fyldt med grøntsager.
+Køleren er fuld af øl.
+Køleskabet indeholder mad til morgenmaden.
+Køkkenet er det bedste sted at lave mad.
+Kufferten er klar til rejsen.
+Købmanden har frisk brød.
+Katten leger med sin bold.
+Københavns Zoo er et godt sted at gå med børn.
+Køkkenet har mange skabe.
+Katten springer op på bordet.
+Købmanden har mange æbler.
+Kufferten er for tung til at bære.
+Kontoret er fyldt med papirer.
+Køleskabet indeholder mælk og juice.
+Københavns Universitet er et godt sted at studere.
+Kaffebaren har dejlige kager.
+Køkkenhaven er fyldt med krydderurter.
+Kufferten er låst med et lås.
+Lægge læbestiften væk.
+Løbe langs stranden.
+Læse lydbogen højt.
+Lade laptop'en oplade.
+Løfte læderjakken op.
+Lyset lyser lyst i rummet.
+Lege med legetøjet.
+Lære at læse dansk.
+Løbe længere end i går.
+Lægge øre til musikken.
+Læse bogen til ende.
+Lægge mærke til detaljerne.
+Lægge lommepenge i sparet.
+Løse gåden med logik.
+Lægge armen om træt ven.
+Lade solen varme ansigtet.
+Løbe længere og hurtigere.
+Lære at lave mad fra bunden.
+Lægge hånden på hjertet.
+Løse opgaverne i fred.
+Lære at læse stjernerne.
+Lægge hånden på skulderen.
+Løfte vægte i træningscenteret.
+Lægge øre til råd fra venner.
+Lægge tæppet omkuld for at støvsuge.
+Løbe længere end nogensinde før.
+Lære at læse kroppens sprog.
+Lægge tingene på plads efter brug.
+Lade vandet løbe i et bad.
+Løse krydsordet i avisen.
+Månen er rund.
+Min mor er fra Danmark.
+Maden smager godt.
+Min kat hedder Mopper.
+Mælk er godt til morgenmad.
+Mit navn er Maria.
+Mandag er den første dag i ugen.
+Måge kalder på sin ven.
+Mennesker elsker at rejse.
+Mørke skyer trækker ind over himlen.
+Mit hjerte banker hårdt.
+Musen løber hen over gulvet.
+Månen skinner klart i nat.
+Min far spiller golf hver søndag.
+Månen går op om aftenen.
+Min søster studerer til læge.
+Mælkebøtten står på bordet.
+Mørket falder på tidligt om vinteren.
+Månen er den næststørste måne i Solsystemet.
+Mit hus har røde vinduer.
+Mange danskere elsker at sejle.
+Min hund er en Golden Retriever.
+Månen er den eneste måne, der omgiver Jorden.
+Maden er klar, lad os spise!
+Månen har ingen atmosfære.
+Månen har været beboet af mennesker.
+Månen har en diameter på omkring 3.474 km.
+Månen har mange kratere på sin overflade.
+Månen er den femte tætteste himmellegeme til Jorden.
+Månen har været genstand for mange missioner fra Jorden.
+Natten er mørk og stille.
+Nattehimlen er stjerneklar.
+Naturligvis vil jeg hjælpe dig.
+Navnet på denne by er København.
+Nemt at lære, svært at mestre.
+Nej, jeg taler ikke dansk fluently.
+Nogen har spist mine cookies!
+Når solen skinner, er livet godt.
+Nytårsaften er en særlig aften.
+Nysgerrighed er en god ting.
+Nytårsforsæt skal holdes.
+Næste stop er Nørreport station.
+Næsten ingen regn i sommer.
+Nærvær er nødvendigt i et forhold.
+Nøglen til succes er hårdt arbejde.
+Nøjagtigt hvad jeg havde brug for.
+Nøjagtigt hvad jeg havde forventet.
+Nøjagtigt hvad jeg havde håbet på.
+Nøjagtigt hvad jeg havde tænkt.
+Nøjagtigt hvad jeg havde ønsket.
+Osten er en del af verden.
+Omgangen er ikke i orden.
+Overenskomsten skal underskrives.
+Ordet "odyssey" kommer fra græsk.
+Osteriet er et godt spisested.
+Omeletten skal vendes om.
+Ovenpå ligger et soveværelse.
+Omgivelserne er smukke.
+Opløsningen skal fortyndes.
+Oprindeligt stammede begrebet "organiske forbindelser" fra kemien.
+Oplysningerne i dokumentet er ikke korrekte.
+Omløbstiden på denne planet er 365 dage.
+Opret en konto på hjemmesiden.
+Oplysningskravet skal overholdes.
+Omgivelserne er ikke særlig hyggelige.
+Ovenfor finder du en oversigt.
+Opret en forbindelse til internettet.
+Ovenpå ligger der et badeværelse.
+Omgangen er for stærk til at drikke.
+Ovenstående punkter skal udføres.
+Opløsningen skal måles nøjagtigt.
+Ovenpå ligger et kontor.
+Oplysningerne skal verificeres.
+Omgivelserne er ikke særlig pæne.
+Oprindeligt stammer begrebet "organisk kemi" fra græsk.
+Omløbstiden på denne planet er lidt kortere end jordens.
+Opret en profil på hjemmesiden.
+Oplysningskravet skal overholdes i alle dele af virksomheden.
+Omgivelserne er ikke særlig indbydende.
+Ovenstående regler skal følges.
+Pigen spiser en pære.
+Papegøjen plukker en paradisfrugt.
+Paradisæblerne er røde og saftige.
+Prøv at spille på pauken.
+Pigen har en pink paryk på.
+Panden på pandabjørnen er sort og blank.
+Prøv at holde balancen på en balancepind.
+Pigen spiller piketpolo med sine venner.
+Pandekagerne er friskbagte og dufter godt.
+Pigen laver et papirklip af en elefant.
+Prøv at spille på en panfløjte.
+Pigen læser en bog om pyramiderne i Egypten.
+Pindsvinet sover i sin pindsvinehule.
+Pigen har en fin prinsessekjole på.
+Prøv at spille på en pibe.
+Pigen har plantet et par jordbærplanter.
+Prøv at spille på en klaver med både store og små pletter.
+Pigen tegner et portræt af sin bedstemor.
+Panden på pandabjørnen er sort og blank.
+Pigen spiller piketpolo med sine venner.
+Prøv at spille på en panfløjte.
+Pigen læser en bog om pyramiderne i Egypten.
+Pindsvinet sover i sin pindsvinehule.
+Pigen har plantet et par jordbærplanter.
+Prøv at spille på en klaver med både store og små pletter.
+Pigen tegner et portræt af sin bedstemor.
+Pigen spiser en pære.
+Prøv at spille på pauken.
+Pigen har en pink paryk på.
+Panden på pandabjørnen er sort og blank.
+Rød blomst på grøn stængel.
+Røde æbler på træet.
+Rødvin i glaset.
+Røde roser på bordet.
+Rækker af huse i rækker.
+Rullemarie i køkkenet.
+Rullekrave på trøjen.
+Rødme i kinderne.
+Rødgrønt flag i hånden.
+Rødspætte på grillen.
+Rødhalset ræv i skoven.
+Rød sko med høje hæle.
+Rødt lys på trafikampel.
+Røde læber på ansigtet.
+Rødt tæppe i entréen.
+Rødbrun hund i haven.
+Rødvinsglas på bordet.
+Røde bær på busken.
+Rødvinsmarinade til kødet.
+Røde pølser på grillen.
+Rulle med ost og skinke.
+Rund form på kagen.
+Rødt tæppe i stuen.
+Rævejagt i skoven.
+Rød løber ved filmpremiere.
+Rødbeder i salaten.
+Rødvin til maden.
+Røde øjne efter tårer.
+Rød ballon i luften.
+Rødglødende solnedgang.
+Sæl skal du have.
+Solen skinner fra en skyfri himmel
+Syrener dufter dejligt.
+Søen ligger som et spejl.
+Spis din suppe, den er god.
+Skovbunden er tæt med bladene.
+Sid pænt på stolen.
+Sæt dig ved siden af mig.
+Søde blomster i vinduet.
+Spil ikke med ilden.
+Skal vi tage en tur til byen?
+Spis din mad, du bliver sulten igen senere.
+Sørg for at huske at lukke døren.
+Spis ikke for meget slik.
+Solen skinner varmt i dag.
+Sød musik i ørerne.
+Sæt dig ned og slappe af.
+Spil et spil med mig.
+Sæt dig ved siden af ham.
+Solen skinner klart gennem vinduet.
+Sælgeren er venlig og hjælpsom.
+Søen er rolig og klar som en spejl.
+Skræl æblet før du spiser det.
+Spis din mad, det er sundt for dig.
+Sæt dig på den bløde sofa.
+Sælgeren tilbød mig et godt tilbud.
+Sørg for at huske at slukke lyset inden du går i seng.
+Spis din grøntsager, de er godt for dig.
+Solen skinner på den grønne græsplæne.
+Sæt dig ved siden af hende.
+Tænk på tærten, inden du tager en bid.
+Tiden flyver, når man har det sjovt.
+Tænk over, hvad du siger, inden du taler.
+Træerne vajer i vinden.
+Tænk på dine valg, før du handler.
+Tæl til ti, inden du reagerer.
+Tænk på konsekvenserne, inden du gør noget.
+Tæppet ligger glat på gulvet.
+Træet står stærkt i stormen.
+Tænk på andre, inden du tænker på dig selv.
+Tænk på miljøet, inden du køber noget.
+Tænk på dine mål, inden du træffer et valg.
+Tænk på din fremtid, inden du handler nu.
+Tæl dine velsignelser, ikke dine problemer.
+Tænk på dit helbred, inden du spiser junkfood.
+Tænk på dine værdier, inden du træffer et valg.
+Træt af at tænke på det samme hele tiden?
+Tænk på dine drømme, inden du giver op.
+Tænk på dine styrker, inden du fokuserer på dine svagheder.
+Tænk på dine prioriteter, inden du spilder din tid.
+Udflugter til bjerge og søer.
+Udgående person med højt humør.
+Udmattet efter en lang dag.
+Udtrykke sig klart og præcist.
+Udvalg af lækre kager og desserter.
+Udsigten fra toppen af tårnet er fantastisk.
+Udtænke en plan for at løse problemet.
+Udtale ordene så tydeligt som muligt.
+Udøve regelmæssigt for at holde sig sund.
+Udøve selvkontrol for at opnå målene.
+Udøve tolerancen og forståelsen for andre.
+Udøve yndefulde bevægelser i dans.
+Udøve yoga for at finde indre ro.
+Udøve økologisk landbrug for at bevare naturen.
+Udføre en kompleks opgave med præcision.
+Udføre en professionel service med et smil.
+Udføre en værdifuld tjeneste for samfundet.
+Udføre nødvendigt vedligehold for at holde huset i god stand.
+Udføre små opgaver rundt om i huset.
+Udføre straffeøvelser for at opbygge styrke.
+Vælg denne mulighed.
+Vend tilbage til mig.
+Værdien af dette er uvurderlig.
+Vær opmærksom på faren.
+Vær tålmodig med ham.
+Værelset er fyldt med røg.
+Var dette den bedste løsning?
+Vær sikker på at du har alt med.
+Vær taknemmelig for alt du har.
+Vær forsigtig med ilden.
+Vær ikke bange for at spørge om hjælp.
+Vær altid ærlig i dine handlinger.
+Ved du hvad klokken er?
+Vær ikke for hurtig til at dømme.
+Ved du hvad dette betyder?
+Vær stolt af dine præstationer.
+Ved du hvor vi er på vej hen?
+Vær ikke bange for at tale højt.
+Ved du hvad der skete i går?
+Vær altid høflig og respektfuld.
+Ved du hvad du vil have til middag?
+Vær altid venlig og imødekommende.
+Ved du hvad tiden er i New York?
+Vær altid opmærksom på dine omgivelser.
+Ved du hvad du skal gøre nu?
+Vær altid taknemmelig for dine velsignelser.
+Ved du hvad der sker i weekenden?
+Vær altid tilgængelig for dem der har brug for dig.
+Ved du hvad du skal have på til festen?
+Vær altid åben for at lære nyt.
+Æblegrød med kanel og honning
+Ægget i skålen er blødt kogt
+Ærmerne på trøjen er for lange
+Æsken med legetøj er under sengen
+Ænderne ved søen lægger æg
+Æblekagen er lige blevet bagt
+Ægget er rødt og æblet er grønt
+Æblejuicen i køleskabet er kold
+Æsken med krydderier står i skabet
+Æren for maden går til kokken
+Æggesalaten er lavet med mayonnaise
+Æblet falder ikke langt fra stammen
+Æsken med chokolade er fyldt med søde sager
+Æbletræet i haven giver mange frugter
+Æggeuret på komfuret viser klokken
+Æsken med perler er hendes skat
+Æblepandekager med skyr og honning
+Æsken med bøger står på hylden
+Ærmerne på skjorten er knappet op
+Æblemosten er lavet af modne frugter
+Æsken med papir er tom, vi skal have mere
+Æbletærten er bagt med marcipan
+Æsken med tændstikker er ved siden af ilden
+Ægget er kogt i tre minutter
+Æblekage med småkager og kokos
+Æsken med kuglepenne er i skuffen
+Ærmerne på blusen er blomstret
+Æblepandekager med kanel og sukker
+Æsken med film står på hylden
+Æbletræet har mange grene og blade
+Øjeblikkelig alarmering af brandvæsenet.
+Ødelæggelsen af denne bygning vil være irreversibel.
+Øst for denne bjergkæde ligger en ødemark.
+Øksehovedet på denne dør er smukt udformet.
+Ørkenen er et barskt og ugæstfrit sted.
+Østersen er en lille, skalddyragtig organisme.
+Øde øer uden mennesker eller byer.
+Østkysten af Danmark er kendt for sine klipper og fyrtårne.
+Øen Bornholm er en populær turistdestination i Danmark.
+Øget konkurrence på det globale marked har ført til lavere priser.
+Øllet er en af de mest populære drikke i Danmark.
+Økologisk landbrug er en bæredygtig måde at dyrke mad på.
+Ødemarken er et ugunstigt sted for dyr at leve på grund af mangel på vand.
+Ørne har et stærkt syn og kan spotte bytte fra store afstande.
+Øresneglen er en lille bløddyr, der findes i haven.
+Øerne i Stillehavet er kendt for deres tropiske klima og smukke strande.
+Økologiske produkter er produceret uden brug af skadelige kemikalier.
+Ødelægge naturen vil have alvorlige konsekvenser for menneskeheden.
+Øst for denne by ligger et stort skovområde.
+Ønsker du en øl til din mad?
+Ølproduktionen i Danmark har en lang historie.
+Ørkenen er et barskt sted, men også et sted med en unik skønhed.
+Ødelagte bygninger efter et jordskælv.
+Øget fokus på miljøbeskyttelse er en vigtig sag.
+Åben vinduet for at lade frisk luft ind.
+Åh, jeg glemte min taske i bussen.
+Årstiden med de lange dage og korte nætter.
+Året rundt har vi brug for solcreme.
+Ål ligger gemt i græsset ved søen.
+Åndenød kræver hurtig medicinsk behandling.
+Årets bedste fest med venner og familie.
+Årstiden med blomstrende træer og grønne blade.
+Ål har følehorn og et glat skind.
+Åndsvagt er en alvorlig tilstand.
+Åben døren til dit hjerte for kærlighed.
+Årets nytårsaften fejres med fyrværkeri.
+Ål har et skarpt syn og kan se i vandet.
+Åh, jeg er så træt i dag.
+Årets sommerferie på en solrig ø.
+Årstiden med efterårsfarver og blæst.
+Åben vinduet og lad lyden af fuglene ind.
+Årets julefest med gaver og god mad.
+Årstiden med sne og kulde.
+Ål har en smidig og hurtig svømmeform.
+Åh, jeg har glemt at tænde ovnen.
+Årets første blomster i haven.
+Årstiden med varme og tørke.
+Ål har mange fjender i naturen.
+Åh, jeg har glemt at tage min medicin.
+Årets fødselsdag fejres med kage.
+Årstiden med våde veje og regn.
+Åben vinduet for at lytte til fuglefløjten.
+Årets julekalender med overraskelser bag hver låge.
+Årstiden med grønt græs og solskin.
