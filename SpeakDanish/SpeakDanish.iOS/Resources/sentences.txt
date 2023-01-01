@@ -1,50 +1,100 @@
-﻿Jeg vil gerne have en kop kaffe.
-Kan du læse denne bog?
-Han spiser altid sin morgenmad i køkkenet.
-Hun har lige købt en ny bil.
-De bor i et hus ved søen.
-Vi skal mødes klokken ti i morgen.
-Det regner udenfor.
-Min mor er sygeplejerske.
-Dit værelse ser rent ud.
-Hans hund hedder Max.
-Hendes hus er lille, men hyggeligt.
-Deres børn elsker at lege i parken.
-Vores lejlighed er på anden sal.
-Dine sko ser slidte ud.
-Mit arbejde er stressende, men også givende.
-Mors kjole er lilla.
-Fars skjorte er blå.
-Søsterens kuffert er rød.
-Brors computer er ny.
-Bedstemors have er fyldt med blomster.
-Farfars bil er gammel, men pålidelig.
-Mosterens kat er kulsort.
-Onkels hund er stor og venlig.
-Tante Lises hus er malet hvidt.
-Kusinen er læge.
-Venindens hår er langt og mørkt.
-Kærestens øjne er blå.
-Min farmor er pensionist.
-Min farfar er ingeniør.
-Min morfar er lærer.
-Min mormor er gartner.
-Min søster er studerende.
-Min bror er mekaniker.
-Min tante er sekretær.
-Min onkel er politibetjent.
-Min kusine er frisør.
-Min veninde er tandlæge.
-Min kæreste er IT-tekniker.
-Min svigermor er sygeplejerske.
-Min svigerfar er tømrer.
-Min svigerinde er lærer.
-Min svoger er arkitekt.
-Min svigerdatter er journalist.
-Min svigersøn er elektriker.
-Min oldemor er pensionist.
-Min oldefar er gartner.
-Min oldetante er kok.
-Min oldeonkel er journalist.
-Min oldekusine er tandlæge.
-Min oldeven er politibetjent.
+﻿Aftenen er lang og kold.
+Alligevel elsker jeg det.
+Altid rejse med et åbent sind.
+Amatørkokken laver en lækker ret.
+Ananas på min pizza? Nej tak.
+Anden etage, tredje dør til venstre.
+Angsten fylder mig indvendigt.
+Anna og jeg skal til koncert i aften.
+Arbejdet skal være færdigt i morgen.
+Aske fra pejsen ligger på gulvet.
+At lære et nyt sprog er svært.
+Avisen ligger på bordet.
+Avocado på brødet er lækkert.
+Avisen bringer de seneste nyheder.
+August måned er altid varm.
+Aftenen byder på god musik og dans.
+Alle børnene leger udenfor.
+Altid husk at tænde lyset først.
+Amatørfotografen tager et billede.
+Ananas er min yndlingsfrugt.
+Anden etage er forbeholdt beboere.
+Angsten for at flyve forsvinder aldrig helt.
+Anna spiller piano hver dag.
+Arbejdet er færdigt, nu skal jeg hjem.
+Aske fra pejsen skal fjernes med omhu.
+At lære et nyt sprog kræver tålmodighed.
+Avisen har mange interessante artikler.
+Avocado på brødet er sundt og lækkert.
+Avisen har en god sportssektion.
+August måned er den varmeste på året.
+Bagen med brød skal hentes i bageren.
+Båden sejler ind til kajen.
+Bærrene smager dejligt i denne dessert.
+Bagerst i butikken finder du mælk.
+Både drengen og pigen går i skole.
+Bænken i parken er min yndlingsplads.
+Bagen med brød er fyldt med lækre fristelser.
+Båden sejler ud til øen.
+Bærrene i denne dessert er friske og søde.
+Bagerst i butikken ligger køleskabet.
+Både drengen og pigen er gode til at tegne.
+Bænken i parken er et godt sted at læse en bog.
+Bagen med brød er lige blevet bagt.
+Båden har en stærk motor.
+Bærrene i denne dessert er hjemmedyrket.
+Bagerst i butikken finder du også æg.
+Både drengen og pigen er gode til at løbe.
+Bænken i parken er et godt sted at mødes med venner.
+Bagen med brød er lige blevet afhentet.
+Båden har en stor solseng på dækket.
+Bærrene i denne dessert er lokalt dyrket.
+Bagerst i butikken finder du også smør.
+Både drengen og pigen elsker at lege udenfor.
+Bænken i parken er et godt sted at nyde naturen.
+Bagen med brød skal være færdig kl. 8 i morgen.
+Båden har en stor kahyt til at sove i.
+Bærrene i denne dessert er fulde af vitaminer.
+Bagerst i butikken finder du også ost.
+Både drengen og pigen er glade for dyr.
+Bænken i parken er et godt sted at slappe af.
+Cyklen har et stort bagagebælte.
+Citronen skal skæres i både.
+Cirkuset kommer til byen i dag.
+Cyklen har en god gearskift.
+Citronen skal rives og presses.
+Cirkuset har mange spændende dyr.
+Cyklen har et stærkt lys på styret.
+Citronen skal tilsættes til saucen.
+Cirkuset har også mange underholdende shows.
+Cyklen har en god komfortabel sadel.
+Denne bog handler om en eventyrlig rejse.
+Dagen har været dejlig med solskin.
+Dette er min yndlingsrestaurant.
+Denne bog har mange spændende kapitler.
+Dagen har været hektisk på kontoret.
+Dette er et lækkert måltid.
+Denne bog har fået mange positive anmeldelser.
+Dagen har været god til at være ude.
+Dette er en god vin til maden.
+Denne bog har vundet mange priser.
+Dagen har været perfekt til at gå en tur.
+Dette er et godt sted at mødes med venner.
+Denne bog har mange farverige illustrationer.
+Dagen har været fyldt med arbejde.
+Dette er et lækkert desserthus.
+Denne bog har en spændende historie.
+Dagen har været god til at læse en bog.
+Dette er en god dessert til kaffen.
+Denne bog har mange gode råd og tips.
+Dagen har været god til at være kreativ.
+Dette er et godt sted at nyde naturen.
+Denne bog har en lærerig tekst.
+Dagen har været god til at løbe en tur.
+Dette er en god vin til en hyggelig aften.
+Denne bog har mange interessante fakta.
+Dagen har været god til at slappe af.
+Dette er et godt sted at holde fest.
+Denne bog har en god forfatter.
+Dagen har været god til at spille spil.
+Dette er en god cocktail til aftenen.
