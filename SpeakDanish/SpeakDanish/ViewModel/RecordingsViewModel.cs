@@ -43,21 +43,14 @@ namespace SpeakDanish.ViewModel
         public Command RedoCommand { get; internal set; }
 
         public ObservableCollection<Recording> Recordings {
-            get { return _recordings; }
-            set {
-                _recordings = value;
-                OnPropertyChanged(nameof(Recordings));
-            }
+            get => _recordings;
+            set => SetProperty(ref _recordings, value);
         }
 
         public string VolumeIcon
         {
-            get { return _volumeIcon; }
-            set
-            {
-                _volumeIcon = value;
-                OnPropertyChanged(nameof(VolumeIcon));
-            }
+            get => _volumeIcon;
+            set => SetProperty(ref _volumeIcon, value);
         }
 
         public async Task LoadRecordingsAsync()

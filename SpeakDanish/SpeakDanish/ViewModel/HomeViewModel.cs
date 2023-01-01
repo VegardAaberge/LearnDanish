@@ -79,53 +79,34 @@ namespace SpeakDanish.ViewModel
 
         public string VolumeIcon
         {
-            get { return _volumeIcon; }
-            set
-            {
-                _volumeIcon = value;
-                OnPropertyChanged(nameof(VolumeIcon));
-            }
+            get => _volumeIcon;
+            set => SetProperty(ref _volumeIcon, value);
         }
 
         public bool IsSpeaking
         {
-            get { return _isSpeaking; }
-            set
-            {
-                _isSpeaking = value;
-                OnPropertyChanged(nameof(IsSpeaking));
-            }
+            get => _isSpeaking;
+            set => SetProperty(ref _isSpeaking, value);
         }
-        
+
         public int CountSeconds
         {
-            get { return _countSeconds; }
-            set
-            {
-                _countSeconds = value;
-                OnPropertyChanged(nameof(CountSeconds));
-            }
+            get => _countSeconds;
+            set => SetProperty(ref _countSeconds, value);
         }
-        
+
         public string Sentence
         {
-            get { return _sentence; }
-            set
-            {
-                _sentence = value;
-                OnPropertyChanged(nameof(Sentence));
-            }
+            get => _sentence;
+            set => SetProperty(ref _sentence, value);
         }
-        
+
         public bool IsRecording
         {
-            get { return _isRecording; }
-            set
-            {
-                _isRecording = value;
-                OnPropertyChanged(nameof(IsRecording));
-            }
+            get => _isRecording;
+            set => SetProperty(ref _isRecording, value);
         }
+
 
         public bool HasRecording
         {
