@@ -27,7 +27,6 @@ namespace SpeakDanish.ViewModel
         private IAudioRecorder _audioRecorder;
         private IRecordingService _recordingService;
         private IAlertService _alertService;
-        private IFileService _fileService;
         private INavigation _navigation;
 
         private string _filepath;
@@ -48,14 +47,12 @@ namespace SpeakDanish.ViewModel
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
             IAlertService alertService,
-            IFileService fileService,
             INavigation navigation)
         {
             _recordingService = recordingService;
             _ttsDataInstaller = ttsDataInstaller;
             _audioRecorder = audioRecorder;
             _alertService = alertService;
-            _fileService = fileService;
             _navigation = navigation;
 
             Title = "Home";
@@ -139,13 +136,23 @@ namespace SpeakDanish.ViewModel
         {
             try
             {
-                Sentence = await _recordingService.GetRandomSentence(Sentence,
-                    _fileService.LoadFileAsync("sentences", "txt")
-                );
+                Sentence = await _recordingService.GetRandomSentence(Sentence, LoadFile());
             }
             catch (Exception e)
             {
                 await _alertService.ShowToast(e.Message);
+            }
+        }
+
+        Task<string> LoadFile()
+        {
+            var assembly = typeof(HomeViewModel).GetTypeInfo().Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("SpeakDanish.Resources.sentences.txt"))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return Task.FromResult(reader.ReadToEnd());
+                }
             }
         }
 

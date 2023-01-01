@@ -145,7 +145,4 @@
     <Folder Include="Renderers\" />
     <Folder Include="Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\sentences.txt" />
-  </ItemGroup>
 </Project>

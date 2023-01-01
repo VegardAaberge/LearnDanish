@@ -24,7 +24,6 @@
   <ItemGroup>
     <None Remove="Controls\" />
     <None Remove="Helpers\" />
-    <None Remove="Helpers\materialdesignicons-webfont.ttf" />
     <None Remove="Converters\" />
     <None Remove="ViewModel\" />
     <None Remove="View\" />
@@ -35,6 +34,9 @@
     <None Remove="Autofac" />
     <None Remove="Microsoft.Extensions.DependencyInjection" />
     <None Remove="Services\Enums\" />
+    <None Remove="Resources\" />
+    <None Remove="Resources\sentences.txt" />
+    <None Remove="Resources\materialdesignicons-webfont.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
@@ -45,9 +47,11 @@
     <Folder Include="ViewModel\Base\" />
     <Folder Include="Extensions\" />
     <Folder Include="Services\Enums\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Helpers\materialdesignicons-webfont.ttf" />
+    <EmbeddedResource Include="Resources\sentences.txt" />
+    <EmbeddedResource Include="Resources\materialdesignicons-webfont.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeakDanish.Domain\SpeakDanish.Domain.csproj" />
