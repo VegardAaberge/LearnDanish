@@ -5,10 +5,10 @@ using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Services;
 using SpeakDanish.Helpers;
-using SpeakDanish.ViewModel.Base;
+using SpeakDanish.ViewModels.Base;
 using Xamarin.Forms;
 
-namespace SpeakDanish.ViewModel
+namespace SpeakDanish.ViewModels
 {
 	public class RecordingsViewModel : BaseViewModel
 	{

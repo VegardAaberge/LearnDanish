@@ -2,11 +2,11 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:common="clr-namespace:SpeakDanish.View.Common"
-    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModel"
+    xmlns:common="clr-namespace:SpeakDanish.Views.Common"
+    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
     x:DataType="viewmodel:RecordingsViewModel"
     
-    x:Class="SpeakDanish.View.RecordingsPage"
+    x:Class="SpeakDanish.Views.RecordingsPage"
     Title="{Binding Title}">
 
     <CollectionView x:Name="MyCollectionView"

@@ -3,11 +3,11 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
-    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModel"
+    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
     xmlns:models="clr-namespace:SpeakDanish.Domain.Models;assembly=SpeakDanish.Domain"
     xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
     x:DataType="models:Recording"
-    x:Class="SpeakDanish.View.Common.RecordingItem">
+    x:Class="SpeakDanish.Views.Common.RecordingItem">
 
     <SwipeView.RightItems>
         <SwipeItems Mode="Reveal">

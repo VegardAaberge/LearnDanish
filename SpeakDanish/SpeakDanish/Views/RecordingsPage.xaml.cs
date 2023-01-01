@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpeakDanish.ViewModel;
+using SpeakDanish.ViewModels;
 
 using Xamarin.Forms;
 
-namespace SpeakDanish.View
+namespace SpeakDanish.Views
 {
     public partial class RecordingsPage : ContentPage
     {

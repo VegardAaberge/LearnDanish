@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SpeakDanish.ViewModel.Base
+namespace SpeakDanish.ViewModels.Base
 {
     public partial class BaseViewModel : INotifyPropertyChanged
     {

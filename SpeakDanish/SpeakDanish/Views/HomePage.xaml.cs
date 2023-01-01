@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SpeakDanish.ViewModel;
+using SpeakDanish.ViewModels;
 using Xamarin.Forms;
 
-namespace SpeakDanish
+namespace SpeakDanish.Views
 {
     public partial class MainPage : ContentPage
     {

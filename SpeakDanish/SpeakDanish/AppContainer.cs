@@ -1,7 +1,7 @@
 ﻿using System;
 using SpeakDanish.Domain;
 using SpeakDanish.Services;
-using SpeakDanish.ViewModel;
+using SpeakDanish.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 

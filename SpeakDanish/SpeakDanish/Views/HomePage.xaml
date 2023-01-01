@@ -2,14 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModel"
+             xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
              xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
              xmlns:gestureRecognizers="clr-namespace:SpeakDanish.Controls.GestureRecognizers"
              xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
              xmlns:buttons="clr-namespace:SpeakDanish.Controls.Buttons"
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
              x:DataType="viewmodel:HomeViewModel"
-             x:Class="SpeakDanish.MainPage"
+             x:Class="SpeakDanish.Views.MainPage"
              Title="{Binding Title }">
 
     <ContentPage.Resources>

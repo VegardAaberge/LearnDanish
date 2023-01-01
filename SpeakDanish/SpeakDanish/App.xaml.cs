@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using SpeakDanish.ViewModel;
+using SpeakDanish.ViewModels;
+using SpeakDanish.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

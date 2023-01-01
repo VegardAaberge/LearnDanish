@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Xamarin.Forms;
 
-namespace SpeakDanish.View.Common
+namespace SpeakDanish.Views.Common
 {
     public partial class RecordingItem : SwipeView
     {

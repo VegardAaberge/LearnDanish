@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using SpeakDanish.ViewModel.Base;
+using SpeakDanish.ViewModels.Base;
 using System.Windows.Input;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
-using SpeakDanish.View;
+using SpeakDanish.Views;
 using SpeakDanish.Services;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
@@ -19,7 +19,7 @@ using Xamarin.CommunityToolkit.Extensions;
 using SpeakDanish.Services.Enums;
 using System.IO;
 
-namespace SpeakDanish.ViewModel
+namespace SpeakDanish.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {

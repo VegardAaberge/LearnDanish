@@ -26,7 +26,6 @@
     <None Remove="Helpers\" />
     <None Remove="Converters\" />
     <None Remove="ViewModel\" />
-    <None Remove="View\" />
     <None Remove="ViewModel\Base\" />
     <None Remove="CommunityToolkit.Mvvm" />
     <None Remove="Xamarin.CommunityToolkit" />
@@ -47,12 +46,11 @@
     <Folder Include="Helpers\" />
     <Folder Include="Converters\" />
     <Folder Include="ViewModel\" />
-    <Folder Include="View\" />
     <Folder Include="ViewModel\Base\" />
     <Folder Include="Extensions\" />
     <Folder Include="Services\Enums\" />
     <Folder Include="Resources\" />
-    <Folder Include="View\Common\" />
+    <Folder Include="Views\Common\" />
     <Folder Include="Controls\Buttons\" />
     <Folder Include="Controls\ContentViews\" />
     <Folder Include="Controls\GestureRecognizers\" />
