@@ -27,6 +27,7 @@ namespace SpeakDanish.ViewModel
         private IAudioRecorder _audioRecorder;
         private IRecordingService _recordingService;
         private IAlertService _alertService;
+        private IFileService _fileService;
         private INavigation _navigation;
 
         private string _filepath;
@@ -54,6 +55,7 @@ namespace SpeakDanish.ViewModel
             _ttsDataInstaller = ttsDataInstaller;
             _audioRecorder = audioRecorder;
             _alertService = alertService;
+            _fileService = fileService;
             _navigation = navigation;
 
             Title = "Home";
@@ -68,19 +70,7 @@ namespace SpeakDanish.ViewModel
 
             VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
 
-            Task.Run(async () =>
-            {
-                try
-                {
-                    Sentence = await _recordingService.GetRandomSentence(
-                        fileService.LoadFileAsync("sentences", "txt")
-                    );
-                }
-                catch (Exception e)
-                {
-
-                }
-            });
+            LoadRandomSentence().ConfigureAwait(false);
         }
 
         public Command SpeakSentenceCommand { get; set; }
@@ -137,6 +127,25 @@ namespace SpeakDanish.ViewModel
             {
                 _isRecording = value;
                 OnPropertyChanged(nameof(IsRecording));
+            }
+        }
+
+        public bool HasRecording
+        {
+            get => !string.IsNullOrEmpty(_filepath);
+        }
+
+        public async Task LoadRandomSentence()
+        {
+            try
+            {
+                Sentence = await _recordingService.GetRandomSentence(Sentence,
+                    _fileService.LoadFileAsync("sentences", "txt")
+                );
+            }
+            catch (Exception e)
+            {
+                await _alertService.ShowToast(e.Message);
             }
         }
 
@@ -220,6 +229,7 @@ namespace SpeakDanish.ViewModel
             }
 
             _filepath = await _audioRecorder.StartRecordingAudio("recording");
+            OnPropertyChanged(nameof(HasRecording));
 
             _countdownTimer = new Timer(1000);
             _countdownTimer.Elapsed += CountdownTimer_Elapsed;
@@ -257,14 +267,15 @@ namespace SpeakDanish.ViewModel
             );
 
             _filepath = "";
+            OnPropertyChanged(nameof(HasRecording));
+
             _cancelSpeakTokenSource = null;
 
             IsSpeaking = false;
             CountSeconds = 0;
             IsRecording = false;
-            Sentence = "New Sentence";
 
-            var recordings = await _recordingService.GetRecordingsAsync();
+            await LoadRandomSentence();
         }
 
         public async Task NavigateToRecordingsAsync()

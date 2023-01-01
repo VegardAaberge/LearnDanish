@@ -8,7 +8,6 @@
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
              x:DataType="viewmodel:HomeViewModel"
              x:Class="SpeakDanish.MainPage"
-             
              Title="{Binding Title }">
 
     <ContentPage.Resources>
@@ -16,6 +15,7 @@
             <Color x:Key="BlueColor">#0000FF</Color>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
+            <converters:DisabledColorConverter x:Key="DisabledColorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -23,92 +23,135 @@
         <ToolbarItem Text="Recordings" Command="{Binding NavigateToRecordingsCommand}" />
     </ContentPage.ToolbarItems>
 
-    <ScrollView>
+    <Grid
+        Padding="16"
+        RowDefinitions="40,Auto,*,Auto">
+
         <StackLayout
-            Padding="16"
-            Orientation="Vertical"
-            HorizontalOptions="Center">
+            Grid.Row="0"
+            Spacing="8"
+            Orientation="Horizontal"
+            IsVisible="{Binding IsRecording}">
 
-            <StackLayout
-                Spacing="8"
-                Orientation="Horizontal"
-                IsVisible="{Binding IsRecording}">
+            <Grid
+                VerticalOptions="Center"
+                HeightRequest="20"
+                WidthRequest="20">
 
-                <Grid
-                    VerticalOptions="Center"
-                    HeightRequest="20"
-                    WidthRequest="20">
-
-                    <Frame
-                        CornerRadius="10"
-                        BackgroundColor="Red" />
-                </Grid>
-
-
-                <Label
-                    Text="{Binding CountSeconds, StringFormat='Recording ({0} seconds)'}"
-                    FontAttributes="Bold"
-                    FontSize="18"
-                    VerticalOptions="CenterAndExpand" />
-
-            </StackLayout>
-
-            <Label
-                IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
-                Text="Speak this sentence"
-                FontAttributes="Bold"
-                FontSize="18"
-                VerticalOptions="Center" />
-
-            <Grid ColumnDefinitions="50, *">
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
-                </Grid.GestureRecognizers>
-
-                <controls:CircleIcon
-                    Grid.Column="0"
-                    HorizontalOptions="Start"
-                    FrameColor="Blue"
-                    LabelTextColor="White"
-                    FrameSize="35"
-                    LabelFontSize="22"
-                    IconText="{Binding VolumeIcon}" />
-                
-                <Label
-                    Grid.Column="1"
-                    Text="{Binding Sentence}"
-                    HorizontalOptions="Start"
-                    VerticalOptions="Center" />
+                <Frame
+                    CornerRadius="10"
+                    BackgroundColor="Red" />
             </Grid>
 
-            <controls:CircleIcon
-                IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
-                LabelFontSize="160"
-                LabelTextColor="White"
-                FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
-                FrameSize="200">
 
-                <controls:CircleIcon.FrameGestureRecognizers>
-                    <controls:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
-                    <controls:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
-                </controls:CircleIcon.FrameGestureRecognizers>
+            <Label
+                Text="{Binding CountSeconds, StringFormat='Recording ({0} seconds)'}"
+                FontAttributes="Bold"
+                FontSize="18"
+                VerticalOptions="CenterAndExpand" />
 
-            </controls:CircleIcon>
-
-            <Frame HasShadow="True" Margin="0" Padding="0" BackgroundColor="Transparent">
-                <Button
-                    Command="{Binding NewSentenceCommand}"
-                    Text="Save Recording"
-                    BackgroundColor="Blue"
-                    TextColor="White"
-                    CornerRadius="4"
-                    HeightRequest="40"
-                    Padding="8,0"
-                    FontSize="15" />
-            </Frame>
         </StackLayout>
+
+        <Label
+            Grid.Row="0"
+            IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
+            Text="Speak this sentence"
+            FontAttributes="Bold"
+            FontSize="18"
+            VerticalOptions="Center" />
+
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="50, *">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
+            </Grid.GestureRecognizers>
+
+            <controls:CircleIcon
+                Grid.Column="0"
+                HorizontalOptions="Start"
+                FrameColor="Blue"
+                LabelTextColor="White"
+                FrameSize="35"
+                LabelFontSize="22"
+                IconText="{Binding VolumeIcon}" />
+                
+            <Label
+                Grid.Column="1"
+                Text="{Binding Sentence}"
+                HorizontalOptions="Start"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <controls:CircleIcon
+            Grid.Row="2"
+            IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
+            LabelFontSize="200"
+            LabelTextColor="White"
+            FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
+            FrameSize="250">
+
+            <controls:CircleIcon.FrameGestureRecognizers>
+                <controls:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
+                <controls:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
+            </controls:CircleIcon.FrameGestureRecognizers>
+
+        </controls:CircleIcon>
+
+        <StackLayout Grid.Row="3">
+
+            <Label
+                FontAttributes="Bold"
+                Text="Your Recording" />
+
+            <Grid HeightRequest="50">
+                <Grid
+                    IsVisible="{Binding HasRecording}"
+                    VerticalOptions="Start"
+                    Grid.Column="0"
+                    ColumnDefinitions="50, *"
+                    Margin="0,0,0,30">
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding Path=PlaySentenceCommand, Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}}"
+                            CommandParameter="{Binding .}">
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+
+                    <controls:CircleIcon
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        FrameColor="Blue"
+                        LabelTextColor="White"
+                        FrameSize="35"
+                        LabelFontSize="22"
+                        IconText="{Binding VolumeIcon}" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="My Recording (11 seconds)"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Grid>
             
-    </ScrollView>
+
+            <Button
+                Command="{Binding NewSentenceCommand}"
+                IsEnabled="{Binding HasRecording }"
+                VerticalOptions="Start"
+                Text="Save Recording"
+                BackgroundColor="{Binding HasRecording, Converter={StaticResource DisabledColorConverter}, ConverterParameter={StaticResource BlueColor}}"
+                TextColor="White"
+                CornerRadius="4"
+                HeightRequest="40"
+                Padding="8,0"
+                Margin="0,0,0,16"
+                FontSize="15" />
+        </StackLayout>
+        
+    </Grid>
     
 
 </ContentPage>
