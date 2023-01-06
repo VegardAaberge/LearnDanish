@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeakDanish.Domain\SpeakDanish.Domain.csproj" />
+    <ProjectReference Include="..\SpeakDanish.Data\SpeakDanish.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Controls\ContentViews\CircleIcon.xaml.cs">

@@ -2,11 +2,28 @@
 using SpeakDanish.Domain;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
+using Moq;
+using SpeakDanish.Data;
+using SpeakDanish.Domain.Models;
+using System.Collections.Generic;
+using SpeakDanish.Tests.Data;
+using System.Linq;
+using SpeakDanish.Data.Models;
 
 namespace SpeakDanish.Tests
 {
-    public class RecordingServiceTests
+    public class RecordingServiceTests : IClassFixture<SpeakDanishDatabaseFixture>
     {
+        private SpeakDanishDatabaseFixture _fixture;
+        private IRecordingService _recordingService;
+
+        public RecordingServiceTests(SpeakDanishDatabaseFixture fixture)
+        {
+            _fixture = fixture;
+            _recordingService = new RecordingService(fixture.DatabaseMock.Object);
+        }
+
         [Fact]
         public async Task TestGetRecordingsAsync()
         {
@@ -62,6 +79,13 @@ namespace SpeakDanish.Tests
         [Fact]
         public async Task TestDeleteRecordingAsync()
         {
+            // Arrange
+            // TODO
+
+            // Act
+            // TODO
+
+            // Assert
             // TODO
         }
 
@@ -69,18 +93,24 @@ namespace SpeakDanish.Tests
         public async Task TestGetRandomSentence_ValidPreviousSentence()
         {
             // Arrange
-            string previousSentence = "This is the previous sentence.";
-            Task<string> getSentencesFromResources = Task.FromResult("This is a sentence. This is another sentence.");
-
-            IRecordingService recordingService = new RecordingService();
+            string[] sentences = new string[] { "This is the previous sentence.", "This is another sentence." };
+            List<SentenceEntity> sentenceEntities = sentences.Select(sentence => new SentenceEntity
+            {
+                Sentence = sentence
+            }).ToList();
+            _fixture.AddAllItem(sentenceEntities);
+            string previousSentence = sentences[0];
+            string exptected = sentences[1];
+            Task<string> getSentencesFromResources = Task.FromResult(string.Join("\n", sentences));
 
             // Act
-            Task<string> result = recordingService.GetRandomSentence(previousSentence, getSentencesFromResources);
-            string resultString = await result;
+            string result = await _recordingService.GetRandomSentence(previousSentence, getSentencesFromResources);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.NotEqual(previousSentence, resultString);
+            result.Should().NotBeNullOrWhiteSpace();
+            result.Should().NotBe(previousSentence);
+            result.Should().ContainAny(sentences);
+            result.Should().Be(exptected);
         }
 
         [Fact]

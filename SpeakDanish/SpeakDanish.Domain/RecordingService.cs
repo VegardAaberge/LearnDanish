@@ -13,11 +13,11 @@ namespace SpeakDanish.Domain
 {
     public class RecordingService : IRecordingService
     {
-        private SpeakDanishDatabase _database;
+        private ISpeakDanishDatabase _database;
 
-        public RecordingService()
+        public RecordingService(ISpeakDanishDatabase speakDanishDatabase)
         {
-            _database = SpeakDanishDatabase.Instance.GetAwaiter().GetResult();
+            _database = speakDanishDatabase;
         }
 
         public async Task<List<Recording>> GetRecordingsAsync()
@@ -66,11 +66,14 @@ namespace SpeakDanish.Domain
             Random random = new Random();
             while (true)
             {
-                int index = random.Next(0, sentences.Count - 1);
-                string newSentence = sentences[index].Sentence;
+                lock (random)
+                {
+                    int index = random.Next(0, sentences.Count);
+                    string newSentence = sentences[index].Sentence;
 
-                if (previousSentence != newSentence)
-                    return sentences[index].Sentence;
+                    if (previousSentence != newSentence)
+                        return sentences[index].Sentence;
+                }
             }
         }
     }
