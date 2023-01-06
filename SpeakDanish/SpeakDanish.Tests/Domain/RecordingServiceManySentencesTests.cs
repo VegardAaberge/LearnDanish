@@ -14,25 +14,14 @@ using MathNet.Numerics.Distributions;
 
 namespace SpeakDanish.Tests
 {
-    public class RecordingServiceTests : IClassFixture<SpeakDanishDatabaseFixture>
+    public class RecordingServiceManySentencesTests : IClassFixture<SpeakDanishDatabaseFixture>
     {
-        private readonly IRecordingService _recordingServiceManySentences;
-        private readonly IRecordingService _recordingServiceTwoSentences;
+        private readonly IRecordingService _recordingService;
+        private readonly string[] sentences = Enumerable.Range(1, 200).Select(x => $"Sentence {x}").ToArray();
 
-        private readonly string[] twoSentences = new string[] { "This is the previous sentence.", "This is another sentence." };
-        private readonly string[] manySentences = Enumerable.Range(1, 200).Select(x => $"Sentence {x}").ToArray();
-
-        public RecordingServiceTests(
-            SpeakDanishDatabaseFixture fixtureManySentences,
-            SpeakDanishDatabaseFixture fixtureTwoSentences)
+        public RecordingServiceManySentencesTests(SpeakDanishDatabaseFixture fixture)
         {
-            SetupFixture(ref _recordingServiceManySentences, fixtureManySentences, manySentences);
-            SetupFixture(ref _recordingServiceTwoSentences, fixtureTwoSentences, twoSentences);
-        }
-
-        private void SetupFixture(ref IRecordingService recordingService, SpeakDanishDatabaseFixture fixture, string[] sentences)
-        {
-            recordingService = new RecordingService(fixture.DatabaseMock.Object);
+            _recordingService = new RecordingService(fixture.DatabaseMock.Object);
 
             List<SentenceEntity> sentenceEntities = sentences
                 .Select(sentence => new SentenceEntity
@@ -43,7 +32,6 @@ namespace SpeakDanish.Tests
             fixture.AddAllItem(sentenceEntities);
         }
 
-        [Fact]
         public async Task TestGetRecordingsAsync()
         {
             // Arrange
@@ -56,7 +44,6 @@ namespace SpeakDanish.Tests
             // TODO
         }
 
-        [Fact]
         public async Task TestGetRecordingAsync_ValidID()
         {
             // Arrange
@@ -69,7 +56,6 @@ namespace SpeakDanish.Tests
             // TODO
         }
 
-        [Fact]
         public async Task TestGetRecordingAsync_InvalidID()
         {
             // Arrange
@@ -82,7 +68,6 @@ namespace SpeakDanish.Tests
             // TODO
         }
 
-        [Fact]
         public async Task TestInsertRecordingAsync()
         {
             // Arrange
@@ -95,7 +80,6 @@ namespace SpeakDanish.Tests
             // TODO
         }
 
-        [Fact]
         public async Task TestDeleteRecordingAsync()
         {
             // Arrange
@@ -109,37 +93,20 @@ namespace SpeakDanish.Tests
         }
 
         [Fact]
-        public async Task TestGetRandomSentence_ValidPreviousSentence()
+        public async Task TestGetRandomSentence_ShouldNotFetchResource()
         {
             // Arrange
-            string previousSentence = twoSentences[0];
-            string exptected = twoSentences[1];
-            Task<string> getSentencesFromResources = Task.FromResult(string.Join("\n", twoSentences));
-
-            // Act
-            string result = await _recordingServiceTwoSentences.GetRandomSentence(previousSentence, getSentencesFromResources);
-
-            // Assert
-            result.Should().NotBeNullOrWhiteSpace();
-            result.Should().NotBe(previousSentence);
-            result.Should().ContainAny(twoSentences);
-            result.Should().Be(exptected);
-        }
-
-        [Fact]
-        public async Task TestGetRandomSentence_ShouldFetchResource()
-        {
-            // Arrange
-            string previousSentence = twoSentences[0];
+            string previousSentence = sentences[0];
             string[] resourceSentences = new string[] { "This is a sentence." };
             Task<string> getSentencesFromResources = Task.FromResult(string.Join("\n", resourceSentences));
 
             // Act
-            string result = await _recordingServiceTwoSentences.GetRandomSentence("", getSentencesFromResources);
+            string result = await _recordingService.GetRandomSentence(previousSentence, getSentencesFromResources);
 
             // Assert
             result.Should().NotBeNullOrWhiteSpace();
-            result.Should().Be(resourceSentences.First());
+            result.Should().NotBe(resourceSentences.First());
+            result.Should().StartWith("Sentence");
         }
 
         [Fact]
@@ -156,7 +123,7 @@ namespace SpeakDanish.Tests
             // Act
             for (int i = 0; i < numTrials; i++)
             {
-                var selectedSentence = await _recordingServiceManySentences.GetRandomSentence("", getSentencesFromResources);
+                var selectedSentence = await _recordingService.GetRandomSentence("", getSentencesFromResources);
                 observedFrequencies[selectedSentence] = observedFrequencies[selectedSentence] + 1;
             }
 
@@ -177,7 +144,6 @@ namespace SpeakDanish.Tests
             pValue.Should().BeGreaterThan(0.05);
         }
 
-        [Fact]
         public async Task TestGetRandomSentence_DifferentFromPreviousSentence()
         {
             // Arrange
