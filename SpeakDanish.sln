@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeakDanish.Android", "Spea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeakDanish.Tests", "SpeakDanish\SpeakDanish.Tests\SpeakDanish.Tests.csproj", "{9CC0787E-9A49-48C9-A42C-355A1A39F785}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeakDanish.Contracts", "SpeakDanish\SpeakDanish.Contracts\SpeakDanish.Contracts.csproj", "{BD5B3684-40C5-4530-A736-B728ECC97DD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{9CC0787E-9A49-48C9-A42C-355A1A39F785}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{9CC0787E-9A49-48C9-A42C-355A1A39F785}.Release|iPhone.ActiveCfg = Release|Any CPU
 		{9CC0787E-9A49-48C9-A42C-355A1A39F785}.Release|iPhone.Build.0 = Release|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{BD5B3684-40C5-4530-A736-B728ECC97DD4}.Release|iPhone.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

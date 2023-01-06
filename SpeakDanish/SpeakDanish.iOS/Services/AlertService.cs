@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SpeakDanish.Services;
-using SpeakDanish.Services.Enums;
+using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Contracts.Platform.Enums;
 using UIKit;
 
 namespace SpeakDanish.iOS.Services

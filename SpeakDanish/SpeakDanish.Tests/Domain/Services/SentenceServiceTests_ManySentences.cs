@@ -13,6 +13,7 @@ using SpeakDanish.Data.Models;
 using MathNet.Numerics.Distributions;
 using SpeakDanish.Domain.Services;
 using SpeakDanish.Tests.Data.Database;
+using SpeakDanish.Contracts.Domain;
 
 namespace SpeakDanish.Tests.Domain.Services
 {

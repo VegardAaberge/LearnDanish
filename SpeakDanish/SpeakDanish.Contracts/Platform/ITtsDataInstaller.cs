@@ -1,5 +1,6 @@
 ﻿using System;
-namespace SpeakDanish.Services
+
+namespace SpeakDanish.Contracts.Platform
 {
 	public interface ITtsDataInstaller
 	{

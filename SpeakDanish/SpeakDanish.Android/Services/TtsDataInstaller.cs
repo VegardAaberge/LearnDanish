@@ -1,8 +1,8 @@
 ﻿using System;
 using Android.Content;
 using Android.Speech.Tts;
+using SpeakDanish.Contracts.Platform;
 using SpeakDanish.Droid.Services;
-using SpeakDanish.Services;
 using Xamarin.Forms;
 
 namespace SpeakDanish.Droid.Services

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Data.Database;
 using SpeakDanish.Data.Models;
 

@@ -6,7 +6,7 @@ using Android.Runtime;
 using Android.OS;
 using Microsoft.Extensions.DependencyInjection;
 using SpeakDanish.Droid.Services;
-using SpeakDanish.Services;
+using SpeakDanish.Contracts.Platform;
 
 namespace SpeakDanish.Droid
 {

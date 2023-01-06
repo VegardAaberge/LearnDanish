@@ -1,7 +1,7 @@
 ﻿using System;
 using SQLite;
 
-namespace SpeakDanish.Data.Models
+namespace SpeakDanish.Data.Database
 {
 	public class BaseEntity
 	{

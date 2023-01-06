@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
 using SpeakDanish.Views;
-using SpeakDanish.Services;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
 using Timer = System.Timers.Timer;
@@ -16,9 +15,10 @@ using SpeakDanish.Helpers;
 using System.Reflection;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.CommunityToolkit.Extensions;
-using SpeakDanish.Services.Enums;
 using System.IO;
 using SpeakDanish.Domain.Services;
+using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Contracts.Domain;
 
 namespace SpeakDanish.ViewModels
 {
@@ -27,7 +27,7 @@ namespace SpeakDanish.ViewModels
         private ITtsDataInstaller _ttsDataInstaller;
         private IAudioRecorder _audioRecorder;
         private ISentenceService _sentenceService;
-        private IRecordingService _recordingService;
+        private IRecordingService<Recording> _recordingService;
         private IAlertService _alertService;
         private INavigation _navigation;
 
@@ -46,7 +46,7 @@ namespace SpeakDanish.ViewModels
 
         public HomeViewModel(
             ISentenceService sentenceService,
-            IRecordingService recordingService,
+            IRecordingService<Recording> recordingService,
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
             IAlertService alertService,

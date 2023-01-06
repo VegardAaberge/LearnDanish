@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace SpeakDanish.Services
+namespace SpeakDanish.Contracts.Platform
 {
 	public interface IAudioRecorder
 	{

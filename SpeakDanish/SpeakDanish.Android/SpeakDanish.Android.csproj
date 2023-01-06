@@ -100,6 +100,10 @@
       <Project>{D972445A-ED0B-4383-9139-DE1022CA1D7F}</Project>
       <Name>SpeakDanish</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SpeakDanish.Contracts\SpeakDanish.Contracts.csproj">
+      <Project>{BD5B3684-40C5-4530-A736-B728ECC97DD4}</Project>
+      <Name>SpeakDanish.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

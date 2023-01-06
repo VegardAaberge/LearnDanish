@@ -3,8 +3,8 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Android.Widget;
 using Google.Android.Material.Snackbar;
-using SpeakDanish.Services;
-using SpeakDanish.Services.Enums;
+using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Contracts.Platform.Enums;
 using Xamarin.CommunityToolkit.UI.Views.Options;
 using Xamarin.Forms;
 

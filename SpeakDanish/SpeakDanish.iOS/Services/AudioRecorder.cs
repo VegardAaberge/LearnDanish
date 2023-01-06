@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using AVFoundation;
 using Foundation;
-using SpeakDanish.Services;
+using SpeakDanish.Contracts.Platform;
 
 namespace SpeakDanish.iOS.Services
 {

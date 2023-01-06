@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Foundation;
 using SpeakDanish.iOS.Services;
-using SpeakDanish.Services;
 using Microsoft.Extensions.DependencyInjection;
 using UIKit;
+using SpeakDanish.Contracts.Platform;
 
 namespace SpeakDanish.iOS
 {

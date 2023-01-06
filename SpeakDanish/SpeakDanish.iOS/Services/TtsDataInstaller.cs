@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AVFoundation;
-using SpeakDanish.Services;
+using SpeakDanish.Contracts.Platform;
 
 namespace SpeakDanish.iOS.Services
 {

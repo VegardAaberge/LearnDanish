@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using AOE = Android.OS.Environment;
 using Android.Media;
 using SpeakDanish.Droid.Services;
-using SpeakDanish.Services;
 using Xamarin.Forms;
 using Android.OS;
+using SpeakDanish.Contracts.Platform;
 
 namespace SpeakDanish.Droid.Services
 {

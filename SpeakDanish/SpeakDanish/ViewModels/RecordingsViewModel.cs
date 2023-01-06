@@ -3,11 +3,12 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
-using SpeakDanish.Services;
 using SpeakDanish.Helpers;
 using SpeakDanish.ViewModels.Base;
 using Xamarin.Forms;
 using SpeakDanish.Domain.Services;
+using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Contracts.Domain;
 
 namespace SpeakDanish.ViewModels
 {
@@ -15,7 +16,7 @@ namespace SpeakDanish.ViewModels
 	{
         private INavigation _navigation;
         private IAlertService _alertService;
-        private IRecordingService _recordingService;
+        private IRecordingService<Recording> _recordingService;
 
         private string _volumeIcon;
         public ObservableCollection<Recording> _recordings;
@@ -23,7 +24,7 @@ namespace SpeakDanish.ViewModels
         public RecordingsViewModel(
             INavigation navigation,
             IAlertService alertService,
-            IRecordingService recordingService)
+            IRecordingService<Recording> recordingService)
         {
             _navigation = navigation;
             _alertService = alertService;

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\SpeakDanish.Data\SpeakDanish.Data.csproj" />
     <ProjectReference Include="..\SpeakDanish.Domain\SpeakDanish.Domain.csproj" />
     <ProjectReference Include="..\SpeakDanish\SpeakDanish.csproj" />
+    <ProjectReference Include="..\SpeakDanish.Contracts\SpeakDanish.Contracts.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="FluentAssertions" />

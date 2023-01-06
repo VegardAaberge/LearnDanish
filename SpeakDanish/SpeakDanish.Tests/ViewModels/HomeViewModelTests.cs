@@ -3,8 +3,10 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
+using SpeakDanish.Contracts.Domain;
+using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Domain.Models;
 using SpeakDanish.Domain.Services;
-using SpeakDanish.Services;
 using SpeakDanish.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Essentials.Interfaces;
@@ -41,7 +43,7 @@ namespace SpeakDanish.Tests.ViewModel
             ITtsDataInstaller ttsDataInstaller = new Mock<ITtsDataInstaller>().Object;
             IAudioRecorder audioRecorder = new Mock<IAudioRecorder>().Object;
             ISentenceService sentenceService = new Mock<ISentenceService>().Object;
-            IRecordingService recordingService = new Mock<IRecordingService>().Object;
+            IRecordingService<Recording> recordingService = new Mock<IRecordingService<Recording>>().Object;
             IAlertService alertService = new Mock<IAlertService>().Object;
             INavigation navigation = new Mock<INavigation>().Object;
 

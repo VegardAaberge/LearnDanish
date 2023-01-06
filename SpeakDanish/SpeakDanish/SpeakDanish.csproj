@@ -30,7 +30,6 @@
     <None Remove="Extensions\" />
     <None Remove="Autofac" />
     <None Remove="Microsoft.Extensions.DependencyInjection" />
-    <None Remove="Services\Enums\" />
     <None Remove="Resources\" />
     <None Remove="Resources\sentences.txt" />
     <None Remove="Resources\materialdesignicons-webfont.ttf" />
@@ -44,7 +43,6 @@
     <Folder Include="Helpers\" />
     <Folder Include="Converters\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Services\Enums\" />
     <Folder Include="Resources\" />
     <Folder Include="Views\Common\" />
     <Folder Include="Controls\Buttons\" />
@@ -58,6 +56,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SpeakDanish.Domain\SpeakDanish.Domain.csproj" />
     <ProjectReference Include="..\SpeakDanish.Data\SpeakDanish.Data.csproj" />
+    <ProjectReference Include="..\SpeakDanish.Contracts\SpeakDanish.Contracts.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Controls\ContentViews\CircleIcon.xaml.cs">

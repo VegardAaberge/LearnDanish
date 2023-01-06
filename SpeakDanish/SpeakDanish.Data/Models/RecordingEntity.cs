@@ -1,4 +1,5 @@
 ﻿using System;
+using SpeakDanish.Data.Database;
 using SpeakDanish.Data.Models;
 using SQLite;
 

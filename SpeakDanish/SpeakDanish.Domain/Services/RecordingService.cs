@@ -9,10 +9,11 @@ using SpeakDanish.Data.Models;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Data.Database;
+using SpeakDanish.Contracts.Domain;
 
 namespace SpeakDanish.Domain.Services
 {
-    public class RecordingService : IRecordingService
+    public class RecordingService : IRecordingService<Recording>
     {
         private ISpeakDanishDatabase _database;
 

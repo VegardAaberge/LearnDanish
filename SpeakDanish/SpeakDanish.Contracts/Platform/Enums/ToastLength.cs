@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SpeakDanish.Services.Enums
+namespace SpeakDanish.Contracts.Platform.Enums
 {
 	public enum ToastDuration
 	{

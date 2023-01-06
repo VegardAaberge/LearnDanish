@@ -21,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeakDanish.Data\SpeakDanish.Data.csproj" />
+    <ProjectReference Include="..\SpeakDanish.Contracts\SpeakDanish.Contracts.csproj" />
   </ItemGroup>
 </Project>

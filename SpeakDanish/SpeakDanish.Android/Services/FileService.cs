@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using SpeakDanish.Services;
+using SpeakDanish.Contracts.Platform;
 
 namespace SpeakDanish.Droid.Services
 {

@@ -1,12 +1,13 @@
 ﻿using System;
 using SpeakDanish.Domain;
-using SpeakDanish.Services;
 using SpeakDanish.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 using SpeakDanish.Data;
 using SpeakDanish.Data.Database;
 using SpeakDanish.Domain.Services;
+using SpeakDanish.Contracts.Domain;
+using SpeakDanish.Domain.Models;
 
 namespace SpeakDanish
 {
@@ -28,7 +29,7 @@ namespace SpeakDanish
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ISpeakDanishDatabase, SpeakDanishDatabase>();
-            services.AddSingleton<IRecordingService, RecordingService>();
+            services.AddSingleton<IRecordingService<Recording>, RecordingService>();
             services.AddSingleton<ISentenceService, SentenceService>();
 
             services.AddSingleton<HomeViewModel>();

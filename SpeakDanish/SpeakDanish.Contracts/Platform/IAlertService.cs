@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SpeakDanish.Services.Enums;
+using SpeakDanish.Contracts.Platform.Enums;
 
-namespace SpeakDanish.Services
+namespace SpeakDanish.Contracts.Platform
 {
 	public interface IAlertService
 	{
