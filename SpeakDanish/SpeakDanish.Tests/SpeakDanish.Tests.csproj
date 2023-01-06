@@ -14,6 +14,7 @@
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,8 @@
     <None Remove="MathNet.Numerics" />
     <None Remove="Domain\Services\" />
     <None Remove="Data\Database\" />
+    <None Remove="Xamarin.Essentials" />
+    <None Remove="Xamarin.Essentials.Interfaces" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />

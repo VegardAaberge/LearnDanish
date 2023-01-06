@@ -25,8 +25,6 @@
     <None Remove="Controls\" />
     <None Remove="Helpers\" />
     <None Remove="Converters\" />
-    <None Remove="ViewModel\" />
-    <None Remove="ViewModel\Base\" />
     <None Remove="CommunityToolkit.Mvvm" />
     <None Remove="Xamarin.CommunityToolkit" />
     <None Remove="Extensions\" />
@@ -45,8 +43,6 @@
     <Folder Include="Controls\" />
     <Folder Include="Helpers\" />
     <Folder Include="Converters\" />
-    <Folder Include="ViewModel\" />
-    <Folder Include="ViewModel\Base\" />
     <Folder Include="Extensions\" />
     <Folder Include="Services\Enums\" />
     <Folder Include="Resources\" />
