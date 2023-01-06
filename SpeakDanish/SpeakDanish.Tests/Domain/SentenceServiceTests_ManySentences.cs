@@ -29,7 +29,7 @@ namespace SpeakDanish.Tests
                     Sentence = sentence
                 }).ToList();
 
-            fixture.AddAllItem(sentenceEntities);
+            fixture.SetupItems(sentenceEntities);
         }
 
 

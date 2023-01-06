@@ -19,7 +19,7 @@ namespace SpeakDanish.Domain
         /// </summary>
         /// <param name="id">The ID of the recording to retrieve.</param>
         /// <returns>The recording with the specified ID, or null if no such recording exists.</returns>
-        Task<Recording> GetRecordingAsync(int id);
+        Task<Recording?> GetRecordingAsync(int id);
 
         /// <summary>
         /// Inserts a new recording into the database.

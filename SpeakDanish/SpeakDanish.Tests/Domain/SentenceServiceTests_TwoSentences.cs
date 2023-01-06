@@ -29,7 +29,7 @@ namespace SpeakDanish.Tests
                     Sentence = sentence
                 }).ToList();
 
-            fixture.AddAllItem(sentenceEntities);
+            fixture.SetupItems(sentenceEntities);
         }
 
         private void SetupFixture(ref IRecordingService recordingService, SpeakDanishDatabaseFixture fixture, string[] sentences)
@@ -42,11 +42,11 @@ namespace SpeakDanish.Tests
                     Sentence = sentence
                 }).ToList();
 
-            fixture.AddAllItem(sentenceEntities);
+            fixture.SetupItems(sentenceEntities);
         }
 
         [Fact]
-        public async Task TestGetRandomSentence_ValidPreviousSentence()
+        public async Task TestGetRandomSentence_ShouldNotReturnPreviousSentence()
         {
             // Arrange
             string previousSentence = sentences[0];

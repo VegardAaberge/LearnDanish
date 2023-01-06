@@ -1,90 +1,110 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Moq;
+using SpeakDanish.Data;
+using SpeakDanish.Data.Mappers;
 using SpeakDanish.Domain;
+using SpeakDanish.Domain.Models;
 using SpeakDanish.Tests.Data;
 using Xunit;
 
 namespace SpeakDanish.Tests.Domain
 {
-	public class RecordingServiceTests : IClassFixture<SpeakDanishDatabaseFixture>
-	{
+    public class RecordingServiceTests : IClassFixture<SpeakDanishDatabaseFixture>
+    {
+        private Mock<SpeakDanishDatabase> _mockDatabase;
         private RecordingService _recordingService;
 
+        private readonly List<RecordingEntity> _recordings = new List<RecordingEntity>{
+            new RecordingEntity { Id=1, Sentence = "Sentence 1", Created=new DateTime(2022,11,1), FilePath="Path1" },
+            new RecordingEntity { Id=2, Sentence = "Sentence 2", Created=new DateTime(2023,11,1), FilePath="Path2" },
+            new RecordingEntity { Id=3, Sentence = "Sentence 3", Created=new DateTime(2024,11,1), FilePath="Path3" }
+        };
+
         public RecordingServiceTests(SpeakDanishDatabaseFixture fixture)
-		{
-			_recordingService = new RecordingService(fixture.DatabaseMock.Object);
-		}
-
-        public async Task TestGetRecordingsAsync()
         {
-            // Arrange
-            // TODO
+            _mockDatabase = fixture.DatabaseMock;
+            _recordingService = new RecordingService(fixture.DatabaseMock.Object);
 
-            // Act
-            // TODO
-
-            // Assert
-            // TODO
+            fixture.SetupItems(_recordings);
         }
 
-        public async Task TestGetRecordingAsync_ValidID()
+        [Fact]
+        public async Task TestGetRecordingsAsync_ShouldWork()
         {
             // Arrange
-            // TODO
+            var expected = _recordings;
 
             // Act
-            // TODO
+            var actual = await _recordingService.GetRecordingsAsync();
 
             // Assert
-            // TODO
+            _mockDatabase.Verify(x => x.GetItemsAsync<RecordingEntity>(), Times.Once);
+            actual.Should().NotBeNullOrEmpty();
+            actual.Should().HaveCount(expected.Count);
+            actual.Should().BeEquivalentTo(expected);
         }
 
-        public async Task TestGetRecordingAsync_InvalidID()
+        [Fact]
+        public async Task TestGetRecordingAsync_ValidIDShouldWork()
         {
             // Arrange
-            // TODO
+            int recordingId = 1;
+            RecordingEntity expected = _recordings.First(x => x.Id == 1);
 
             // Act
-            // TODO
+            var actual = await _recordingService.GetRecordingAsync(recordingId);
 
             // Assert
-            // TODO
+            _mockDatabase.Verify(x => x.GetItemAsync<RecordingEntity>(recordingId), Times.Once);
+            actual.Should().NotBeNull();
+            actual.Should().BeEquivalentTo(expected);
         }
 
-        public async Task TestInsertRecordingAsync()
+        [Fact]
+        public async Task TestGetRecordingAsync_InvalidIDShouldNotWork()
         {
             // Arrange
-            // TODO
+            int recordingId = 999;
 
             // Act
-            // TODO
+            var actual = await _recordingService.GetRecordingAsync(recordingId);
 
             // Assert
-            // TODO
+            _mockDatabase.Verify(x => x.GetItemAsync<RecordingEntity>(recordingId), Times.Once);
+            actual.Should().BeNull();
         }
 
-        public async Task TestDeleteRecordingAsync()
+        [Fact]
+        public async Task TestInsertRecordingAsync_ShouldWork()
         {
             // Arrange
-            // TODO
+            Recording recording = new Recording();
 
             // Act
-            // TODO
+            var actual = await _recordingService.InsertRecordingAsync(recording);
 
             // Assert
-            // TODO
+            _mockDatabase.Verify(x => x.InsertItemAsync<RecordingEntity>(It.IsAny<RecordingEntity>()), Times.Once);
+            actual.Should().Be(1);
+            recording.Should().BeEquivalentTo(recording.ToRecordingEntity().ToRecording());
         }
 
-        public async Task TestGetRandomSentence_DifferentFromPreviousSentence()
+        [Fact]
+        public async Task TestDeleteRecordingAsync_ShouldWork()
         {
             // Arrange
-            // TODO
+            Recording recording = new Recording();
 
             // Act
-            // TODO
+            var actual = await _recordingService.DeleteRecordingAsync(recording);
 
             // Assert
-            // TODO
+            _mockDatabase.Verify(x => x.DeleteItemAsync<RecordingEntity>(It.IsAny<RecordingEntity>()), Times.Once);
+            actual.Should().Be(1);
         }
     }
 }

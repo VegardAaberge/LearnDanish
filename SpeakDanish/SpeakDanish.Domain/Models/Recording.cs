@@ -3,8 +3,13 @@ using SpeakDanish.Data;
 
 namespace SpeakDanish.Domain.Models
 {
-	public class Recording
-	{
+    public class Recording
+    {
+        public Recording()
+        {
+            VolumeIcon = "\U000f057e";
+        }
+
         public int Id { get; set; }
 
         public string Sentence { get; set; }

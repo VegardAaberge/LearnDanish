@@ -29,11 +29,11 @@ namespace SpeakDanish.Domain
                 .ToList();
         }
 
-        public async Task<Recording> GetRecordingAsync(int id)
+        public async Task<Recording?> GetRecordingAsync(int id)
         {
             var recording = await _database.GetItemAsync<RecordingEntity>(id);
 
-            return recording.ToRecording();
+            return recording?.ToRecording();
         }
 
         public Task<int> InsertRecordingAsync(Recording recording)

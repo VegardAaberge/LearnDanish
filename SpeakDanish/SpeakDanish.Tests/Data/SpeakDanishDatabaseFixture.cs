@@ -23,6 +23,8 @@ namespace SpeakDanish.Tests.Data
 
         private void SetupMock<T>() where T : BaseEntity, new()
         {
+            _items[typeof(T)] = new List<T>();
+
             DatabaseMock
                 .Setup(x => x.GetItemsAsync<T>())
                 .ReturnsAsync(() => GetItems<T>());
@@ -33,70 +35,32 @@ namespace SpeakDanish.Tests.Data
 
             DatabaseMock
                 .Setup(x => x.InsertItemAsync<T>(It.IsAny<T>()))
-                .ReturnsAsync((T item) => AddItem<T>(item));
+                .ReturnsAsync(1);
 
             DatabaseMock
                 .Setup(x => x.InsertAllItemsAsync<T>(It.IsAny<List<T>>()))
-                .ReturnsAsync((List<T> items) => AddAllItem<T>(items));
+                .ReturnsAsync((List<T> items) => items.Count);
 
             DatabaseMock
                 .Setup(x => x.DeleteItemAsync<T>(It.IsAny<T>()))
-                .ReturnsAsync((T item) => RemoveItem<T>(item));
+                .ReturnsAsync(1);
         }
 
         public Mock<SpeakDanishDatabase> DatabaseMock { get; }
 
+        public void SetupItems<T>(List<T> items) where T : BaseEntity
+        {
+            _items[typeof(T)] = items;
+        }
+
         public List<T> GetItems<T>() where T : BaseEntity
         {
-            if (!_items.ContainsKey(typeof(T)))
-            {
-                _items[typeof(T)] = new List<T>();
-            }
-
             return (List<T>)_items[typeof(T)];
         }
 
         public T GetItem<T>(int id) where T : BaseEntity
         {
-            if (!_items.ContainsKey(typeof(T)))
-            {
-                return default(T);
-            }
-
             return ((List<T>)_items[typeof(T)]).FirstOrDefault(i => i.Id == id);
-        }
-
-        public int AddItem<T>(T item) where T : BaseEntity
-        {
-            if (!_items.ContainsKey(typeof(T)))
-            {
-                _items[typeof(T)] = new List<T>();
-            }
-
-            ((List<T>)_items[typeof(T)]).Add(item);
-            return 1;
-        }
-
-        public int AddAllItem<T>(List<T> items) where T : BaseEntity
-        {
-            if (!_items.ContainsKey(typeof(T)))
-            {
-                _items[typeof(T)] = new List<T>();
-            }
-
-            _items[typeof(T)] = items;
-            return items.Count;
-        }
-
-        public int RemoveItem<T>(T item) where T : BaseEntity
-        {
-            if (!_items.ContainsKey(typeof(T)))
-            {
-                return 0;
-            }
-
-            ((List<T>)_items[typeof(T)]).Remove(item);
-            return 1;
         }
 
         public void Dispose()
