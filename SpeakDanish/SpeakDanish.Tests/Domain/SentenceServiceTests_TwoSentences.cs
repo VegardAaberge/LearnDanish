@@ -14,14 +14,14 @@ using MathNet.Numerics.Distributions;
 
 namespace SpeakDanish.Tests
 {
-    public class RecordingServiceTwoSentencesTests : IClassFixture<SpeakDanishDatabaseFixture>
+    public class SentenceServiceTests_TwoSentences : IClassFixture<SpeakDanishDatabaseFixture>
     {
-        private readonly IRecordingService _recordingService;
+        private readonly ISentenceService _sentenceService;
         private readonly string[] sentences = new string[] { "This is the previous sentence.", "This is another sentence." };
 
-        public RecordingServiceTwoSentencesTests(SpeakDanishDatabaseFixture fixture)
+        public SentenceServiceTests_TwoSentences(SpeakDanishDatabaseFixture fixture)
         {
-            _recordingService = new RecordingService(fixture.DatabaseMock.Object);
+            _sentenceService = new SentenceService(fixture.DatabaseMock.Object);
 
             List<SentenceEntity> sentenceEntities = sentences
                 .Select(sentence => new SentenceEntity
@@ -54,7 +54,7 @@ namespace SpeakDanish.Tests
             Task<string> getSentencesFromResources = Task.FromResult(string.Join("\n", sentences));
 
             // Act
-            string result = await _recordingService.GetRandomSentence(previousSentence, getSentencesFromResources);
+            string result = await _sentenceService.GetRandomSentence(previousSentence, getSentencesFromResources);
 
             // Assert
             result.Should().NotBeNullOrWhiteSpace();
@@ -72,7 +72,7 @@ namespace SpeakDanish.Tests
             Task<string> getSentencesFromResources = Task.FromResult(string.Join("\n", resourceSentences));
 
             // Act
-            string result = await _recordingService.GetRandomSentence(previousSentence, getSentencesFromResources);
+            string result = await _sentenceService.GetRandomSentence(previousSentence, getSentencesFromResources);
 
             // Assert
             result.Should().NotBeNullOrWhiteSpace();

@@ -34,14 +34,6 @@ namespace SpeakDanish.Domain
         /// <param name="recording">The recording to delete.</param>
         /// <returns>The number of rows affected by the delete operation.</returns>
         Task<int> DeleteRecordingAsync(Recording recording);
-
-        /// <summary>
-        /// Returns a random sentence from the list of sentences, excluding the previous sentence.
-        /// </summary>
-        /// <param name="previousSentence">The previous sentence to exclude from the list of choices.</param>
-        /// <param name="getSentencesFromResources">A task that returns the list of sentences to choose from.</param>
-        /// <returns>A task that returns a random sentence from the list of sentences, excluding the previous sentence.</returns>
-        Task<string> GetRandomSentence(string previousSentence, Task<string> getSentencesFromResources);
     }
 }
 

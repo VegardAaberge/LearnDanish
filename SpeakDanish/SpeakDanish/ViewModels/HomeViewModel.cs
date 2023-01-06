@@ -25,6 +25,7 @@ namespace SpeakDanish.ViewModels
     {
         private ITtsDataInstaller _ttsDataInstaller;
         private IAudioRecorder _audioRecorder;
+        private ISentenceService _sentenceService;
         private IRecordingService _recordingService;
         private IAlertService _alertService;
         private INavigation _navigation;
@@ -43,12 +44,14 @@ namespace SpeakDanish.ViewModels
         private CancellationTokenSource _cancelSpeakTokenSource = null;
 
         public HomeViewModel(
+            ISentenceService sentenceService,
             IRecordingService recordingService,
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
             IAlertService alertService,
             INavigation navigation)
         {
+            _sentenceService = sentenceService;
             _recordingService = recordingService;
             _ttsDataInstaller = ttsDataInstaller;
             _audioRecorder = audioRecorder;
@@ -117,7 +120,7 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
-                Sentence = await _recordingService.GetRandomSentence(Sentence, LoadFile());
+                Sentence = await _sentenceService.GetRandomSentence(Sentence, LoadFile());
             }
             catch (Exception e)
             {

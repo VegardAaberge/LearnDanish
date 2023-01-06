@@ -14,14 +14,14 @@ using MathNet.Numerics.Distributions;
 
 namespace SpeakDanish.Tests
 {
-    public class RecordingServiceManySentencesTests : IClassFixture<SpeakDanishDatabaseFixture>
+    public class SentenceServiceTests_ManySentences : IClassFixture<SpeakDanishDatabaseFixture>
     {
-        private readonly IRecordingService _recordingService;
+        private readonly ISentenceService _sentenceService;
         private readonly string[] sentences = Enumerable.Range(1, 200).Select(x => $"Sentence {x}").ToArray();
 
-        public RecordingServiceManySentencesTests(SpeakDanishDatabaseFixture fixture)
+        public SentenceServiceTests_ManySentences(SpeakDanishDatabaseFixture fixture)
         {
-            _recordingService = new RecordingService(fixture.DatabaseMock.Object);
+            _sentenceService = new SentenceService(fixture.DatabaseMock.Object);
 
             List<SentenceEntity> sentenceEntities = sentences
                 .Select(sentence => new SentenceEntity
@@ -32,65 +32,7 @@ namespace SpeakDanish.Tests
             fixture.AddAllItem(sentenceEntities);
         }
 
-        public async Task TestGetRecordingsAsync()
-        {
-            // Arrange
-            // TODO
 
-            // Act
-            // TODO
-
-            // Assert
-            // TODO
-        }
-
-        public async Task TestGetRecordingAsync_ValidID()
-        {
-            // Arrange
-            // TODO
-
-            // Act
-            // TODO
-
-            // Assert
-            // TODO
-        }
-
-        public async Task TestGetRecordingAsync_InvalidID()
-        {
-            // Arrange
-            // TODO
-
-            // Act
-            // TODO
-
-            // Assert
-            // TODO
-        }
-
-        public async Task TestInsertRecordingAsync()
-        {
-            // Arrange
-            // TODO
-
-            // Act
-            // TODO
-
-            // Assert
-            // TODO
-        }
-
-        public async Task TestDeleteRecordingAsync()
-        {
-            // Arrange
-            // TODO
-
-            // Act
-            // TODO
-
-            // Assert
-            // TODO
-        }
 
         [Fact]
         public async Task TestGetRandomSentence_ShouldNotFetchResource()
@@ -101,7 +43,7 @@ namespace SpeakDanish.Tests
             Task<string> getSentencesFromResources = Task.FromResult(string.Join("\n", resourceSentences));
 
             // Act
-            string result = await _recordingService.GetRandomSentence(previousSentence, getSentencesFromResources);
+            string result = await _sentenceService.GetRandomSentence(previousSentence, getSentencesFromResources);
 
             // Assert
             result.Should().NotBeNullOrWhiteSpace();
@@ -123,7 +65,7 @@ namespace SpeakDanish.Tests
             // Act
             for (int i = 0; i < numTrials; i++)
             {
-                var selectedSentence = await _recordingService.GetRandomSentence("", getSentencesFromResources);
+                var selectedSentence = await _sentenceService.GetRandomSentence("", getSentencesFromResources);
                 observedFrequencies[selectedSentence] = observedFrequencies[selectedSentence] + 1;
             }
 
@@ -142,18 +84,6 @@ namespace SpeakDanish.Tests
             double pValue = 1 - chiSquared.CumulativeDistribution(chiSquaredValue);
 
             pValue.Should().BeGreaterThan(0.05);
-        }
-
-        public async Task TestGetRandomSentence_DifferentFromPreviousSentence()
-        {
-            // Arrange
-            // TODO
-
-            // Act
-            // TODO
-
-            // Assert
-            // TODO
         }
     }
 }

@@ -27,6 +27,7 @@ namespace SpeakDanish
         {
             services.AddSingleton<ISpeakDanishDatabase, SpeakDanishDatabase>();
             services.AddSingleton<IRecordingService, RecordingService>();
+            services.AddSingleton<ISentenceService, SentenceService>();
 
             services.AddSingleton<HomeViewModel>();
             services.AddTransient<RecordingsViewModel>();
