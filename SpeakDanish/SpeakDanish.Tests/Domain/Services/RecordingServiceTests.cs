@@ -5,13 +5,17 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using SpeakDanish.Data;
+using SpeakDanish.Data.Database;
 using SpeakDanish.Data.Mappers;
+using SpeakDanish.Data.Models;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
+using SpeakDanish.Domain.Services;
 using SpeakDanish.Tests.Data;
+using SpeakDanish.Tests.Data.Database;
 using Xunit;
 
-namespace SpeakDanish.Tests.Domain
+namespace SpeakDanish.Tests.Domain.Services
 {
     public class RecordingServiceTests : IClassFixture<SpeakDanishDatabaseFixture>
     {

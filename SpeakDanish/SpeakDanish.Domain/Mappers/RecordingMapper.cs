@@ -1,4 +1,5 @@
 ﻿using System;
+using SpeakDanish.Data.Models;
 using SpeakDanish.Domain.Models;
 
 namespace SpeakDanish.Data.Mappers

@@ -6,8 +6,9 @@ using SpeakDanish.Data.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
+using SpeakDanish.Data.Database;
 
-namespace SpeakDanish.Tests.Data
+namespace SpeakDanish.Tests.Data.Database
 {
 	public class SpeakDanishDatabaseFixture : IDisposable
 	{

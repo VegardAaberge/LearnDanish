@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace SpeakDanish.Data.Models
 {
 	public class SentenceEntity : BaseEntity

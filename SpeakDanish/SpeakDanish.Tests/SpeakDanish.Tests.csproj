@@ -27,9 +27,13 @@
     <None Remove="Domain\" />
     <None Remove="Data\" />
     <None Remove="MathNet.Numerics" />
+    <None Remove="Domain\Services\" />
+    <None Remove="Data\Database\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
     <Folder Include="Data\" />
+    <Folder Include="Domain\Services\" />
+    <Folder Include="Data\Database\" />
   </ItemGroup>
 </Project>

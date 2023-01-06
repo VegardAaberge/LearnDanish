@@ -8,8 +8,9 @@ using SpeakDanish.Data.Mappers;
 using SpeakDanish.Data.Models;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
+using SpeakDanish.Data.Database;
 
-namespace SpeakDanish.Domain
+namespace SpeakDanish.Domain.Services
 {
     public class RecordingService : IRecordingService
     {

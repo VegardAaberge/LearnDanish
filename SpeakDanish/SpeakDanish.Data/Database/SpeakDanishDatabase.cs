@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SpeakDanish.Data.Models;
 using SQLite;
 
-namespace SpeakDanish.Data
+namespace SpeakDanish.Data.Database
 {
 	public class SpeakDanishDatabase : ISpeakDanishDatabase
 	{

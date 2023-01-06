@@ -18,6 +18,7 @@ using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.CommunityToolkit.Extensions;
 using SpeakDanish.Services.Enums;
 using System.IO;
+using SpeakDanish.Domain.Services;
 
 namespace SpeakDanish.ViewModels
 {

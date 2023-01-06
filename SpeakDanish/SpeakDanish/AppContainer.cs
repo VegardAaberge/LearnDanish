@@ -5,6 +5,8 @@ using SpeakDanish.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 using SpeakDanish.Data;
+using SpeakDanish.Data.Database;
+using SpeakDanish.Domain.Services;
 
 namespace SpeakDanish
 {

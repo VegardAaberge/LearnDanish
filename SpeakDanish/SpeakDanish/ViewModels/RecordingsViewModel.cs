@@ -7,6 +7,7 @@ using SpeakDanish.Services;
 using SpeakDanish.Helpers;
 using SpeakDanish.ViewModels.Base;
 using Xamarin.Forms;
+using SpeakDanish.Domain.Services;
 
 namespace SpeakDanish.ViewModels
 {

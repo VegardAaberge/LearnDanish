@@ -3,7 +3,7 @@ using SpeakDanish.Data.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SpeakDanish.Data
+namespace SpeakDanish.Data.Database
 {
     /// <summary>
     /// Interface for a database that stores information about Danish language recordings.

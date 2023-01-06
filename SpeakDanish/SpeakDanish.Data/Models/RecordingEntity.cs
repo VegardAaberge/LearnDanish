@@ -2,7 +2,7 @@
 using SpeakDanish.Data.Models;
 using SQLite;
 
-namespace SpeakDanish.Data
+namespace SpeakDanish.Data.Models
 {
     public class RecordingEntity : BaseEntity
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SpeakDanish.Domain.Models;
 
-namespace SpeakDanish.Domain
+namespace SpeakDanish.Domain.Services
 {
     public interface IRecordingService
     {

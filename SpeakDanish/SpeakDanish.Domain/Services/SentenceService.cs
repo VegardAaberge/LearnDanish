@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SpeakDanish.Data;
+using SpeakDanish.Data.Database;
 using SpeakDanish.Data.Models;
 
-namespace SpeakDanish.Domain
+namespace SpeakDanish.Domain.Services
 {
 	public class SentenceService : ISentenceService
 	{

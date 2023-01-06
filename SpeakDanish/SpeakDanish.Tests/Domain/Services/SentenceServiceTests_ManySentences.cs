@@ -11,8 +11,10 @@ using SpeakDanish.Tests.Data;
 using System.Linq;
 using SpeakDanish.Data.Models;
 using MathNet.Numerics.Distributions;
+using SpeakDanish.Domain.Services;
+using SpeakDanish.Tests.Data.Database;
 
-namespace SpeakDanish.Tests
+namespace SpeakDanish.Tests.Domain.Services
 {
     public class SentenceServiceTests_ManySentences : IClassFixture<SpeakDanishDatabaseFixture>
     {

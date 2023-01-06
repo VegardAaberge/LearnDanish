@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace SpeakDanish.Domain
+namespace SpeakDanish.Domain.Services
 {
 	public interface ISentenceService
 	{

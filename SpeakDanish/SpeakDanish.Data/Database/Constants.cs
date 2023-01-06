@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SpeakDanish.Data
+namespace SpeakDanish.Data.Database
 {
     public static class Constants
     {
