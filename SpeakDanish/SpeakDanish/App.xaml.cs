@@ -16,13 +16,12 @@ namespace SpeakDanish
 
             AppContainer.SetupServices(addPlatformServices);
 
-            MainPage = new NavigationPage(new MainPage())
+            MainPage = new NavigationPage()
             {
                 BarBackgroundColor = Color.Blue,
                 BarTextColor = Color.White,
             };
-
-            MainPage.BindingContext = AppContainer.GetService<HomeViewModel>();
+            (MainPage as NavigationPage).PushAsync(new HomePage(), false);
         }
 
         protected override void OnSleep ()

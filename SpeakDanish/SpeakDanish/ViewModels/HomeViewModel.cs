@@ -19,13 +19,14 @@ using System.IO;
 using SpeakDanish.Domain.Services;
 using SpeakDanish.Contracts.Platform;
 using SpeakDanish.Contracts.Domain;
+using SpeakDanish.Domain.UseCases;
+using SpeakDanish.Contracts;
 
 namespace SpeakDanish.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
-        private ITtsDataInstaller _ttsDataInstaller;
-        private IAudioRecorder _audioRecorder;
+        private IAudioUseCase _audioUseCase;
         private ISentenceService _sentenceService;
         private IRecordingService<Recording> _recordingService;
         private IAlertService _alertService;
@@ -37,39 +38,29 @@ namespace SpeakDanish.ViewModels
         private string _sentence;
         private bool _isRecording;
         private string _volumeIcon;
-
         private int _volumeCounter = 1;
-        private Timer _volumeTimer = new Timer(300);
-        private Timer _countdownTimer = new Timer(1000);
-
-        private CancellationTokenSource _cancelSpeakTokenSource = null;
 
         public HomeViewModel(
+            IAudioUseCase audioUseCase,
             ISentenceService sentenceService,
             IRecordingService<Recording> recordingService,
-            ITtsDataInstaller ttsDataInstaller,
-            IAudioRecorder audioRecorder,
             IAlertService alertService,
             INavigation navigation)
         {
+            _audioUseCase = audioUseCase;
             _sentenceService = sentenceService;
             _recordingService = recordingService;
-            _ttsDataInstaller = ttsDataInstaller;
-            _audioRecorder = audioRecorder;
             _alertService = alertService;
             _navigation = navigation;
 
             Title = "Home";
-            Sentence = "En hund løber gennem gaderne i en lille by. ";
-            IsRecording = false;
+            VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
 
             SpeakSentenceCommand = new Command(async () => await SpeakSentenceAsync(), () => !_isSpeaking);
             StartRecordingCommand = new Command(async () => await StartRecordingAsync(), () => !_isRecording);
             StopRecordingCommand = new Command(async () => await StopRecordingAsync(), () => _isRecording);
             NewSentenceCommand = new Command(async () => await NewSentenceAsync());
             NavigateToRecordingsCommand = new Command(async () => await NavigateToRecordingsAsync());
-
-            VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
 
             LoadRandomSentence().ConfigureAwait(false);
         }
@@ -79,7 +70,6 @@ namespace SpeakDanish.ViewModels
         public Command StopRecordingCommand { get; set; }
         public Command NewSentenceCommand { get; set; }
         public Command NavigateToRecordingsCommand { get; set; }
-
 
         public string VolumeIcon
         {
@@ -143,41 +133,16 @@ namespace SpeakDanish.ViewModels
 
         public async Task SpeakSentenceAsync()
         {
-            _cancelSpeakTokenSource?.Cancel();
-
-            var locales = await TextToSpeech.GetLocalesAsync();
-            var locale = locales.FirstOrDefault(x => x.Language == "da");
-
-            if (locale == null)
-            {
-                _ttsDataInstaller.InstallTtsData();
-
-                locales = await TextToSpeech.GetLocalesAsync();
-                locale = locales.FirstOrDefault(x => x.Language == "da");
-
-                if(locale == null)
-                {
-                    await _alertService.ShowToast("No Danish language found");
-                    return;
-                }
-            }
-
             try
             {
-                _cancelSpeakTokenSource = new CancellationTokenSource();
-                _volumeTimer.Stop();
-                _volumeTimer = new Timer(300);
-                _volumeTimer.Elapsed += VolumeTimer_Elapsed;
-                _volumeTimer.Start();
-
-                await TextToSpeech.SpeakAsync(Sentence, new SpeechOptions
+                var response = await _audioUseCase.SpeakSentenceAsync(Sentence, VolumeTimer_Elapsed);
+                if (!response.Success)
                 {
-                    Locale = locale
-                }, _cancelSpeakTokenSource.Token);
+                    await _alertService.ShowToast(response.Message);
+                }
             }
             finally
             {
-                _volumeTimer.Stop();
                 VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
             }
         }
@@ -206,27 +171,22 @@ namespace SpeakDanish.ViewModels
 
         public async Task StartRecordingAsync()
         {
-            if (_countdownTimer.Enabled)
-                return;
-
-            var microphoneStatus = await Permissions.CheckStatusAsync<Permissions.Microphone>();
-            var storageStatus = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-            if (microphoneStatus != PermissionStatus.Granted || storageStatus != PermissionStatus.Granted)
+            try
             {
-                if(microphoneStatus != PermissionStatus.Granted)
-                    await Permissions.RequestAsync<Permissions.Microphone>();
-                if (storageStatus != PermissionStatus.Granted)
-                    await Permissions.RequestAsync<Permissions.StorageWrite>();
-                return;
+                var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
+                if (response.Success)
+                {
+                    _filepath = response.Data;
+                }
+                else
+                {
+                    await _alertService.ShowToast(response.Message);
+                }
             }
-
-            _filepath = await _audioRecorder.StartRecordingAudio("recording");
-            OnPropertyChanged(nameof(HasRecording));
-
-            _countdownTimer = new Timer(1000);
-            _countdownTimer.Elapsed += CountdownTimer_Elapsed;
-            _countdownTimer.Start();
-            IsRecording = true;
+            finally
+            {
+                IsRecording = true;
+            }
         }
 
         private void CountdownTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -240,11 +200,23 @@ namespace SpeakDanish.ViewModels
 
         public async Task StopRecordingAsync()
         {
-            await _audioRecorder.StopRecordingAudio(_filepath);
-
-            _countdownTimer.Stop();
-            CountSeconds = 0;
-            IsRecording = false;
+            try
+            {
+                var response = await _audioUseCase.StopRecordingAsync(_filepath);
+                if (response.Success)
+                {
+                    OnPropertyChanged(nameof(HasRecording));
+                }
+                else
+                {
+                    await _alertService.ShowToast(response.Message);
+                }
+            }
+            finally
+            {
+                CountSeconds = 0;
+                IsRecording = false;
+            }
         }
 
         public async Task NewSentenceAsync()
@@ -258,16 +230,8 @@ namespace SpeakDanish.ViewModels
                 }
             );
 
-            _filepath = "";
-            OnPropertyChanged(nameof(HasRecording));
-
-            _cancelSpeakTokenSource = null;
-
-            IsSpeaking = false;
-            CountSeconds = 0;
-            IsRecording = false;
-
-            await LoadRandomSentence();
+            await _navigation.PopAsync(false);
+            await _navigation.PushAsync(new HomePage());
         }
 
         public async Task NavigateToRecordingsAsync()

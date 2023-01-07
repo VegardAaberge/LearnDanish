@@ -20,6 +20,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.4" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controls\" />
@@ -37,6 +38,7 @@
     <None Remove="Controls\Buttons\" />
     <None Remove="Controls\ContentViews\" />
     <None Remove="Controls\GestureRecognizers\" />
+    <None Remove="Xamarin.Essentials.Interfaces" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />

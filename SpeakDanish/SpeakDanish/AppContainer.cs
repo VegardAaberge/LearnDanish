@@ -8,6 +8,10 @@ using SpeakDanish.Data.Database;
 using SpeakDanish.Domain.Services;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Domain.Models;
+using SpeakDanish.Domain.UseCases;
+using Xamarin.Essentials.Interfaces;
+using Xamarin.Essentials;
+using Xamarin.Essentials.Implementation;
 
 namespace SpeakDanish
 {
@@ -29,10 +33,13 @@ namespace SpeakDanish
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ISpeakDanishDatabase, SpeakDanishDatabase>();
-            services.AddSingleton<IRecordingService<Recording>, RecordingService>();
             services.AddSingleton<ISentenceService, SentenceService>();
+            services.AddSingleton<IRecordingService<Recording>, RecordingService>();
 
-            services.AddSingleton<HomeViewModel>();
+            services.AddTransient<IAudioUseCase, AudioUseCase>();
+            services.AddTransient<ITextToSpeech, TextToSpeechImplementation>();
+
+            services.AddTransient<HomeViewModel>();
             services.AddTransient<RecordingsViewModel>();
 
             services.AddSingleton<INavigation>(s => Application.Current.MainPage.Navigation);

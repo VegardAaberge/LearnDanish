@@ -10,14 +10,18 @@
     <None Remove="Mappers\" />
     <None Remove="System.Linq" />
     <None Remove="Services\" />
+    <None Remove="UseCases\" />
+    <None Remove="Xamarin.Essentials.Interfaces" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Mappers\" />
     <Folder Include="Services\" />
+    <Folder Include="UseCases\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeakDanish.Data\SpeakDanish.Data.csproj" />

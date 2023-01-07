@@ -9,7 +9,7 @@
              xmlns:buttons="clr-namespace:SpeakDanish.Controls.Buttons"
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
              x:DataType="viewmodel:HomeViewModel"
-             x:Class="SpeakDanish.Views.MainPage"
+             x:Class="SpeakDanish.Views.HomePage"
              Title="{Binding Title }">
 
     <ContentPage.Resources>

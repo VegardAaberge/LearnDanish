@@ -9,11 +9,13 @@ using Xamarin.Forms;
 
 namespace SpeakDanish.Views
 {
-    public partial class MainPage : ContentPage
+    public partial class HomePage : ContentPage
     {
-        public MainPage()
+        public HomePage()
         {
             InitializeComponent();
+
+            BindingContext = AppContainer.GetService<HomeViewModel>();
         }
     }
 }
