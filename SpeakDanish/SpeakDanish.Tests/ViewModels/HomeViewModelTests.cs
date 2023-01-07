@@ -21,41 +21,7 @@ namespace SpeakDanish.Tests.ViewModel
 
         public RecordingsViewModelTests()
 		{
-            Type localeType = typeof(Locale);
-            ConstructorInfo constructor = localeType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new[] {
-                typeof(string),
-                typeof(string),
-                typeof(string),
-                typeof(string)
-            }, null);
-
-            object[] constructorArgs = { "da", "", "Danish", "" };
-            Locale danishLocale = (Locale)constructor.Invoke(constructorArgs);
-
-            var textToSpeech = new Mock<ITextToSpeech>();
-            textToSpeech
-                .Setup(x => x.GetLocalesAsync())
-                .ReturnsAsync(new [] { danishLocale });
-
-            textToSpeech.Setup(x => x.SpeakAsync(It.IsAny<string>(), It.IsAny<SpeechOptions>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
-
-            ITtsDataInstaller ttsDataInstaller = new Mock<ITtsDataInstaller>().Object;
-            IAudioRecorder audioRecorder = new Mock<IAudioRecorder>().Object;
-            ISentenceService sentenceService = new Mock<ISentenceService>().Object;
-            IRecordingService<Recording> recordingService = new Mock<IRecordingService<Recording>>().Object;
-            IAlertService alertService = new Mock<IAlertService>().Object;
-            INavigation navigation = new Mock<INavigation>().Object;
-
-            _homeViewModel = new HomeViewModel(sentenceService, recordingService, ttsDataInstaller, audioRecorder, alertService, navigation);
         }
-
-        [Fact]
-        public async Task SpeakSentenceAsync_ShouldSpeakSentenceInDanish()
-        {
-            // Act
-        }
-
     }
 }
 

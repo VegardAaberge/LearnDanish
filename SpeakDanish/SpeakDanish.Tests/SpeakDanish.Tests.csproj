@@ -33,11 +33,13 @@
     <None Remove="Data\Database\" />
     <None Remove="Xamarin.Essentials" />
     <None Remove="Xamarin.Essentials.Interfaces" />
+    <None Remove="Domain\UseCases\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
     <Folder Include="Data\" />
     <Folder Include="Domain\Services\" />
     <Folder Include="Data\Database\" />
+    <Folder Include="Domain\UseCases\" />
   </ItemGroup>
 </Project>

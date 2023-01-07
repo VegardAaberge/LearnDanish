@@ -5,15 +5,16 @@ using System.Timers;
 using CancellationTokenSource = System.Threading.CancellationTokenSource;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Contracts.Platform;
-using Xamarin.Essentials;
 using Xamarin.Essentials.Interfaces;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Contracts;
+using Xamarin.Essentials;
 
 namespace SpeakDanish.Domain.UseCases
 {
 	public class AudioUseCase : IAudioUseCase
     {
+        private IPermissions _permissions;
         private ITtsDataInstaller _ttsDataInstaller;
         private IAudioRecorder _audioRecorder;
         private ITextToSpeech _textToSpeech;
@@ -23,10 +24,12 @@ namespace SpeakDanish.Domain.UseCases
         private Timer _countTimer = new Timer();
 
         public AudioUseCase(
+            IPermissions permissions,
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
             ITextToSpeech textToSpeech)
 		{
+            _permissions = permissions;
             _ttsDataInstaller = ttsDataInstaller;
             _audioRecorder = audioRecorder;
             _textToSpeech = textToSpeech;
@@ -58,7 +61,7 @@ namespace SpeakDanish.Domain.UseCases
             _volumeTimer.Elapsed += volumeTimerCallback;
             _volumeTimer.Start();
 
-            await TextToSpeech.SpeakAsync(sentence, new SpeechOptions
+            await _textToSpeech.SpeakAsync(sentence, new SpeechOptions
             {
                 Locale = locale
             }, _cancelSpeakTokenSource.Token);
@@ -73,14 +76,14 @@ namespace SpeakDanish.Domain.UseCases
             if (_countTimer.Enabled)
                 return new Response<string>(false, "Already recording");
 
-            var microphoneStatus = await Permissions.CheckStatusAsync<Permissions.Microphone>();
-            var storageStatus = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+            var microphoneStatus = await _permissions.CheckStatusAsync<Permissions.Microphone>();
+            var storageStatus = await _permissions.CheckStatusAsync<Permissions.StorageWrite>();
             if (microphoneStatus != PermissionStatus.Granted || storageStatus != PermissionStatus.Granted)
             {
                 if (microphoneStatus != PermissionStatus.Granted)
-                    await Permissions.RequestAsync<Permissions.Microphone>();
+                    await _permissions.RequestAsync<Permissions.Microphone>();
                 if (storageStatus != PermissionStatus.Granted)
-                    await Permissions.RequestAsync<Permissions.StorageWrite>();
+                    await _permissions.RequestAsync<Permissions.StorageWrite>();
 
                 return new Response<string>(false, "Permission denied");
             }

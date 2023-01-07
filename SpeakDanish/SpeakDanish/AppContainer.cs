@@ -38,6 +38,7 @@ namespace SpeakDanish
 
             services.AddTransient<IAudioUseCase, AudioUseCase>();
             services.AddTransient<ITextToSpeech, TextToSpeechImplementation>();
+            services.AddTransient<IPermissions, PermissionsImplementation>();
 
             services.AddTransient<HomeViewModel>();
             services.AddTransient<RecordingsViewModel>();
