@@ -15,6 +15,7 @@
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +35,7 @@
     <None Remove="Xamarin.Essentials" />
     <None Remove="Xamarin.Essentials.Interfaces" />
     <None Remove="Domain\UseCases\" />
+    <None Remove="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />

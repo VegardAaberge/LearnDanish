@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Threading;
 using FluentAssertions;
 using System.Timers;
+using Microsoft.Extensions.DependencyInjection;
+using SpeakDanish.Contracts.Domain;
 
 namespace SpeakDanish.Tests.Domain.UseCases
 {
@@ -35,25 +37,24 @@ namespace SpeakDanish.Tests.Domain.UseCases
         [Fact]
         public async void SpeakSentenceAsync_ShouldSpeakSentence_WhenCalled()
         {
-            var mockTextToSpeech = new Mock<ITextToSpeech>();
-            var mockPermissions = new Mock<IPermissions>();
-            var mockTtsDataInstaller = new Mock<ITtsDataInstaller>();
-            var mockAudioRecorder = new Mock<IAudioRecorder>();
-
             // Arrange
-            mockTextToSpeech
-                .Setup(tts => tts.GetLocalesAsync())
-                .ReturnsAsync(new List<Locale> { _danishLocale });
-            mockTextToSpeech
-                .Setup(tts => tts.SpeakAsync(It.IsAny<string>(), It.IsAny<SpeechOptions>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
+            var mockTextToSpeech = new Mock<ITextToSpeech>();
 
-            var audioUseCase = new AudioUseCase(
-                mockPermissions.Object,
-                mockTtsDataInstaller.Object,
-                mockAudioRecorder.Object,
-                mockTextToSpeech.Object
-            );
+            var setupDictionary = new Dictionary<Type, Action<Mock>>();
+            setupDictionary.Add(typeof(ITextToSpeech), mock =>
+            {
+                mockTextToSpeech = mock as Mock<ITextToSpeech>;
+                mockTextToSpeech
+                    .Setup(tts => tts.GetLocalesAsync())
+                    .ReturnsAsync(new List<Locale> { _danishLocale });
+                mockTextToSpeech
+                    .Setup(tts => tts.SpeakAsync(It.IsAny<string>(), It.IsAny<SpeechOptions>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.CompletedTask);
+            });
+
+            var audioUseCase = TestProviderHelper
+                .CreateTestProvider(setupDictionary)
+                .GetService<IAudioUseCase>();
 
             // Act
             var result = await audioUseCase.SpeakSentenceAsync("Hej!", null);
@@ -67,25 +68,24 @@ namespace SpeakDanish.Tests.Domain.UseCases
         [Fact]
         public async void SpeakSentenceAsync_ShouldReturnError_WhenDanishLanguageNotFound()
         {
-            var mockTextToSpeech = new Mock<ITextToSpeech>();
-            var mockPermissions = new Mock<IPermissions>();
-            var mockTtsDataInstaller = new Mock<ITtsDataInstaller>();
-            var mockAudioRecorder = new Mock<IAudioRecorder>();
-
             // Arrange
-            mockTextToSpeech
-                .Setup(tts => tts.GetLocalesAsync())
-                .ReturnsAsync(new List<Locale> { });
-            mockTextToSpeech
-                .Setup(tts => tts.SpeakAsync(It.IsAny<string>(), It.IsAny<SpeechOptions>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
+            var mockTextToSpeech = new Mock<ITextToSpeech>();
 
-            var audioUseCase = new AudioUseCase(
-                mockPermissions.Object,
-                mockTtsDataInstaller.Object,
-                mockAudioRecorder.Object,
-                mockTextToSpeech.Object
-            );
+            var setupDictionary = new Dictionary<Type, Action<Mock>>();
+            setupDictionary.Add(typeof(ITextToSpeech), mock =>
+            {
+                mockTextToSpeech = mock as Mock<ITextToSpeech>;
+                mockTextToSpeech
+                    .Setup(tts => tts.GetLocalesAsync())
+                    .ReturnsAsync(new List<Locale> { });
+                mockTextToSpeech
+                    .Setup(tts => tts.SpeakAsync(It.IsAny<string>(), It.IsAny<SpeechOptions>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.CompletedTask);
+            });
+
+            var audioUseCase = TestProviderHelper
+                .CreateTestProvider(setupDictionary)
+                .GetService<IAudioUseCase>();
 
             // Act
             var result = await audioUseCase.SpeakSentenceAsync("Hej!", null);
@@ -102,25 +102,29 @@ namespace SpeakDanish.Tests.Domain.UseCases
         {
             // Arrange
             var recordingPath = "/path/to/recording.mp3";
-            var permissionsMock = new Mock<IPermissions>();
-            var ttsDataInstallerMock = new Mock<ITtsDataInstaller>();
             var audioRecorderMock = new Mock<IAudioRecorder>();
-            var textToSpeechMock = new Mock<ITextToSpeech>();
+            var permissionsMock = new Mock<IPermissions>();
 
-            permissionsMock.Setup(p => p.CheckStatusAsync<Permissions.Microphone>())
+            var setupDictionary = new Dictionary<Type, Action<Mock>>();
+            setupDictionary.Add(typeof(IPermissions), mock =>
+            {
+                permissionsMock = mock as Mock<IPermissions>;
+                permissionsMock.Setup(p => p.CheckStatusAsync<Permissions.Microphone>())
                 .ReturnsAsync(PermissionStatus.Granted);
-            permissionsMock.Setup(p => p.CheckStatusAsync<Permissions.StorageWrite>())
-                .ReturnsAsync(PermissionStatus.Granted);
+                permissionsMock.Setup(p => p.CheckStatusAsync<Permissions.StorageWrite>())
+                    .ReturnsAsync(PermissionStatus.Granted);
+            });
+            setupDictionary.Add(typeof(IAudioRecorder), mock =>
+            {
+                audioRecorderMock = mock as Mock<IAudioRecorder>;
+                audioRecorderMock
+                    .Setup(x => x.StartRecordingAudio(It.IsAny<string>()))
+                    .ReturnsAsync(recordingPath);
+            });
 
-            audioRecorderMock.Setup(ar => ar.StartRecordingAudio(It.IsAny<string>()))
-                .ReturnsAsync(recordingPath);
-
-            var audioUseCase = new AudioUseCase(
-                permissionsMock.Object,
-                ttsDataInstallerMock.Object,
-                audioRecorderMock.Object,
-                textToSpeechMock.Object
-            );
+            var audioUseCase = TestProviderHelper
+                .CreateTestProvider(setupDictionary)
+                .GetService<IAudioUseCase>();
 
             // Act
             var result = await audioUseCase.StartRecordingAsync(null);
@@ -140,19 +144,18 @@ namespace SpeakDanish.Tests.Domain.UseCases
         {
             // Arrange
             var recordingPath = "/path/to/recording.mp3";
-            var permissionsMock = new Mock<IPermissions>();
-            var ttsDataInstallerMock = new Mock<ITtsDataInstaller>();
-            var audioRecorderMock = new Mock<IAudioRecorder>();
-            var textToSpeechMock = new Mock<ITextToSpeech>();
+            Mock<IAudioRecorder> audioRecorderMock = new Mock<IAudioRecorder>();
 
-            audioRecorderMock.Setup(x => x.StopRecordingAudio(It.IsAny<string>()));
+            var setupDictionary = new Dictionary<Type, Action<Mock>>();
+            setupDictionary.Add(typeof(IAudioRecorder), mock =>
+            {
+                audioRecorderMock = mock as Mock<IAudioRecorder>;
+                audioRecorderMock.Setup(x => x.StopRecordingAudio(It.IsAny<string>()));
+            });
 
-            var audioUseCase = new AudioUseCase(
-                permissionsMock.Object,
-                ttsDataInstallerMock.Object,
-                audioRecorderMock.Object,
-                textToSpeechMock.Object
-            );
+            var audioUseCase = TestProviderHelper
+                .CreateTestProvider(setupDictionary)
+                .GetService<IAudioUseCase>();
 
             // Act
             var result = await audioUseCase.StopRecordingAsync(recordingPath);
@@ -160,7 +163,6 @@ namespace SpeakDanish.Tests.Domain.UseCases
             // Assert
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
-
             audioRecorderMock.Verify(x => x.StopRecordingAudio(It.IsAny<string>()), Times.Once);
         }
     }
