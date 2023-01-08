@@ -19,6 +19,7 @@ namespace SpeakDanish.Tests.Domain.UseCases
 	public class AudioUseCasesTests
 	{
         private Locale _danishLocale;
+        private Action<ServiceCollection> _addAudioUseCase;
 
         public AudioUseCasesTests()
 		{
@@ -32,6 +33,10 @@ namespace SpeakDanish.Tests.Domain.UseCases
 
             object[] constructorArgs = { "da", "", "Danish", "" };
             _danishLocale = (Locale)constructor.Invoke(constructorArgs);
+
+            _addAudioUseCase = (serviceCollection) => {
+                serviceCollection.AddTransient<IAudioUseCase, AudioUseCase>();
+            };
         }
 
         [Fact]
@@ -39,6 +44,7 @@ namespace SpeakDanish.Tests.Domain.UseCases
         {
             // Arrange
             var mockTextToSpeech = new Mock<ITextToSpeech>();
+            
 
             var setupDictionary = new Dictionary<Type, Action<Mock>>();
             setupDictionary.Add(typeof(ITextToSpeech), mock =>
@@ -52,8 +58,8 @@ namespace SpeakDanish.Tests.Domain.UseCases
                     .Returns(Task.CompletedTask);
             });
 
-            var audioUseCase = TestProviderHelper
-                .CreateTestProvider(setupDictionary)
+            var audioUseCase = TestUtils
+                .CreateTestProvider(setupDictionary, _addAudioUseCase)
                 .GetService<IAudioUseCase>();
 
             // Act
@@ -83,8 +89,8 @@ namespace SpeakDanish.Tests.Domain.UseCases
                     .Returns(Task.CompletedTask);
             });
 
-            var audioUseCase = TestProviderHelper
-                .CreateTestProvider(setupDictionary)
+            var audioUseCase = TestUtils
+                .CreateTestProvider(setupDictionary, _addAudioUseCase)
                 .GetService<IAudioUseCase>();
 
             // Act
@@ -122,8 +128,8 @@ namespace SpeakDanish.Tests.Domain.UseCases
                     .ReturnsAsync(recordingPath);
             });
 
-            var audioUseCase = TestProviderHelper
-                .CreateTestProvider(setupDictionary)
+            var audioUseCase = TestUtils
+                .CreateTestProvider(setupDictionary, _addAudioUseCase)
                 .GetService<IAudioUseCase>();
 
             // Act
@@ -153,8 +159,8 @@ namespace SpeakDanish.Tests.Domain.UseCases
                 audioRecorderMock.Setup(x => x.StopRecordingAudio(It.IsAny<string>()));
             });
 
-            var audioUseCase = TestProviderHelper
-                .CreateTestProvider(setupDictionary)
+            var audioUseCase = TestUtils
+                .CreateTestProvider(setupDictionary, _addAudioUseCase)
                 .GetService<IAudioUseCase>();
 
             // Act

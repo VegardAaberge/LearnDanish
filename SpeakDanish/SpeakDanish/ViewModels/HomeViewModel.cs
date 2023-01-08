@@ -32,7 +32,6 @@ namespace SpeakDanish.ViewModels
         private IAlertService _alertService;
         private INavigation _navigation;
 
-        private string _filepath;
         private bool _isSpeaking;
         private int _countSeconds;
         private string _sentence;
@@ -71,6 +70,8 @@ namespace SpeakDanish.ViewModels
         public Command NewSentenceCommand { get; set; }
         public Command NavigateToRecordingsCommand { get; set; }
 
+        public string Filepath { get; set; }
+
         public string VolumeIcon
         {
             get => _volumeIcon;
@@ -104,7 +105,7 @@ namespace SpeakDanish.ViewModels
 
         public bool HasRecording
         {
-            get => !string.IsNullOrEmpty(_filepath);
+            get => !string.IsNullOrEmpty(Filepath);
         }
 
         public async Task LoadRandomSentence()
@@ -176,7 +177,7 @@ namespace SpeakDanish.ViewModels
                 var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
                 if (response.Success)
                 {
-                    _filepath = response.Data;
+                    Filepath = response.Data;
                 }
                 else
                 {
@@ -202,7 +203,7 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
-                var response = await _audioUseCase.StopRecordingAsync(_filepath);
+                var response = await _audioUseCase.StopRecordingAsync(Filepath);
                 if (response.Success)
                 {
                     OnPropertyChanged(nameof(HasRecording));
@@ -224,7 +225,7 @@ namespace SpeakDanish.ViewModels
             await _recordingService.InsertRecordingAsync(
                 new Recording
                 {
-                    FilePath = _filepath,
+                    FilePath = Filepath,
                     Sentence = _sentence,
                     Created = DateTime.Now
                 }

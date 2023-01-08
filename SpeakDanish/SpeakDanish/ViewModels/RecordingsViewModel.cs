@@ -75,19 +75,19 @@ namespace SpeakDanish.ViewModels
             }
         }
 
-        private async Task PlaySentenceAsync(Recording recording)
+        public async Task PlaySentenceAsync(Recording recording)
         {
         }
 
-        private async Task PlayAudioAsync(Recording recording)
+        public async Task PlayAudioAsync(Recording recording)
         {
         }
 
-        private async Task RedoAsync(Recording recording)
+        public async Task RedoAsync(Recording recording)
         {
         }
 
-        private async Task DeleteAsync(Recording recording)
+        public async Task DeleteAsync(Recording recording)
         {
         }
     }
