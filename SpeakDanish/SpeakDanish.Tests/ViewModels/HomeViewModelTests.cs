@@ -12,6 +12,7 @@ using SpeakDanish.Contracts;
 using SpeakDanish.Helpers;
 using System.Timers;
 using SpeakDanish.Contracts.Platform.Enums;
+using SpeakDanish.Tests.ViewModels;
 
 namespace SpeakDanish.Tests.ViewModel
 {
@@ -33,30 +34,20 @@ namespace SpeakDanish.Tests.ViewModel
             // Arrange
             var previousSentence = "Sentence 1";
             var nextSentence = "Sentence 2";
-            var setup = TestUtils.CreateSetupDictionary();
-            Mock<ISentenceService> sentenceService = new Mock<ISentenceService>();
 
-            setup.Add(typeof(ISentenceService), mock =>
-            {
-                sentenceService = mock as Mock<ISentenceService>;
-                sentenceService
-                    .Setup(x => x.GetRandomSentence(It.IsAny<string>(), It.IsAny<Task<string>>()))
-                    .ReturnsAsync((string a, Task<string> b) => a == previousSentence ? nextSentence : previousSentence);
-            });
+            var builder = new HomeViewModelBuilder()
+                .WithGetRandomSentence((a, b) => a == previousSentence ? nextSentence : previousSentence)
+                .Build();
 
-            var homeViewModel = TestUtils
-                .CreateTestProvider(setup, _addHomeViewModelAction)
-                .GetService<HomeViewModel>();
-
-            var actualPreviousSentence = homeViewModel.Sentence?.ToString();
+            var actualPreviousSentence = builder.HomeViewModel.Sentence?.ToString();
 
             // Act
-            await homeViewModel.LoadRandomSentence();
+            await builder.HomeViewModel.LoadRandomSentence();
 
             // Arrange
             actualPreviousSentence.Should().Be(previousSentence);
-            homeViewModel.Sentence.Should().Be(nextSentence);
-            sentenceService.Verify(x => x.GetRandomSentence(previousSentence, It.IsAny<Task<string>>()), Times.Once());
+            builder.HomeViewModel.Sentence.Should().Be(nextSentence);
+            builder.SentenceService.Verify(x => x.GetRandomSentence(previousSentence, It.IsAny<Task<string>>()), Times.Once());
         }
 
         [Fact]
@@ -64,38 +55,20 @@ namespace SpeakDanish.Tests.ViewModel
         {
             // Arrange
             var sentence = "Sentence to speak";
-            var errorResponse = "Error";
+            var errorResponse = new Response(false, "Error");
 
-            var setup = TestUtils.CreateSetupDictionary();
-            Mock<IAudioUseCase> audioUseCase = new Mock<IAudioUseCase>();
-            Mock<IAlertService> alertService = new Mock<IAlertService>();
-
-            setup.Add(typeof(IAudioUseCase), mock =>
-            {
-                audioUseCase = mock as Mock<IAudioUseCase>;
-                audioUseCase
-                    .Setup(x => x.SpeakSentenceAsync(It.IsAny<string>(), It.IsAny<ElapsedEventHandler>()))
-                    .ReturnsAsync((string s, ElapsedEventHandler a) => new Response(false, errorResponse));
-            });
-            setup.Add(typeof(IAlertService), mock =>
-            {
-                alertService = mock as Mock<IAlertService>;
-                alertService
-                    .Setup(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()));
-            });
-
-            var homeViewModel = TestUtils
-                .CreateTestProvider(setup, _addHomeViewModelAction)
-                .GetService<HomeViewModel>();
-            homeViewModel.Sentence = sentence;
+            var builder = new HomeViewModelBuilder()
+                .WithSpeakSentenceAsync(errorResponse)
+                .Build();
+            builder.HomeViewModel.Sentence = sentence;
 
             // Act
-            await homeViewModel.SpeakSentenceAsync();
+            await builder.HomeViewModel.SpeakSentenceAsync();
 
             // Assert
-            audioUseCase.Verify(x => x.SpeakSentenceAsync(sentence, It.IsAny<ElapsedEventHandler>()), Times.Once());
-            alertService.Verify(x => x.ShowToast(errorResponse, It.IsAny<ToastDuration>()), Times.Once());
-            homeViewModel.VolumeIcon.Should().Be(MaterialDesignIconsFont.VolumeHigh);
+            builder.AudioUseCase.Verify(x => x.SpeakSentenceAsync(sentence, It.IsAny<ElapsedEventHandler>()), Times.Once());
+            builder.AlertService.Verify(x => x.ShowToast(errorResponse.Message, It.IsAny<ToastDuration>()), Times.Once());
+            builder.HomeViewModel.VolumeIcon.Should().Be(MaterialDesignIconsFont.VolumeHigh);
         }
 
         [Fact]
@@ -103,37 +76,20 @@ namespace SpeakDanish.Tests.ViewModel
         {
             // Arrange
             var sentence = "Sentence to speak";
+            var successReponse = new Response(true);
 
-            var setup = TestUtils.CreateSetupDictionary();
-            Mock<IAudioUseCase> audioUseCase = new Mock<IAudioUseCase>();
-            Mock<IAlertService> alertService = new Mock<IAlertService>();
-
-            setup.Add(typeof(IAudioUseCase), mock =>
-            {
-                audioUseCase = mock as Mock<IAudioUseCase>;
-                audioUseCase
-                    .Setup(x => x.SpeakSentenceAsync(It.IsAny<string>(), It.IsAny<ElapsedEventHandler>()))
-                    .ReturnsAsync((string s, ElapsedEventHandler a) => new Response(true, null));
-            });
-            setup.Add(typeof(IAlertService), mock =>
-            {
-                alertService = mock as Mock<IAlertService>;
-                alertService
-                    .Setup(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()));
-            });
-
-            var homeViewModel = TestUtils
-                .CreateTestProvider(setup, _addHomeViewModelAction)
-                .GetService<HomeViewModel>();
-            homeViewModel.Sentence = sentence;
+            var builder = new HomeViewModelBuilder()
+                .WithSpeakSentenceAsync(successReponse)
+                .Build();
+            builder.HomeViewModel.Sentence = sentence;
 
             // Act
-            await homeViewModel.SpeakSentenceAsync();
+            await builder.HomeViewModel.SpeakSentenceAsync();
 
             // Assert
-            audioUseCase.Verify(x => x.SpeakSentenceAsync(sentence, It.IsAny<ElapsedEventHandler>()), Times.Once());
-            alertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
-            homeViewModel.VolumeIcon.Should().Be(MaterialDesignIconsFont.VolumeHigh);
+            builder.AudioUseCase.Verify(x => x.SpeakSentenceAsync(sentence, It.IsAny<ElapsedEventHandler>()), Times.Once());
+            builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
+            builder.HomeViewModel.VolumeIcon.Should().Be(MaterialDesignIconsFont.VolumeHigh);
         }
 
         [Fact]
@@ -142,36 +98,18 @@ namespace SpeakDanish.Tests.ViewModel
             // Arrange
             var successResponse = new Response<string> { Success = true, Data = "filepath" };
 
-            var setup = TestUtils.CreateSetupDictionary();
-            Mock<IAudioUseCase> audioUseCase = new Mock<IAudioUseCase>();
-            Mock<IAlertService> alertService = new Mock<IAlertService>();
-
-            setup.Add(typeof(IAudioUseCase), mock =>
-            {
-                audioUseCase = mock as Mock<IAudioUseCase>;
-                audioUseCase
-                    .Setup(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()))
-                    .ReturnsAsync(successResponse);
-            });
-            setup.Add(typeof(IAlertService), mock =>
-            {
-                alertService = mock as Mock<IAlertService>;
-                alertService
-                    .Setup(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()));
-            });
-
-            var homeViewModel = TestUtils
-                .CreateTestProvider(setup, _addHomeViewModelAction)
-                .GetService<HomeViewModel>();
+            var builder = new HomeViewModelBuilder()
+                .WithStartRecordingAsync(successResponse)
+                .Build();
 
             // Act
-            await homeViewModel.StartRecordingAsync();
+            await builder.HomeViewModel.StartRecordingAsync();
 
             // Assert
-            homeViewModel.IsRecording.Should().BeTrue();
-            homeViewModel.Filepath.Should().Be(successResponse.Data);
-            audioUseCase.Verify(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()), Times.Once());
-            alertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
+            builder.HomeViewModel.IsRecording.Should().BeTrue();
+            builder.HomeViewModel.Filepath.Should().Be(successResponse.Data);
+            builder.AudioUseCase.Verify(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()), Times.Once());
+            builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
         }
 
         [Fact]
@@ -180,36 +118,18 @@ namespace SpeakDanish.Tests.ViewModel
             // Arrange
             var failureResponse = new Response<string> { Success = false, Message = "error message" };
 
-            var setup = TestUtils.CreateSetupDictionary();
-            Mock<IAudioUseCase> audioUseCase = new Mock<IAudioUseCase>();
-            Mock<IAlertService> alertService = new Mock<IAlertService>();
-
-            setup.Add(typeof(IAudioUseCase), mock =>
-            {
-                audioUseCase = mock as Mock<IAudioUseCase>;
-                audioUseCase
-                    .Setup(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()))
-                    .ReturnsAsync(failureResponse);
-            });
-            setup.Add(typeof(IAlertService), mock =>
-            {
-                alertService = mock as Mock<IAlertService>;
-                alertService
-                    .Setup(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()));
-            });
-
-            var homeViewModel = TestUtils
-                .CreateTestProvider(setup, _addHomeViewModelAction)
-                .GetService<HomeViewModel>();
+            var builder = new HomeViewModelBuilder()
+                .WithStartRecordingAsync(failureResponse)
+                .Build();
 
             // Act
-            await homeViewModel.StartRecordingAsync();
+            await builder.HomeViewModel.StartRecordingAsync();
 
             // Assert
-            homeViewModel.IsRecording.Should().BeTrue();
-            homeViewModel.Filepath.Should().Be(null);
-            audioUseCase.Verify(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()), Times.Once());
-            alertService.Verify(x => x.ShowToast(failureResponse.Message, It.IsAny<ToastDuration>()), Times.Once());
+            builder.HomeViewModel.IsRecording.Should().BeTrue();
+            builder.HomeViewModel.Filepath.Should().Be(null);
+            builder.AudioUseCase.Verify(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()), Times.Once());
+            builder.AlertService.Verify(x => x.ShowToast(failureResponse.Message, It.IsAny<ToastDuration>()), Times.Once());
         }
 
         [Fact]
@@ -219,39 +139,19 @@ namespace SpeakDanish.Tests.ViewModel
             var path = "filepath";
             var successResponse = new Response(true);
 
-            var setup = TestUtils.CreateSetupDictionary();
-            Mock<IAudioUseCase> audioUseCase = new Mock<IAudioUseCase>();
-            Mock<IAlertService> alertService = new Mock<IAlertService>();
-
-            setup.Add(typeof(IAudioUseCase), mock =>
-            {
-                audioUseCase = mock as Mock<IAudioUseCase>;
-                audioUseCase
-                    .Setup(x => x.StopRecordingAsync(It.IsAny<string>()))
-                    .ReturnsAsync(successResponse);
-            });
-            setup.Add(typeof(IAlertService), mock =>
-            {
-                alertService = mock as Mock<IAlertService>;
-                alertService
-                    .Setup(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()));
-            });
-
-            var homeViewModel = TestUtils
-                .CreateTestProvider(setup, _addHomeViewModelAction)
-                .GetService<HomeViewModel>();
-            homeViewModel.Filepath = path;
-            homeViewModel.IsRecording = true;
-            homeViewModel.CountSeconds = 6;
+            var builder = new HomeViewModelBuilder()
+                .WithStopRecordingAsync(successResponse)
+                .Build()
+                .UserIsRecording(path);
 
             // Act
-            await homeViewModel.StopRecordingAsync();
+            await builder.HomeViewModel.StopRecordingAsync();
 
             // Assert
-            homeViewModel.IsRecording.Should().BeFalse();
-            homeViewModel.CountSeconds.Should().Be(0);
-            audioUseCase.Verify(x => x.StopRecordingAsync(path), Times.Once());
-            alertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
+            builder.HomeViewModel.IsRecording.Should().BeFalse();
+            builder.HomeViewModel.CountSeconds.Should().Be(0);
+            builder.AudioUseCase.Verify(x => x.StopRecordingAsync(path), Times.Once());
+            builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
         }
     }
 }
