@@ -32,6 +32,29 @@ namespace SpeakDanish.Tests.ViewModels
             return this;
         }
 
+        public RecordingsViewModelBuilder WithPlayAudioAsync(Response response)
+        {
+            AudioUseCase
+                    .Setup(x => x.PlayAudioAsync(It.IsAny<string>()))
+                    .ReturnsAsync(response);
+            return this;
+        }
+
+        public RecordingsViewModelBuilder WithPopAsync()
+        {
+            Navigation
+                    .Setup(x => x.PopAsync(It.IsAny<bool>()));
+            return this;
+        }
+
+        public RecordingsViewModelBuilder WithDeleteRecordingAsync(int rowModified)
+        {
+            RecordingService
+                .Setup(x => x.DeleteRecordingAsync(It.IsAny<Recording>()))
+                .ReturnsAsync(rowModified);
+            return this;
+        }
+
         public RecordingsViewModelBuilder Build()
 		{
             AlertService

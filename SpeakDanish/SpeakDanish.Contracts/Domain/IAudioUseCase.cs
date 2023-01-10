@@ -27,6 +27,8 @@ namespace SpeakDanish.Contracts.Domain
         /// <param name="filepath">The filepath where the recorded audio should be saved.</param>
         /// <returns>A response indicating the success or failure of the operation.</returns>
         Task<Response> StopRecordingAsync(string filepath);
+
+        Task<Response> PlayAudioAsync(string filepath);
     }
 }
 

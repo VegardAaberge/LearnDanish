@@ -33,24 +33,27 @@ namespace SpeakDanish.Tests.ViewModel
                 .WithGetRandomSentence((a, b) => a == previousSentence ? nextSentence : previousSentence)
                 .Build();
 
-            var actualPreviousSentence = builder.HomeViewModel.Sentence?.ToString();
+            AssertThat(builder)
+                .Sentence(previousSentence);
 
             // Act
             await builder.HomeViewModel.LoadRandomSentence();
 
             // Arrange
-            actualPreviousSentence.Should().Be(previousSentence);
             AssertThat(builder)
                 .Sentence(nextSentence)
                 .VerifyGetRandomSentence(previousSentence, Times.Once);
         }
 
-        [Fact]
-        public async Task SpeakSentenceAsync_FailedResponseShouldShowAlert()
+        [Theory]
+        [InlineData(true, null)]
+        [InlineData(false, "error")]
+        public async Task SpeakSentenceAsync_ShouldWork(bool success, string message)
         {
             // Arrange
             var sentence = "Sentence to speak";
-            var errorResponse = new Response(false, "Error");
+            var errorResponse = new Response(success, message);
+            Func<Times> times = success ? Times.Never : Times.Once;
 
             var builder = new HomeViewModelBuilder()
                 .WithSpeakSentenceAsync(errorResponse)
@@ -63,40 +66,22 @@ namespace SpeakDanish.Tests.ViewModel
             // Assert
             AssertThat(builder)
                 .VerifySpeakSentenceAsync(sentence, Times.Once)
-                .VerifyShowToast(Times.Once)
+                .VerifyShowToast(times)
                 .VolumeIcon(MaterialDesignIconsFont.VolumeHigh);
         }
 
-        [Fact]
-        public async Task SpeakSentenceAsync_SuccessResponseShouldWork()
+        [Theory]
+        [InlineData(true, null)]
+        [InlineData(false, "error")]
+        public async Task StartRecordingAsync_ShouldWork(bool success, string message)
         {
             // Arrange
-            var sentence = "Sentence to speak";
-            var successReponse = new Response(true);
+            var data = success ? "filepath" : null;
+            var response = new Response<string>(success, message, data);
+
 
             var builder = new HomeViewModelBuilder()
-                .WithSpeakSentenceAsync(successReponse)
-                .Build()
-                .UpdateSentence(sentence);
-
-            // Act
-            await builder.HomeViewModel.SpeakSentenceAsync();
-
-            // Assert
-            AssertThat(builder)
-                .VerifySpeakSentenceAsync(sentence, Times.Once)
-                .VerifyShowToast(Times.Never)
-                .VolumeIcon(MaterialDesignIconsFont.VolumeHigh);
-        }
-
-        [Fact]
-        public async Task StartRecordingAsync_ShouldWork()
-        {
-            // Arrange
-            var successResponse = new Response<string> { Success = true, Data = "filepath" };
-
-            var builder = new HomeViewModelBuilder()
-                .WithStartRecordingAsync(successResponse)
+                .WithStartRecordingAsync(response)
                 .Build();
 
             // Act
@@ -104,39 +89,20 @@ namespace SpeakDanish.Tests.ViewModel
 
             // Assert
             AssertThat(builder)
-                .IsRecording(true)
-                .FilePath(successResponse.Data)
+                .IsRecording(success ? true : false)
+                .FilePath(data)
                 .VerifyStartRecordingAsync(Times.Once)
-                .VerifyShowToast(Times.Never);
+                .VerifyShowToast(success ? Times.Never : Times.Once);
         }
 
-        [Fact]
-        public async Task StartRecordingAsync_ErrorShouldShowMessage()
-        {
-            // Arrange
-            var failureResponse = new Response<string> { Success = false, Message = "error message" };
-
-            var builder = new HomeViewModelBuilder()
-                .WithStartRecordingAsync(failureResponse)
-                .Build();
-
-            // Act
-            await builder.HomeViewModel.StartRecordingAsync();
-
-            // Assert
-            AssertThat(builder)
-                .IsRecording(false)
-                .FilePath(null)
-                .VerifyStartRecordingAsync(Times.Once)
-                .VerifyShowToast(Times.Once);
-        }
-
-        [Fact]
-        public async Task StopRecordingAsync_ShouldWork()
+        [Theory]
+        [InlineData(true, null)]
+        [InlineData(false, "error")]
+        public async Task StopRecordingAsync_ShouldWork(bool success, string message)
         {
             // Arrange
             var path = "filepath";
-            var successResponse = new Response(true);
+            var successResponse = new Response(success, message);
 
             var builder = new HomeViewModelBuilder()
                 .WithStopRecordingAsync(successResponse)
@@ -150,7 +116,7 @@ namespace SpeakDanish.Tests.ViewModel
             AssertThat(builder)
                 .IsRecording(false)
                 .VerifyStopRecordingAsync(path, Times.Once)
-                .VerifyShowToast(Times.Never);
+                .VerifyShowToast(success ? Times.Never : Times.Once);
         }
 
         HomeViewModelStateVerifier AssertThat(HomeViewModelBuilder builder)

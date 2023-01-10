@@ -108,6 +108,11 @@ namespace SpeakDanish.Domain.UseCases
 
             return new Response(true);
         }
+
+        public Task<Response> PlayAudioAsync(string filepath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
