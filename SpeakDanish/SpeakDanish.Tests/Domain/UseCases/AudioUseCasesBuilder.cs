@@ -77,6 +77,13 @@ namespace SpeakDanish.Tests.Domain.UseCases
                 .Setup(x => x.StopRecordingAudio(It.IsAny<string>()));
             return this;
         }
+
+        internal AudioUseCaseBuilder WithPlayAudio(string recordingPath)
+        {
+            AudioRecorder
+                .Setup(x => x.PlayAudio(It.IsAny<string>()));
+            return this;
+        }
     }
 }
 

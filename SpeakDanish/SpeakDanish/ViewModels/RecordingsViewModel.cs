@@ -9,6 +9,9 @@ using Xamarin.Forms;
 using SpeakDanish.Domain.Services;
 using SpeakDanish.Contracts.Platform;
 using SpeakDanish.Contracts.Domain;
+using Xamarin.Essentials.Interfaces;
+using System.Timers;
+using SpeakDanish.Contracts;
 
 namespace SpeakDanish.ViewModels
 {
@@ -16,6 +19,7 @@ namespace SpeakDanish.ViewModels
 	{
         private INavigation _navigation;
         private IAlertService _alertService;
+        private IAudioUseCase _audioUseCase;
         private IRecordingService<Recording> _recordingService;
 
         public ObservableCollection<Recording> _recordings;
@@ -23,10 +27,12 @@ namespace SpeakDanish.ViewModels
         public RecordingsViewModel(
             INavigation navigation,
             IAlertService alertService,
+            IAudioUseCase audioUseCase,
             IRecordingService<Recording> recordingService)
         {
             _navigation = navigation;
             _alertService = alertService;
+            _audioUseCase = audioUseCase;
             _recordingService = recordingService;
 
             Title = "Recordings";
@@ -69,18 +75,60 @@ namespace SpeakDanish.ViewModels
 
         public async Task PlaySentenceAsync(Recording recording)
         {
+            try
+            {
+                var response = await _audioUseCase.SpeakSentenceAsync(recording.Sentence, VolumeTimer_Elapsed);
+                if (!response.Success)
+                {
+                    await _alertService.ShowToast(response.Message);
+                }
+            }
+            finally
+            {
+
+            }
+        }
+
+        private void VolumeTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // TODO
         }
 
         public async Task PlayAudioAsync(Recording recording)
         {
+            try
+            {
+                var response = await _audioUseCase.PlayAudioAsync(recording.FilePath);
+                if (!response.Success)
+                {
+                    await _alertService.ShowToast(response.Message);
+                }
+            }
+            finally
+            {
+
+            }
         }
 
         public async Task RedoAsync(Recording recording)
         {
+            // TODO
         }
 
         public async Task DeleteAsync(Recording recording)
         {
+            try
+            {
+                var response = await _recordingService.DeleteRecordingAsync(recording);
+                if (response == 0)
+                {
+                    await _alertService.ShowToast("Was not able to delete record");
+                }
+            }
+            finally
+            {
+
+            }
         }
     }
 }

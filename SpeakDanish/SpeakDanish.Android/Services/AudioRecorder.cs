@@ -47,6 +47,13 @@ namespace SpeakDanish.Droid.Services
             _mediaRecorder.Release();
 
             // Replay the audio
+            PlayAudio(filepath);
+
+            return Task.FromResult(0);
+        }
+
+        public Task PlayAudio(string filepath)
+        {
             _mediaPlayer = new MediaPlayer();
             _mediaPlayer.SetDataSource(filepath);
             _mediaPlayer.Prepare();
@@ -59,7 +66,7 @@ namespace SpeakDanish.Droid.Services
                 _mediaPlayer = null;
             };
 
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }

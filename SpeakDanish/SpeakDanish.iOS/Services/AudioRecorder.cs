@@ -58,6 +58,13 @@ namespace SpeakDanish.iOS.Services
             _audioRecorder = null;
 
             // Replay the audio
+            PlayAudio(filepath);
+
+            return Task.CompletedTask;
+        }
+
+        public Task PlayAudio(string filepath)
+        {
             _audioPlayer = AVAudioPlayer.FromUrl(NSUrl.FromString(filepath));
             _audioPlayer.FinishedPlaying += (sender, e) =>
             {

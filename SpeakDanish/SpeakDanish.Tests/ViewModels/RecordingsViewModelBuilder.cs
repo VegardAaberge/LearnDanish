@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using Moq;
@@ -23,6 +24,16 @@ namespace SpeakDanish.Tests.ViewModels
         public Mock<INavigation> Navigation = new Mock<INavigation>();
 
         public RecordingsViewModel RecordingsViewModel { get; set; }
+
+        public RecordingsViewModelBuilder()
+        {
+            RecordingService
+                .Setup(x => x.GetRecordingsAsync())
+                .ReturnsAsync(new List<Recording>());
+
+            AlertService
+                .Setup(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()));
+        }
 
         public RecordingsViewModelBuilder WithSpeakSentenceAsync(Response response)
         {
@@ -57,12 +68,10 @@ namespace SpeakDanish.Tests.ViewModels
 
         public RecordingsViewModelBuilder Build()
 		{
-            AlertService
-                .Setup(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()));
-
             RecordingsViewModel = new RecordingsViewModel(
                 Navigation.Object,
                 AlertService.Object,
+                AudioUseCase.Object,
                 RecordingService.Object
             );
             return this;

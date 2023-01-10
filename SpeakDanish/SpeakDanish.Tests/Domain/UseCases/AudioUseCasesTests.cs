@@ -116,6 +116,25 @@ namespace SpeakDanish.Tests.Domain.UseCases
                 .VerifyStopRecordingAudio(recordingPath, Times.Once);
         }
 
+        [Fact]
+        public async void PlayAudio_ShouldWork()
+        {
+            // Arrange
+            var recordingPath = "/path/to/recording.mp3";
+
+            var builder = new AudioUseCaseBuilder()
+                .WithStopRecordingAudio(recordingPath)
+                .Build();
+
+            // Act
+            var result = await builder.AudioUseCase.PlayAudioAsync(recordingPath);
+
+            // Assert
+            AssertThat(builder)
+                .IsSuccessful(result)
+                .VerifyPlayAudio(recordingPath, Times.Once);
+        }
+
         AudioUseCaseVerifier AssertThat(AudioUseCaseBuilder builder)
         {
             return new AudioUseCaseVerifier(builder);
@@ -179,15 +198,21 @@ namespace SpeakDanish.Tests.Domain.UseCases
                 return this;
             }
 
-            internal AudioUseCaseVerifier VerifyStartRecordingAudio(string filename, Func<Times> once)
+            internal AudioUseCaseVerifier VerifyStartRecordingAudio(string filename, Func<Times> times)
             {
-                _builder.AudioRecorder.Verify(x => x.StartRecordingAudio(filename), Times.Once);
+                _builder.AudioRecorder.Verify(x => x.StartRecordingAudio(filename), times);
                 return this;
             }
 
-            internal AudioUseCaseVerifier VerifyStopRecordingAudio(string filepath, Func<Times> once)
+            internal AudioUseCaseVerifier VerifyStopRecordingAudio(string filepath, Func<Times> times)
             {
-                _builder.AudioRecorder.Verify(x => x.StopRecordingAudio(filepath), Times.Once);
+                _builder.AudioRecorder.Verify(x => x.StopRecordingAudio(filepath), times);
+                return this;
+            }
+
+            internal AudioUseCaseVerifier VerifyPlayAudio(string filepath, Func<Times> times)
+            {
+                _builder.AudioRecorder.Verify(x => x.PlayAudio(filepath), times);
                 return this;
             }
         }
