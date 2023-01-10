@@ -18,14 +18,8 @@ namespace SpeakDanish.Tests.ViewModel
 {
     public class HomeViewModelTests
     {
-        private Action<ServiceCollection> _addHomeViewModelAction;
-
         public HomeViewModelTests()
         {
-            _addHomeViewModelAction = (serviceCollection) =>
-            {
-                serviceCollection.AddTransient<HomeViewModel>();
-            };
         }
 
         [Fact]
@@ -46,8 +40,9 @@ namespace SpeakDanish.Tests.ViewModel
 
             // Arrange
             actualPreviousSentence.Should().Be(previousSentence);
-            builder.HomeViewModel.Sentence.Should().Be(nextSentence);
-            builder.SentenceService.Verify(x => x.GetRandomSentence(previousSentence, It.IsAny<Task<string>>()), Times.Once());
+            AssertThat(builder)
+                .Sentence(nextSentence)
+                .VerifyGetRandomSentence(previousSentence, Times.Once);
         }
 
         [Fact]
@@ -59,16 +54,17 @@ namespace SpeakDanish.Tests.ViewModel
 
             var builder = new HomeViewModelBuilder()
                 .WithSpeakSentenceAsync(errorResponse)
-                .Build();
-            builder.HomeViewModel.Sentence = sentence;
+                .Build()
+                .UpdateSentence(sentence);
 
             // Act
             await builder.HomeViewModel.SpeakSentenceAsync();
 
             // Assert
-            builder.AudioUseCase.Verify(x => x.SpeakSentenceAsync(sentence, It.IsAny<ElapsedEventHandler>()), Times.Once());
-            builder.AlertService.Verify(x => x.ShowToast(errorResponse.Message, It.IsAny<ToastDuration>()), Times.Once());
-            builder.HomeViewModel.VolumeIcon.Should().Be(MaterialDesignIconsFont.VolumeHigh);
+            AssertThat(builder)
+                .VerifySpeakSentenceAsync(sentence, Times.Once)
+                .VerifyShowToast(Times.Once)
+                .VolumeIcon(MaterialDesignIconsFont.VolumeHigh);
         }
 
         [Fact]
@@ -80,16 +76,17 @@ namespace SpeakDanish.Tests.ViewModel
 
             var builder = new HomeViewModelBuilder()
                 .WithSpeakSentenceAsync(successReponse)
-                .Build();
-            builder.HomeViewModel.Sentence = sentence;
+                .Build()
+                .UpdateSentence(sentence);
 
             // Act
             await builder.HomeViewModel.SpeakSentenceAsync();
 
             // Assert
-            builder.AudioUseCase.Verify(x => x.SpeakSentenceAsync(sentence, It.IsAny<ElapsedEventHandler>()), Times.Once());
-            builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
-            builder.HomeViewModel.VolumeIcon.Should().Be(MaterialDesignIconsFont.VolumeHigh);
+            AssertThat(builder)
+                .VerifySpeakSentenceAsync(sentence, Times.Once)
+                .VerifyShowToast(Times.Never)
+                .VolumeIcon(MaterialDesignIconsFont.VolumeHigh);
         }
 
         [Fact]
@@ -106,10 +103,11 @@ namespace SpeakDanish.Tests.ViewModel
             await builder.HomeViewModel.StartRecordingAsync();
 
             // Assert
-            builder.HomeViewModel.IsRecording.Should().BeTrue();
-            builder.HomeViewModel.Filepath.Should().Be(successResponse.Data);
-            builder.AudioUseCase.Verify(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()), Times.Once());
-            builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
+            AssertThat(builder)
+                .IsRecording(true)
+                .FilePath(successResponse.Data)
+                .VerifyStartRecordingAsync(Times.Once)
+                .VerifyShowToast(Times.Never);
         }
 
         [Fact]
@@ -126,10 +124,11 @@ namespace SpeakDanish.Tests.ViewModel
             await builder.HomeViewModel.StartRecordingAsync();
 
             // Assert
-            builder.HomeViewModel.IsRecording.Should().BeTrue();
-            builder.HomeViewModel.Filepath.Should().Be(null);
-            builder.AudioUseCase.Verify(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()), Times.Once());
-            builder.AlertService.Verify(x => x.ShowToast(failureResponse.Message, It.IsAny<ToastDuration>()), Times.Once());
+            AssertThat(builder)
+                .IsRecording(false)
+                .FilePath(null)
+                .VerifyStartRecordingAsync(Times.Once)
+                .VerifyShowToast(Times.Once);
         }
 
         [Fact]
@@ -142,16 +141,93 @@ namespace SpeakDanish.Tests.ViewModel
             var builder = new HomeViewModelBuilder()
                 .WithStopRecordingAsync(successResponse)
                 .Build()
-                .UserIsRecording(path);
+                .UpdateUserIsRecording(path);
 
             // Act
             await builder.HomeViewModel.StopRecordingAsync();
 
             // Assert
-            builder.HomeViewModel.IsRecording.Should().BeFalse();
-            builder.HomeViewModel.CountSeconds.Should().Be(0);
-            builder.AudioUseCase.Verify(x => x.StopRecordingAsync(path), Times.Once());
-            builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), Times.Never());
+            AssertThat(builder)
+                .IsRecording(false)
+                .VerifyStopRecordingAsync(path, Times.Once)
+                .VerifyShowToast(Times.Never);
+        }
+
+        HomeViewModelStateVerifier AssertThat(HomeViewModelBuilder builder)
+        {
+            return new HomeViewModelStateVerifier(builder);
+        }
+
+        internal class HomeViewModelStateVerifier
+        {
+            private HomeViewModelBuilder _builder;
+
+            public HomeViewModelStateVerifier(HomeViewModelBuilder builder)
+            {
+                _builder = builder;
+            }
+
+            internal HomeViewModelStateVerifier IsRecording(bool value)
+            {
+                _builder.HomeViewModel.IsRecording.Should().Be(value);
+                if(!value)
+                    _builder.HomeViewModel.CountSeconds.Should().Be(0);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier IsCountSecond(int value)
+            {
+                _builder.HomeViewModel.CountSeconds.Should().Be(value);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier VerifyStopRecordingAsync(string path, Func<Times> times)
+            {
+                _builder.AudioUseCase.Verify(x => x.StopRecordingAsync(path), times);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier VerifyShowToast(Func<Times> times)
+            {
+                _builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), times);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier FilePath(string value)
+            {
+                _builder.HomeViewModel.Filepath.Should().Be(value);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier VerifyStartRecordingAsync(Func<Times> times)
+            {
+                _builder.AudioUseCase.Verify(x => x.StartRecordingAsync(It.IsAny<ElapsedEventHandler>()), times);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier VerifySpeakSentenceAsync(string sentence, Func<Times> times)
+            {
+                _builder.AudioUseCase.Verify(x => x.SpeakSentenceAsync(sentence, It.IsAny<ElapsedEventHandler>()), Times.Once());
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier VolumeIcon(string icon)
+            {
+                _builder.HomeViewModel.VolumeIcon.Should().Be(icon);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier Sentence(string sentence)
+            {
+                _builder.HomeViewModel.Sentence.Should().Be(sentence);
+                return this;
+            }
+
+            internal HomeViewModelStateVerifier VerifyGetRandomSentence(string sentence, Func<Times> times)
+            {
+                _builder.SentenceService.Verify(x => x.GetRandomSentence(sentence, It.IsAny<Task<string>>()), times);
+                return this;
+            }
         }
     }
 }

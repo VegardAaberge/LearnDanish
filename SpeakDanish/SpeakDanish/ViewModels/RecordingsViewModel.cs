@@ -18,7 +18,6 @@ namespace SpeakDanish.ViewModels
         private IAlertService _alertService;
         private IRecordingService<Recording> _recordingService;
 
-        private string _volumeIcon;
         public ObservableCollection<Recording> _recordings;
 
         public RecordingsViewModel(
@@ -31,7 +30,6 @@ namespace SpeakDanish.ViewModels
             _recordingService = recordingService;
 
             Title = "Recordings";
-            VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
 
             PlaySentenceCommand = new Command<Recording>(async (r) => await PlaySentenceAsync(r));
             PlayAudioCommand = new Command<Recording>(async (r) => await PlayAudioAsync(r));
@@ -49,12 +47,6 @@ namespace SpeakDanish.ViewModels
         public ObservableCollection<Recording> Recordings {
             get => _recordings;
             set => SetProperty(ref _recordings, value);
-        }
-
-        public string VolumeIcon
-        {
-            get => _volumeIcon;
-            set => SetProperty(ref _volumeIcon, value);
         }
 
         public async Task LoadRecordingsAsync()

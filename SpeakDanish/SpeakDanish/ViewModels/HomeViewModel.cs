@@ -178,6 +178,7 @@ namespace SpeakDanish.ViewModels
                 if (response.Success)
                 {
                     Filepath = response.Data;
+                    IsRecording = true;
                 }
                 else
                 {
@@ -186,7 +187,6 @@ namespace SpeakDanish.ViewModels
             }
             finally
             {
-                IsRecording = true;
             }
         }
 

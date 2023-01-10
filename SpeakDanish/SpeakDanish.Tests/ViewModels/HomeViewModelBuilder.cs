@@ -72,11 +72,17 @@ namespace SpeakDanish.Tests.ViewModels
             return this;
 		}
 
-        public HomeViewModelBuilder UserIsRecording(string path)
+        public HomeViewModelBuilder UpdateUserIsRecording(string path)
         {
             HomeViewModel.Filepath = path;
             HomeViewModel.IsRecording = true;
             HomeViewModel.CountSeconds = 6;
+            return this;
+        }
+
+        internal HomeViewModelBuilder UpdateSentence(string sentence)
+        {
+            HomeViewModel.Sentence = sentence;
             return this;
         }
     }
