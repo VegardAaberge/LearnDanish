@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation;
 using SpeakDanish.iOS.Services;
-using Microsoft.Extensions.DependencyInjection;
 using UIKit;
 using SpeakDanish.Contracts.Platform;
+using SpeakDanish.iOS.Initializers;
 
 namespace SpeakDanish.iOS
 {
@@ -25,17 +25,9 @@ namespace SpeakDanish.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App(AddServices));
+            LoadApplication(new App(new PlatformInitializer()));
 
             return base.FinishedLaunching(app, options);
-        }
-
-        private void AddServices(IServiceCollection services)
-        {
-            services.AddSingleton<IAudioRecorder, AudioRecorder>();
-            services.AddSingleton<ITtsDataInstaller, TtsDataInstaller>();
-            services.AddSingleton<IAlertService, AlertService>();
-            services.AddSingleton<IFileService, FileService>();
         }
 
         public static UIViewController GetVisibleViewController()

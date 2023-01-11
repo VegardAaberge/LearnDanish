@@ -11,8 +11,6 @@ namespace SpeakDanish.Views
         public RecordingsPage()
         {
             InitializeComponent();
-
-            BindingContext = AppContainer.GetService<RecordingsViewModel>();
         }
     }
 }

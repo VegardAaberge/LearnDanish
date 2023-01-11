@@ -14,8 +14,19 @@ namespace SpeakDanish.Views
         public HomePage()
         {
             InitializeComponent();
+        }
 
-            BindingContext = AppContainer.GetService<HomeViewModel>();
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            (Parent as NavigationPage).BarBackgroundColor = Color.Blue;
+            (Parent as NavigationPage).BarTextColor = Color.White;
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
         }
     }
 }

@@ -4,9 +4,9 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using Microsoft.Extensions.DependencyInjection;
 using SpeakDanish.Droid.Services;
 using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Droid.Initializers;
 
 namespace SpeakDanish.Droid
 {
@@ -24,15 +24,7 @@ namespace SpeakDanish.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            LoadApplication(new App(AddServices));
-        }
-
-        static void AddServices(IServiceCollection services)
-        {
-            services.AddSingleton<IAudioRecorder, AudioRecorder>();
-            services.AddSingleton<ITtsDataInstaller, TtsDataInstaller>();
-            services.AddSingleton<IAlertService, AlertService>();
-            services.AddSingleton<IFileService, FileService>();
+            LoadApplication(new App(new PlatformInitializer()));
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

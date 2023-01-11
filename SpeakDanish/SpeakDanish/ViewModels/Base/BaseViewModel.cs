@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Prism.Mvvm;
+using Prism.Navigation;
 
 namespace SpeakDanish.ViewModels.Base
 {
-    public partial class BaseViewModel : INotifyPropertyChanged
+    public partial class BaseViewModel : BindableBase, INavigationAware, IDestructible
     {
         public BaseViewModel()
         {
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            base.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 
         private bool _isBusy;
@@ -35,25 +35,20 @@ namespace SpeakDanish.ViewModels.Base
         private string _title;
         public string Title
         {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                OnPropertyChanged(nameof(Title));
-            }
+            get => _title;
+            set => SetProperty(ref _title, value);
         }
 
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        public void OnNavigatedFrom(INavigationParameters parameters)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-            {
-                return false;
-            }
-
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
         }
 
+        public void OnNavigatedTo(INavigationParameters parameters)
+        {
+        }
+
+        public void Destroy()
+        {
+        }
     }
 }

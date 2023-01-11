@@ -10,6 +10,7 @@
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
              x:DataType="viewmodel:HomeViewModel"
              x:Class="SpeakDanish.Views.HomePage"
+             NavigationPage.HasBackButton="False"
              Title="{Binding Title }">
 
     <ContentPage.Resources>

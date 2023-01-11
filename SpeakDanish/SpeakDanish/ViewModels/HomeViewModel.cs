@@ -21,6 +21,7 @@ using SpeakDanish.Contracts.Platform;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Domain.UseCases;
 using SpeakDanish.Contracts;
+using Prism.Navigation;
 
 namespace SpeakDanish.ViewModels
 {
@@ -30,7 +31,7 @@ namespace SpeakDanish.ViewModels
         private ISentenceService _sentenceService;
         private IRecordingService<Recording> _recordingService;
         private IAlertService _alertService;
-        private INavigation _navigation;
+        private INavigationService _navigation;
 
         private bool _isSpeaking;
         private int _countSeconds;
@@ -44,7 +45,7 @@ namespace SpeakDanish.ViewModels
             ISentenceService sentenceService,
             IRecordingService<Recording> recordingService,
             IAlertService alertService,
-            INavigation navigation)
+            INavigationService navigation)
         {
             _audioUseCase = audioUseCase;
             _sentenceService = sentenceService;
@@ -231,13 +232,12 @@ namespace SpeakDanish.ViewModels
                 }
             );
 
-            await _navigation.PopAsync(false);
-            await _navigation.PushAsync(new HomePage());
+            await _navigation.GoBackAsync(animated: false);
         }
 
         public async Task NavigateToRecordingsAsync()
         {
-            await _navigation.PushAsync(new RecordingsPage());
+            await _navigation.NavigateAsync(nameof(RecordingsPage));
         }
     }
 }

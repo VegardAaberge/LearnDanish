@@ -17,26 +17,26 @@ namespace SpeakDanish.Droid.Services
 
         public async Task<string> StartRecordingAudio(string filename)
         {
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.P)
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
             {
                 _mediaRecorder = new MediaRecorder(MainActivity.Instance);
             }
             else
             {
-#pragma warning disable CS0618 // Type or member is obsolete
                 _mediaRecorder = new MediaRecorder();
-#pragma warning restore CS0618 // Type or member is obsolete
             }
                 
             _mediaRecorder.SetAudioSource(AudioSource.Mic);
             _mediaRecorder.SetOutputFormat(OutputFormat.Mpeg4);
             _mediaRecorder.SetAudioEncoder(AudioEncoder.AmrNb);
 
-            _mediaRecorder.SetOutputFile(Path.Combine(AOE.ExternalStorageDirectory.AbsolutePath, filename + ".mp4"));
+            string directory = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath;
+            string filePath = Path.Combine(directory, filename + ".mp4");
+            _mediaRecorder.SetOutputFile(filePath);
             await Task.Run(() => _mediaRecorder.Prepare());
             _mediaRecorder.Start();
 
-            return Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, filename + ".mp4");
+            return filePath;
         }
 
         public Task StopRecordingAudio(string filepath)

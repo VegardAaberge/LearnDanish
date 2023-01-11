@@ -17,10 +17,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.4" />
+    <PackageReference Include="Prism.Forms" Version="8.1.97" />
+    <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
+    <PackageReference Include="Unity" Version="5.11.10" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controls\" />
@@ -39,6 +41,11 @@
     <None Remove="Controls\ContentViews\" />
     <None Remove="Controls\GestureRecognizers\" />
     <None Remove="Xamarin.Essentials.Interfaces" />
+    <None Remove="MvvmCross" />
+    <None Remove="Prism.Forms" />
+    <None Remove="Prism.Core" />
+    <None Remove="Prism.Unity.Forms" />
+    <None Remove="Unity" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />

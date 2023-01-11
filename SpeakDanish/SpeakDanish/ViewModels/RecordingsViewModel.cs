@@ -12,12 +12,13 @@ using SpeakDanish.Contracts.Domain;
 using Xamarin.Essentials.Interfaces;
 using System.Timers;
 using SpeakDanish.Contracts;
+using Prism.Navigation;
 
 namespace SpeakDanish.ViewModels
 {
 	public class RecordingsViewModel : BaseViewModel
 	{
-        private INavigation _navigation;
+        private INavigationService _navigation;
         private IAlertService _alertService;
         private IAudioUseCase _audioUseCase;
         private IRecordingService<Recording> _recordingService;
@@ -25,7 +26,7 @@ namespace SpeakDanish.ViewModels
         public ObservableCollection<Recording> _recordings;
 
         public RecordingsViewModel(
-            INavigation navigation,
+            INavigationService navigation,
             IAlertService alertService,
             IAudioUseCase audioUseCase,
             IRecordingService<Recording> recordingService)
