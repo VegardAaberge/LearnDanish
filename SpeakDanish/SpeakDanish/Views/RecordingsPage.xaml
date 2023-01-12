@@ -5,9 +5,8 @@
     xmlns:common="clr-namespace:SpeakDanish.Views.Common"
     xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
     x:DataType="viewmodel:RecordingsViewModel"
-    
     x:Class="SpeakDanish.Views.RecordingsPage"
-    Title="{Binding Title}">
+    Title="Recordings">
 
     <CollectionView x:Name="MyCollectionView"
                     SelectionMode="Single"

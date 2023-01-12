@@ -11,7 +11,7 @@
              x:DataType="viewmodel:HomeViewModel"
              x:Class="SpeakDanish.Views.HomePage"
              NavigationPage.HasBackButton="False"
-             Title="{Binding Title }">
+             Title="Home">
 
     <ContentPage.Resources>
         <ResourceDictionary>

@@ -23,6 +23,7 @@ using SpeakDanish.Domain.UseCases;
 using SpeakDanish.Contracts;
 using Prism.Navigation;
 using Prism.Events;
+using static SpeakDanish.Helpers.AppEvents;
 
 namespace SpeakDanish.ViewModels
 {
@@ -57,7 +58,6 @@ namespace SpeakDanish.ViewModels
             _eventAggregator = eventAggregator;
             _navigation = navigation;
 
-            Title = "Home";
             VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
 
             SpeakSentenceCommand = new Command(async () => await SpeakSentenceAsync(), () => !_isSpeaking);

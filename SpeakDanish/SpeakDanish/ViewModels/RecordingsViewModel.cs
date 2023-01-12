@@ -15,6 +15,7 @@ using System.Timers;
 using SpeakDanish.Contracts;
 using Prism.Navigation;
 using Prism.Events;
+using static SpeakDanish.Helpers.AppEvents;
 
 namespace SpeakDanish.ViewModels
 {
@@ -40,8 +41,6 @@ namespace SpeakDanish.ViewModels
             _audioUseCase = audioUseCase;
             _eventAggregator = eventAggregator;
             _recordingService = recordingService;
-
-            Title = "Recordings";
 
             PlaySentenceCommand = new Command<Recording>(async (r) => await PlaySentenceAsync(r));
             PlayAudioCommand = new Command<Recording>(async (r) => await PlayAudioAsync(r));
@@ -138,7 +137,5 @@ namespace SpeakDanish.ViewModels
             }
         }
     }
-
-    public class RecordingSelectedEvent : PubSubEvent<Recording> { }
 }
 
