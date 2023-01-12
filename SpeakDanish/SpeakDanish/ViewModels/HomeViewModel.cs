@@ -1,28 +1,17 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using SpeakDanish.ViewModels.Base;
-using System.Windows.Input;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
-using Xamarin.Essentials;
-using SpeakDanish.Views;
-using SpeakDanish.Domain;
-using SpeakDanish.Domain.Models;
-using Timer = System.Timers.Timer;
-using SpeakDanish.Helpers;
-using System.Reflection;
-using Xamarin.Forms.PlatformConfiguration;
-using Xamarin.CommunityToolkit.Extensions;
 using System.IO;
-using SpeakDanish.Domain.Services;
-using SpeakDanish.Contracts.Platform;
-using SpeakDanish.Contracts.Domain;
-using SpeakDanish.Domain.UseCases;
-using SpeakDanish.Contracts;
-using Prism.Navigation;
+using System.Reflection;
+using System.Threading.Tasks;
+using Prism.Commands;
 using Prism.Events;
+using Prism.Navigation;
+using SpeakDanish.Contracts.Domain;
+using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Domain.Models;
+using SpeakDanish.Helpers;
+using SpeakDanish.ViewModels.Base;
+using SpeakDanish.Views;
+using Xamarin.Forms;
 using static SpeakDanish.Helpers.AppEvents;
 
 namespace SpeakDanish.ViewModels
@@ -42,6 +31,7 @@ namespace SpeakDanish.ViewModels
         private bool _isRecording;
         private string _volumeIcon;
         private int _volumeCounter = 1;
+        private SubscriptionToken _recordingSelectedEvent;
 
         public HomeViewModel(
             IAudioUseCase audioUseCase,
@@ -60,27 +50,55 @@ namespace SpeakDanish.ViewModels
 
             VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
 
-            SpeakSentenceCommand = new Command(async () => await SpeakSentenceAsync(), () => !_isSpeaking);
-            StartRecordingCommand = new Command(async () => await StartRecordingAsync(), () => !_isRecording);
-            StopRecordingCommand = new Command(async () => await StopRecordingAsync(), () => _isRecording);
-            NewSentenceCommand = new Command(async () => await NewSentenceAsync());
-            NavigateToRecordingsCommand = new Command(async () => await NavigateToRecordingsAsync());
+            SetupCommands();
 
-            _eventAggregator.GetEvent<RecordingSelectedEvent>().Subscribe(OnRecordingSelected);
-
-            LoadRandomSentence().ConfigureAwait(false);
+            LoadRandomSentence().Await(HandleException);
         }
 
-        private void OnRecordingSelected(Recording recording)
+        public override void Destroy()
         {
-            Sentence = recording.Sentence;
+            _recordingSelectedEvent.Dispose();
+            base.Destroy();
         }
 
-        public Command SpeakSentenceCommand { get; set; }
-        public Command StartRecordingCommand { get; set; }
-        public Command StopRecordingCommand { get; set; }
-        public Command NewSentenceCommand { get; set; }
-        public Command NavigateToRecordingsCommand { get; set; }
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            base.OnNavigatedTo(parameters);
+
+            _recordingSelectedEvent = _eventAggregator.GetEvent<RecordingSelectedEvent>().Subscribe(OnRecordingSelected);
+        }
+
+        public void SetupCommands()
+        {
+            SpeakSentenceCommand = new DelegateCommand(() => SpeakSentenceAsync().Await(HandleException))
+                .ObservesCanExecute(() => IsNotRecording);
+
+            StartRecordingCommand = new DelegateCommand(() => StartRecordingAsync().Await(HandleException))
+                .ObservesCanExecute(() => IsNotRecording);
+
+            StopRecordingCommand = new DelegateCommand(() => StopRecordingAsync().Await(HandleException))
+                .ObservesCanExecute(() => IsRecording);
+
+            NewSentenceCommand = new DelegateCommand(() => NewSentenceAsync().Await(HandleException))
+                .ObservesCanExecute(() => CanSave);
+
+            NavigateToRecordingsCommand = new DelegateCommand(() => NavigateToRecordingsAsync().Await(HandleException))
+                .ObservesCanExecute(() => IsNotRecording);
+        }
+
+        private void HandleException(Exception e)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await _alertService.ShowToast(e.Message);
+            });
+        }
+
+        public DelegateCommand SpeakSentenceCommand { get; set; }
+        public DelegateCommand StartRecordingCommand { get; set; }
+        public DelegateCommand StopRecordingCommand { get; set; }
+        public DelegateCommand NewSentenceCommand { get; set; }
+        public DelegateCommand NavigateToRecordingsCommand { get; set; }
 
         public string Filepath { get; set; }
 
@@ -113,9 +131,9 @@ namespace SpeakDanish.ViewModels
             get => _isRecording;
             set => SetProperty(ref _isRecording, value);
         }
+        public bool IsNotRecording => !IsRecording;
 
-
-        public bool HasRecording
+        public bool CanSave
         {
             get => !string.IsNullOrEmpty(Filepath);
         }
@@ -124,11 +142,12 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
+                IsBusy = true;
                 Sentence = await _sentenceService.GetRandomSentence(Sentence, LoadFile());
             }
-            catch (Exception e)
+            finally
             {
-                await _alertService.ShowToast(e.Message);
+                IsBusy = false;
             }
         }
 
@@ -148,6 +167,7 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
+                IsBusy = true; 
                 var response = await _audioUseCase.SpeakSentenceAsync(Sentence, VolumeTimer_Elapsed);
                 if (!response.Success)
                 {
@@ -156,6 +176,7 @@ namespace SpeakDanish.ViewModels
             }
             finally
             {
+                IsBusy = false;
                 VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
             }
         }
@@ -186,6 +207,7 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
+                IsBusy = true;
                 var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
                 if (response.Success)
                 {
@@ -199,6 +221,7 @@ namespace SpeakDanish.ViewModels
             }
             finally
             {
+                IsBusy = false;
             }
         }
 
@@ -207,7 +230,7 @@ namespace SpeakDanish.ViewModels
             CountSeconds = CountSeconds + 1;
             if (_countSeconds > 20)
             {
-                StopRecordingCommand.Execute(null);
+                StopRecordingCommand.Execute();
             }
         }
 
@@ -215,10 +238,11 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
+                IsBusy = true;
                 var response = await _audioUseCase.StopRecordingAsync(Filepath);
                 if (response.Success)
                 {
-                    OnPropertyChanged(nameof(HasRecording));
+                    OnPropertyChanged(nameof(CanSave));
                 }
                 else
                 {
@@ -227,6 +251,7 @@ namespace SpeakDanish.ViewModels
             }
             finally
             {
+                IsBusy = false;
                 CountSeconds = 0;
                 IsRecording = false;
             }
@@ -249,6 +274,11 @@ namespace SpeakDanish.ViewModels
         public async Task NavigateToRecordingsAsync()
         {
             await _navigation.NavigateAsync(nameof(RecordingsPage));
+        }
+
+        private void OnRecordingSelected(Recording recording)
+        {
+            Sentence = recording.Sentence;
         }
     }
 }

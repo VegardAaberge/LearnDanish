@@ -1,19 +1,16 @@
-﻿using System;
-using SpeakDanish.Views;
-using Prism.Unity;
-using Xamarin.Forms;
+﻿using Prism;
 using Prism.Ioc;
-using Prism;
-using SpeakDanish.Data.Database;
+using Prism.Unity;
 using SpeakDanish.Contracts.Domain;
-using SpeakDanish.ViewModels;
-using SpeakDanish.Domain.UseCases;
-using SpeakDanish.Domain.Services;
+using SpeakDanish.Data.Database;
 using SpeakDanish.Domain.Models;
+using SpeakDanish.Domain.Services;
+using SpeakDanish.Domain.UseCases;
+using SpeakDanish.ViewModels;
+using SpeakDanish.Views;
 using Xamarin.Essentials.Implementation;
 using Xamarin.Essentials.Interfaces;
-using System.Threading.Tasks;
-using Prism.Navigation;
+using Xamarin.Forms;
 
 [assembly: ExportFont("materialdesignicons-webfont.ttf", Alias = "MaterialDesignIcons")]
 namespace SpeakDanish

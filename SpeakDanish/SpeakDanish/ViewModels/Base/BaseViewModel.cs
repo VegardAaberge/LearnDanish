@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -18,13 +16,17 @@ namespace SpeakDanish.ViewModels.Base
             base.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 
-        private bool _isBusy;
+        private int _busyCount;
         public bool IsBusy
         {
-            get { return _isBusy; }
+            get => _busyCount > 0;
             set
             {
-                _isBusy = value;
+                if (value)
+                    _busyCount++;
+                else if (_busyCount > 0)
+                    _busyCount--;
+
                 OnPropertyChanged(nameof(IsBusy));
                 OnPropertyChanged(nameof(IsNotBusy));
             }

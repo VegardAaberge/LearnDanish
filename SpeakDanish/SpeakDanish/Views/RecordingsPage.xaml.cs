@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using SpeakDanish.ViewModels;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace SpeakDanish.Views
 {

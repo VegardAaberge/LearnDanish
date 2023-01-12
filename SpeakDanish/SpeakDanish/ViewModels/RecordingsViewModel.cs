@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using SpeakDanish.Domain;
+using System.Timers;
+using Prism.Commands;
+using Prism.Events;
+using Prism.Navigation;
+using SpeakDanish.Contracts.Domain;
+using SpeakDanish.Contracts.Platform;
 using SpeakDanish.Domain.Models;
-using SpeakDanish.Views;
-using SpeakDanish.Helpers;
 using SpeakDanish.ViewModels.Base;
 using Xamarin.Forms;
-using SpeakDanish.Domain.Services;
-using SpeakDanish.Contracts.Platform;
-using SpeakDanish.Contracts.Domain;
-using Xamarin.Essentials.Interfaces;
-using System.Timers;
-using SpeakDanish.Contracts;
-using Prism.Navigation;
-using Prism.Events;
 using static SpeakDanish.Helpers.AppEvents;
 
 namespace SpeakDanish.ViewModels
 {
-	public class RecordingsViewModel : BaseViewModel
+    public class RecordingsViewModel : BaseViewModel
 	{
         private INavigationService _navigation;
         private IAlertService _alertService;
@@ -42,22 +37,43 @@ namespace SpeakDanish.ViewModels
             _eventAggregator = eventAggregator;
             _recordingService = recordingService;
 
-            PlaySentenceCommand = new Command<Recording>(async (r) => await PlaySentenceAsync(r));
-            PlayAudioCommand = new Command<Recording>(async (r) => await PlayAudioAsync(r));
-            RedoCommand = new Command<Recording>(async (r) => await RedoAsync(r));
-            DeleteCommand = new Command<Recording>(async (r) => await DeleteAsync(r));
+            SetupCommands();
 
-            LoadRecordingsAsync().ConfigureAwait(false);
+            LoadRecordingsAsync().Await(HandleException);
         }
 
-        public Command PlaySentenceCommand { get; internal set; }
-        public Command PlayAudioCommand { get; internal set; }
-        public Command RedoCommand { get; internal set; }
-        public Command DeleteCommand { get; internal set; }
+        public DelegateCommand<Recording> PlaySentenceCommand { get; internal set; }
+        public DelegateCommand<Recording> PlayAudioCommand { get; internal set; }
+        public DelegateCommand<Recording> RedoCommand { get; internal set; }
+        public DelegateCommand<Recording> DeleteCommand { get; internal set; }
 
-        public ObservableCollection<Recording> Recordings {
+        public ObservableCollection<Recording> Recordings
+        {
             get => _recordings;
             set => SetProperty(ref _recordings, value);
+        }
+
+        public void SetupCommands()
+        {
+            PlaySentenceCommand = new DelegateCommand<Recording>((r) => PlaySentenceAsync(r).Await(HandleException))
+                .ObservesCanExecute(() => IsNotBusy);
+
+            PlayAudioCommand = new DelegateCommand<Recording>((r) => PlayAudioAsync(r).Await(HandleException))
+                .ObservesCanExecute(() => IsNotBusy);
+
+            RedoCommand = new DelegateCommand<Recording>((r) => RedoAsync(r).Await(HandleException))
+                .ObservesCanExecute(() => IsNotBusy);
+
+            DeleteCommand = new DelegateCommand<Recording>((r) => DeleteAsync(r).Await(HandleException))
+                .ObservesCanExecute(() => IsNotBusy);
+        }
+
+        private void HandleException(Exception e)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await _alertService.ShowToast(e.Message);
+            });
         }
 
         public async Task LoadRecordingsAsync()
@@ -67,10 +83,6 @@ namespace SpeakDanish.ViewModels
                 IsBusy = true;
                 var records = await _recordingService.GetRecordingsAsync();
                 Recordings = new ObservableCollection<Recording>(records);
-            }
-            catch (Exception e)
-            {
-                await _alertService.ShowToast(e.Message);
             }
             finally
             {
@@ -82,6 +94,7 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
+                IsBusy = true;
                 var response = await _audioUseCase.SpeakSentenceAsync(recording.Sentence, VolumeTimer_Elapsed);
                 if (!response.Success)
                 {
@@ -90,7 +103,7 @@ namespace SpeakDanish.ViewModels
             }
             finally
             {
-
+                IsBusy = false;
             }
         }
 
@@ -103,6 +116,7 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
+                IsBusy = true;
                 var response = await _audioUseCase.PlayAudioAsync(recording.FilePath);
                 if (!response.Success)
                 {
@@ -111,7 +125,7 @@ namespace SpeakDanish.ViewModels
             }
             finally
             {
-
+                IsBusy = false;
             }
         }
 
@@ -125,6 +139,7 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
+                IsBusy = true;
                 var response = await _recordingService.DeleteRecordingAsync(recording);
                 if (response == 0)
                 {
@@ -133,7 +148,7 @@ namespace SpeakDanish.ViewModels
             }
             finally
             {
-
+                IsBusy = false;
             }
         }
     }

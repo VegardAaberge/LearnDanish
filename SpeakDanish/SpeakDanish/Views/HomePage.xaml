@@ -109,7 +109,7 @@
 
             <Grid HeightRequest="50">
                 <Grid
-                    IsVisible="{Binding HasRecording}"
+                    IsVisible="{Binding CanSave}"
                     VerticalOptions="Start"
                     Grid.Column="0"
                     ColumnDefinitions="50, *"
@@ -142,9 +142,9 @@
 
             <buttons:MaterialsButton
                 Command="{Binding NewSentenceCommand}"
-                IsEnabled="{Binding HasRecording }"
+                IsEnabled="{Binding CanSave }"
                 Text="Save Recording"
-                BackgroundColor="{Binding HasRecording, Converter={StaticResource DisabledColorConverter}, ConverterParameter={StaticResource BlueColor}}" />
+                BackgroundColor="{Binding CanSave, Converter={StaticResource DisabledColorConverter}, ConverterParameter={StaticResource BlueColor}}" />
 
 
         </StackLayout>
