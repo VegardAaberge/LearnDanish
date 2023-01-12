@@ -55,9 +55,11 @@ namespace SpeakDanish.Tests.ViewModels
             return this;
         }
 
-        public RecordingsViewModelBuilder WithGoBackAsync()
+        public RecordingsViewModelBuilder WithGoBackAsync(NavigationResult navigationResponse)
         {
-            Navigation.Setup(x => x.GoBackAsync());
+            Navigation
+                .Setup(x => x.GoBackAsync())
+                .ReturnsAsync(navigationResponse);
             return this;
         }
 

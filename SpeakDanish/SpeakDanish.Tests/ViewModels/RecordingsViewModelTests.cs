@@ -13,6 +13,7 @@ using System.Timers;
 using SpeakDanish.Contracts.Platform.Enums;
 using SpeakDanish.Tests.ViewModels;
 using SpeakDanish.Domain.Models;
+using Prism.Navigation;
 
 namespace SpeakDanish.Tests.ViewModel
 {
@@ -68,17 +69,22 @@ namespace SpeakDanish.Tests.ViewModel
                 .VolumeIcon(recording, MaterialDesignIconsFont.VolumeHigh);
         }
 
-        [Fact]
-        public async Task RedoAsync_ShouldWork()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RedoAsync_ShouldWork(bool success)
         {
             // Arrange
+            var navigationResponse = new NavigationResult() {
+                Success = success
+            };
             var recording = new Recording {
                 Sentence = "Sentence to speak",
                 FilePath = "filepath"
             };
 
             var builder = new RecordingsViewModelBuilder()
-                .WithGoBackAsync()
+                .WithGoBackAsync(navigationResponse)
                 .WithGetEvent()
                 .Build();
 
@@ -88,12 +94,15 @@ namespace SpeakDanish.Tests.ViewModel
             AssertThat(builder)
                 .VerifyGoBackAsync(Times.Once)
                 .VerifyGetEvent(Times.Once)
+                .VerifyShowToast(success ? Times.Never : Times.Once)
                 .IsBusy(false);
         }
 
         [Fact]
         public void RedoAsync_ShouldNotWorkIfBusy()
         {
+            var navigationResponse = new NavigationResult();
+
             // Arrange
             var recording = new Recording
             {
@@ -102,7 +111,7 @@ namespace SpeakDanish.Tests.ViewModel
             };
 
             var builder = new RecordingsViewModelBuilder()
-                .WithGoBackAsync()
+                .WithGoBackAsync(navigationResponse)
                 .WithGetEvent()
                 .Build()
                 .IsBusy();

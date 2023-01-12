@@ -9,6 +9,7 @@ using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Contracts.Platform;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.ViewModels.Base;
+using SpeakDanish.Views;
 using Xamarin.Forms;
 using static SpeakDanish.Helpers.AppEvents;
 
@@ -138,7 +139,12 @@ namespace SpeakDanish.ViewModels
             {
                 IsBusy = true;
                 _eventAggregator.GetEvent<RecordingSelectedEvent>()?.Publish(recording);
-                await _navigation.GoBackAsync();
+
+                var result = await _navigation.GoBackAsync();
+                if (!result.Success)
+                {
+                    await _alertService.ShowToast("Could not return");
+                }
             }
             finally
             {

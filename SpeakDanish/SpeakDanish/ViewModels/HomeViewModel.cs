@@ -273,7 +273,11 @@ namespace SpeakDanish.ViewModels
 
         public async Task NavigateToRecordingsAsync()
         {
-            await _navigation.NavigateAsync(nameof(RecordingsPage));
+            var result = await _navigation.NavigateAsync(nameof(RecordingsPage));
+            if (!result.Success)
+            {
+                await _alertService.ShowToast("Could not navigate to recordings page");
+            }
         }
 
         private void OnRecordingSelected(Recording recording)
