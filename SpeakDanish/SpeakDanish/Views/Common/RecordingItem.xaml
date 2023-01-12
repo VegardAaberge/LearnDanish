@@ -6,12 +6,13 @@
     xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
     xmlns:models="clr-namespace:SpeakDanish.Domain.Models;assembly=SpeakDanish.Domain"
     xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
+    xmlns:resources="clr-namespace:SpeakDanish.Resources"
     x:DataType="models:Recording"
     x:Class="SpeakDanish.Views.Common.RecordingItem">
 
     <SwipeView.RightItems>
         <SwipeItems Mode="Reveal">
-            <SwipeItem Text="Delete" 
+            <SwipeItem Text="{x:Static resources:AppResources.Recording_Delete}"
                         BackgroundColor="Red" 
                         Command="{Binding Path=DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
                         CommandParameter="{Binding .}" />

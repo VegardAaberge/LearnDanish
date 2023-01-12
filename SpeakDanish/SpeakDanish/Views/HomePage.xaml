@@ -8,10 +8,11 @@
              xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
              xmlns:buttons="clr-namespace:SpeakDanish.Controls.Buttons"
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
+             xmlns:resources="clr-namespace:SpeakDanish.Resources"
              x:DataType="viewmodel:HomeViewModel"
              x:Class="SpeakDanish.Views.HomePage"
              NavigationPage.HasBackButton="False"
-             Title="Home">
+             Title="{x:Static resources:AppResources.Home_Title}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -23,7 +24,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Recordings" Command="{Binding NavigateToRecordingsCommand}" />
+        <ToolbarItem Text="{x:Static resources:AppResources.Home_Recordings}" Command="{Binding NavigateToRecordingsCommand}" />
     </ContentPage.ToolbarItems>
 
     <Grid
@@ -58,7 +59,7 @@
         <Label
             Grid.Row="0"
             IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
-            Text="Speak this sentence"
+            Text="{x:Static resources:AppResources.Home_SpeakThisSentence }"
             FontAttributes="Bold"
             FontSize="18"
             VerticalOptions="Center" />
@@ -105,7 +106,7 @@
 
             <Label
                 FontAttributes="Bold"
-                Text="Your Recording" />
+                Text="{x:Static resources:AppResources.Home_YourRecording}" />
 
             <Grid HeightRequest="50">
                 <Grid
@@ -133,7 +134,7 @@
 
                     <Label
                         Grid.Column="1"
-                        Text="My Recording (11 seconds)"
+                        Text="{Binding RecordingLength, StringFormat={x:Static resources:AppResources.Home_MyRecordingWithSeconds}}"
                         HorizontalOptions="Start"
                         VerticalOptions="Center" />
                 </Grid>
@@ -143,7 +144,7 @@
             <buttons:MaterialsButton
                 Command="{Binding NewSentenceCommand}"
                 IsEnabled="{Binding CanSave }"
-                Text="Save Recording"
+                Text="{x:Static resources:AppResources.Home_SaveRecording}"
                 BackgroundColor="{Binding CanSave, Converter={StaticResource DisabledColorConverter}, ConverterParameter={StaticResource BlueColor}}" />
 
 

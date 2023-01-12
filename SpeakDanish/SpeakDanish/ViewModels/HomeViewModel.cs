@@ -31,6 +31,9 @@ namespace SpeakDanish.ViewModels
         private bool _isRecording;
         private string _volumeIcon;
         private int _volumeCounter = 1;
+        private int _recordingLength;
+        private string _filepathCache;
+
         private SubscriptionToken _recordingSelectedEvent;
 
         public HomeViewModel(
@@ -133,6 +136,12 @@ namespace SpeakDanish.ViewModels
         }
         public bool IsNotRecording => !IsRecording;
 
+        public int RecordingLength
+        {
+            get => _recordingLength;
+            set => SetProperty(ref _recordingLength, value);
+        }
+
         public bool CanSave
         {
             get => !string.IsNullOrEmpty(Filepath);
@@ -211,7 +220,7 @@ namespace SpeakDanish.ViewModels
                 var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
                 if (response.Success)
                 {
-                    Filepath = response.Data;
+                    _filepathCache = response.Data;
                     IsRecording = true;
                 }
                 else
@@ -242,6 +251,8 @@ namespace SpeakDanish.ViewModels
                 var response = await _audioUseCase.StopRecordingAsync(Filepath);
                 if (response.Success)
                 {
+                    Filepath = _filepathCache;
+                    RecordingLength = CountSeconds;
                     OnPropertyChanged(nameof(CanSave));
                 }
                 else
