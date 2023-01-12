@@ -22,6 +22,7 @@ using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Domain.UseCases;
 using SpeakDanish.Contracts;
 using Prism.Navigation;
+using Prism.Events;
 
 namespace SpeakDanish.ViewModels
 {
@@ -31,6 +32,7 @@ namespace SpeakDanish.ViewModels
         private ISentenceService _sentenceService;
         private IRecordingService<Recording> _recordingService;
         private IAlertService _alertService;
+        private IEventAggregator _eventAggregator;
         private INavigationService _navigation;
 
         private bool _isSpeaking;
@@ -45,12 +47,14 @@ namespace SpeakDanish.ViewModels
             ISentenceService sentenceService,
             IRecordingService<Recording> recordingService,
             IAlertService alertService,
+            IEventAggregator eventAggregator,
             INavigationService navigation)
         {
             _audioUseCase = audioUseCase;
             _sentenceService = sentenceService;
             _recordingService = recordingService;
             _alertService = alertService;
+            _eventAggregator = eventAggregator;
             _navigation = navigation;
 
             Title = "Home";
@@ -62,7 +66,14 @@ namespace SpeakDanish.ViewModels
             NewSentenceCommand = new Command(async () => await NewSentenceAsync());
             NavigateToRecordingsCommand = new Command(async () => await NavigateToRecordingsAsync());
 
+            _eventAggregator.GetEvent<RecordingSelectedEvent>().Subscribe(OnRecordingSelected);
+
             LoadRandomSentence().ConfigureAwait(false);
+        }
+
+        private void OnRecordingSelected(Recording recording)
+        {
+            Sentence = recording.Sentence;
         }
 
         public Command SpeakSentenceCommand { get; set; }

@@ -67,7 +67,7 @@
 
             <Button
                 Grid.Column="2"
-                Command="{Binding Path=PlaySentenceCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
+                Command="{Binding Path=RedoCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
                 CommandParameter="{Binding .}">
                 <Button.ImageSource>
                     <FontImageSource

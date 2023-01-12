@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
+using SpeakDanish.Views;
 using SpeakDanish.Helpers;
 using SpeakDanish.ViewModels.Base;
 using Xamarin.Forms;
@@ -13,6 +14,7 @@ using Xamarin.Essentials.Interfaces;
 using System.Timers;
 using SpeakDanish.Contracts;
 using Prism.Navigation;
+using Prism.Events;
 
 namespace SpeakDanish.ViewModels
 {
@@ -21,6 +23,7 @@ namespace SpeakDanish.ViewModels
         private INavigationService _navigation;
         private IAlertService _alertService;
         private IAudioUseCase _audioUseCase;
+        private IEventAggregator _eventAggregator;
         private IRecordingService<Recording> _recordingService;
 
         public ObservableCollection<Recording> _recordings;
@@ -29,11 +32,13 @@ namespace SpeakDanish.ViewModels
             INavigationService navigation,
             IAlertService alertService,
             IAudioUseCase audioUseCase,
+            IEventAggregator eventAggregator,
             IRecordingService<Recording> recordingService)
         {
             _navigation = navigation;
             _alertService = alertService;
             _audioUseCase = audioUseCase;
+            _eventAggregator = eventAggregator;
             _recordingService = recordingService;
 
             Title = "Recordings";
@@ -113,7 +118,8 @@ namespace SpeakDanish.ViewModels
 
         public async Task RedoAsync(Recording recording)
         {
-            // TODO
+            _eventAggregator.GetEvent<RecordingSelectedEvent>().Publish(recording);
+            await _navigation.GoBackAsync();
         }
 
         public async Task DeleteAsync(Recording recording)
@@ -132,5 +138,7 @@ namespace SpeakDanish.ViewModels
             }
         }
     }
+
+    public class RecordingSelectedEvent : PubSubEvent<Recording> { }
 }
 
