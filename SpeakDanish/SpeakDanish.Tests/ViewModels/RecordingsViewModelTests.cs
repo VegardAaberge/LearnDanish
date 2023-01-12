@@ -1,6 +1,5 @@
 ﻿using System;
 using SpeakDanish.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -79,18 +78,21 @@ namespace SpeakDanish.Tests.ViewModel
             };
 
             var builder = new RecordingsViewModelBuilder()
-                .WithPopAsync()
+                .WithGoBackAsync()
+                .WithGetEvent()
                 .Build();
 
             // Act
             await builder.RecordingsViewModel.RedoAsync(recording);
 
             AssertThat(builder)
-                .VerifyPopAsync(Times.Once);
+                .VerifyGoBackAsync(Times.Once)
+                .VerifyGetEvent(Times.Once)
+                .IsBusy(false);
         }
 
         [Fact]
-        public async Task RedoAsync_ShouldWorkWhenDoubleTapped()
+        public void RedoAsync_ShouldNotWorkIfBusy()
         {
             // Arrange
             var recording = new Recording
@@ -100,16 +102,18 @@ namespace SpeakDanish.Tests.ViewModel
             };
 
             var builder = new RecordingsViewModelBuilder()
-                .WithPopAsync()
-                .Build();
+                .WithGoBackAsync()
+                .WithGetEvent()
+                .Build()
+                .IsBusy();
 
             // Act
-            await builder.RecordingsViewModel.RedoAsync(recording);
-            await Task.Delay(50);
-            await builder.RecordingsViewModel.RedoAsync(recording);
+            builder.RecordingsViewModel.RedoCommand.Execute(recording);
 
             AssertThat(builder)
-                .VerifyPopAsync(Times.Once);
+                .VerifyGoBackAsync(Times.Never)
+                .VerifyGetEvent(Times.Never)
+                .RedoCommandCanExecute(false, recording);
         }
 
         [Theory]
@@ -160,12 +164,6 @@ namespace SpeakDanish.Tests.ViewModel
                 return this;
             }
 
-            internal RecordingsViewModelStateVerifier VerifyPopAsync(Func<Times> times)
-            {
-                _builder.Navigation.Verify(x => x.PopAsync(It.IsAny<bool>()), times);
-                return this;
-            }
-
             internal RecordingsViewModelStateVerifier VerifyShowToast(Func<Times> times)
             {
                 _builder.AlertService.Verify(x => x.ShowToast(It.IsAny<string>(), It.IsAny<ToastDuration>()), times);
@@ -182,6 +180,32 @@ namespace SpeakDanish.Tests.ViewModel
             {
                 recording.VolumeIcon.Should().Be(icon);
                 return this;
+            }
+
+            internal RecordingsViewModelStateVerifier VerifyGoBackAsync(Func<Times> times)
+            {
+                _builder.Navigation.Verify(x => x.GoBackAsync(), times);
+                return this;
+            }
+
+            internal RecordingsViewModelStateVerifier VerifyGetEvent(Func<Times> times)
+            {
+                _builder.EventAggregator.Verify(x => x.GetEvent<AppEvents.RecordingSelectedEvent>(), times);
+                return this;
+            }
+
+            internal RecordingsViewModelStateVerifier RedoCommandCanExecute(bool canExecute, Recording recording)
+            {
+                _builder.RecordingsViewModel.RedoCommand
+                    .CanExecute(recording)
+                    .Should()
+                    .Be(canExecute);
+                return this;
+            }
+
+            internal void IsBusy(bool value)
+            {
+                _builder.RecordingsViewModel.IsBusy.Should().Be(value);
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using SpeakDanish.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using System.Threading.Tasks;
 using FluentAssertions;

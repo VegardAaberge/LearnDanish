@@ -131,8 +131,19 @@ namespace SpeakDanish.ViewModels
 
         public async Task RedoAsync(Recording recording)
         {
-            _eventAggregator.GetEvent<RecordingSelectedEvent>().Publish(recording);
-            await _navigation.GoBackAsync();
+            if (IsBusy)
+                return;
+
+            try
+            {
+                IsBusy = true;
+                _eventAggregator.GetEvent<RecordingSelectedEvent>()?.Publish(recording);
+                await _navigation.GoBackAsync();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         public async Task DeleteAsync(Recording recording)

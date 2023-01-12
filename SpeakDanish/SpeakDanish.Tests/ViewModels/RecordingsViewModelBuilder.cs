@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using Moq;
+using Prism.Events;
+using Prism.Navigation;
 using SpeakDanish.Contracts;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Contracts.Platform;
@@ -10,6 +12,7 @@ using SpeakDanish.Contracts.Platform.Enums;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Domain.Services;
 using SpeakDanish.Domain.UseCases;
+using SpeakDanish.Helpers;
 using SpeakDanish.ViewModels;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
@@ -21,7 +24,8 @@ namespace SpeakDanish.Tests.ViewModels
         public Mock<IAudioUseCase> AudioUseCase = new Mock<IAudioUseCase>();
         public Mock<IRecordingService<Recording>> RecordingService = new Mock<IRecordingService<Recording>>();
         public Mock<IAlertService> AlertService = new Mock<IAlertService>();
-        public Mock<INavigation> Navigation = new Mock<INavigation>();
+        public Mock<IEventAggregator> EventAggregator = new Mock<IEventAggregator>();
+        public Mock<INavigationService> Navigation = new Mock<INavigationService>();
 
         public RecordingsViewModel RecordingsViewModel { get; set; }
 
@@ -51,10 +55,9 @@ namespace SpeakDanish.Tests.ViewModels
             return this;
         }
 
-        public RecordingsViewModelBuilder WithPopAsync()
+        public RecordingsViewModelBuilder WithGoBackAsync()
         {
-            Navigation
-                    .Setup(x => x.PopAsync(It.IsAny<bool>()));
+            Navigation.Setup(x => x.GoBackAsync());
             return this;
         }
 
@@ -66,16 +69,32 @@ namespace SpeakDanish.Tests.ViewModels
             return this;
         }
 
+        internal RecordingsViewModelBuilder WithGetEvent()
+        {
+            EventAggregator
+                    .Setup(x => x.GetEvent<AppEvents.RecordingSelectedEvent>())
+                    .Returns(new AppEvents.RecordingSelectedEvent());
+
+            return this;
+        }
+
         public RecordingsViewModelBuilder Build()
 		{
             RecordingsViewModel = new RecordingsViewModel(
                 Navigation.Object,
                 AlertService.Object,
                 AudioUseCase.Object,
+                EventAggregator.Object,
                 RecordingService.Object
             );
             return this;
 		}
+
+        internal RecordingsViewModelBuilder IsBusy()
+        {
+            RecordingsViewModel.IsBusy = true;
+            return this;
+        }
     }
 }
 

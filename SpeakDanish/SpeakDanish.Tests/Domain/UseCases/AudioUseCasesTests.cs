@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Threading;
 using FluentAssertions;
 using System.Timers;
-using Microsoft.Extensions.DependencyInjection;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Tests.ViewModels;
 using SpeakDanish.Contracts;
@@ -21,7 +20,6 @@ namespace SpeakDanish.Tests.Domain.UseCases
     public class AudioUseCaseTests
     {
         private Locale _danishLocale;
-        private Action<ServiceCollection> _addAudioUseCase;
 
         public AudioUseCaseTests()
         {

@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Timers;
 using Moq;
+using Prism.Events;
+using Prism.Navigation;
 using SpeakDanish.Contracts;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Contracts.Platform;
@@ -21,7 +23,8 @@ namespace SpeakDanish.Tests.ViewModels
         public Mock<ISentenceService> SentenceService = new Mock<ISentenceService>();
         public Mock<IRecordingService<Recording>> RecordingService = new Mock<IRecordingService<Recording>>();
         public Mock<IAlertService> AlertService = new Mock<IAlertService>();
-        public Mock<INavigation> Navigation = new Mock<INavigation>();
+        public Mock<IEventAggregator> EventAggregator = new Mock<IEventAggregator>();
+        public Mock<INavigationService> Navigation = new Mock<INavigationService>();
 
         public HomeViewModel HomeViewModel { get; set; }
 
@@ -67,6 +70,7 @@ namespace SpeakDanish.Tests.ViewModels
                 SentenceService.Object,
                 RecordingService.Object,
                 AlertService.Object,
+                EventAggregator.Object,
                 Navigation.Object
             );
             return this;
