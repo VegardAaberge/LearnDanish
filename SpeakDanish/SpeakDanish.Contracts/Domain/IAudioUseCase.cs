@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Timers;
+using SpeakDanish.Contracts.Shared;
 
 namespace SpeakDanish.Contracts.Domain
 {

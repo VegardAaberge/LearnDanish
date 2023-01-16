@@ -29,8 +29,10 @@ namespace SpeakDanish.Droid.Services
             _mediaRecorder.SetAudioSource(AudioSource.Mic);
             _mediaRecorder.SetOutputFormat(OutputFormat.Mpeg4);
             _mediaRecorder.SetAudioEncoder(AudioEncoder.AmrNb);
+            _mediaRecorder.SetAudioChannels(1);
+            _mediaRecorder.SetAudioSamplingRate(16000);
 
-            string directory = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath;
+            string directory = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath;
             string filePath = Path.Combine(directory, filename + ".mp4");
             _mediaRecorder.SetOutputFile(filePath);
             await Task.Run(() => _mediaRecorder.Prepare());

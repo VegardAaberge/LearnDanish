@@ -375,3 +375,6 @@ local.properties
 
 # Directory Build overrides for local setups
 Directory.Build.Override.props
+
+# Ignore Secrets
+SpeakDanish/SpeakDanish.Contracts/Shared/Secrets.cs

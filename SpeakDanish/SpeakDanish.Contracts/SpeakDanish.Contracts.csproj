@@ -16,11 +16,15 @@
     <None Remove="Platform\" />
     <None Remove="Platform\Enums\" />
     <None Remove="Xamarin.Essentials.Interfaces" />
+    <None Remove="Data\" />
+    <None Remove="Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
     <Folder Include="Platform\" />
     <Folder Include="Platform\Enums\" />
+    <Folder Include="Data\" />
+    <Folder Include="Shared\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.4" />

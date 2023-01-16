@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace SpeakDanish.Contracts
+namespace SpeakDanish.Contracts.Shared
 {
 	public class Response
 	{

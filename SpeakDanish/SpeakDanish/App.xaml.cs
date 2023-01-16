@@ -1,7 +1,9 @@
 ﻿using Prism;
 using Prism.Ioc;
 using Prism.Unity;
+using SpeakDanish.Contracts.Data;
 using SpeakDanish.Contracts.Domain;
+using SpeakDanish.Data.Api;
 using SpeakDanish.Data.Database;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Domain.Services;
@@ -35,6 +37,7 @@ namespace SpeakDanish
             container.RegisterForNavigation<RootPage>();
 
             container.RegisterSingleton<ISpeakDanishDatabase, SpeakDanishDatabase>();
+            container.RegisterSingleton<ISpeechService, SpeechService>();
             container.RegisterSingleton<ISentenceService, SentenceService>();
             container.RegisterSingleton<IRecordingService<Recording>, RecordingService>();
 

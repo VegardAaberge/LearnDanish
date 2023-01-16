@@ -85,12 +85,16 @@ namespace SpeakDanish.ViewModels
             NewSentenceCommand = new DelegateCommand(() => NewSentenceAsync().Await(HandleException))
                 .ObservesCanExecute(() => CanSave);
 
+            TranscribeRecordingCommand = new DelegateCommand(() => TranscribeRecordingAsync().Await(HandleException))
+                .ObservesCanExecute(() => IsNotRecording);
+
             NavigateToRecordingsCommand = new DelegateCommand(() => NavigateToRecordingsAsync().Await(HandleException))
                 .ObservesCanExecute(() => IsNotRecording);
         }
 
         private void HandleException(Exception e)
         {
+            Console.Write(e.ToString());
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await _alertService.ShowToast(e.Message);
@@ -101,6 +105,7 @@ namespace SpeakDanish.ViewModels
         public DelegateCommand StartRecordingCommand { get; set; }
         public DelegateCommand StopRecordingCommand { get; set; }
         public DelegateCommand NewSentenceCommand { get; set; }
+        public DelegateCommand TranscribeRecordingCommand { get; set; }
         public DelegateCommand NavigateToRecordingsCommand { get; set; }
 
         public string Filepath { get; set; }
@@ -248,7 +253,7 @@ namespace SpeakDanish.ViewModels
             try
             {
                 IsBusy = true;
-                var response = await _audioUseCase.StopRecordingAsync(Filepath);
+                var response = await _audioUseCase.StopRecordingAsync(_filepathCache);
                 if (response.Success)
                 {
                     Filepath = _filepathCache;
@@ -265,6 +270,26 @@ namespace SpeakDanish.ViewModels
                 IsBusy = false;
                 CountSeconds = 0;
                 IsRecording = false;
+            }
+        }
+
+        public async Task TranscribeRecordingAsync()
+        {
+            try
+            {
+                var response = await _recordingService.TranscribeDanishSpeechToText(Filepath);
+                if (response.Success)
+                {
+                    await _alertService.ShowToast(response.Data);
+                }
+                else
+                {
+                    await _alertService.ShowToast(response.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                await _alertService.ShowToast(e.Message);
             }
         }
 

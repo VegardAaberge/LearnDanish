@@ -10,16 +10,23 @@ using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Data.Database;
 using SpeakDanish.Contracts.Domain;
+using SpeakDanish.Contracts.Shared;
+using SpeakDanish.Contracts.Data;
+using SpeakDanish.Data.Api;
 
 namespace SpeakDanish.Domain.Services
 {
     public class RecordingService : IRecordingService<Recording>
     {
         private ISpeakDanishDatabase _database;
+        private ISpeechService _speechService;
 
-        public RecordingService(ISpeakDanishDatabase speakDanishDatabase)
+        public RecordingService(
+            ISpeakDanishDatabase speakDanishDatabase,
+            ISpeechService speechService)
         {
             _database = speakDanishDatabase;
+            _speechService = speechService;
         }
 
         public async Task<List<Recording>> GetRecordingsAsync()
@@ -46,6 +53,11 @@ namespace SpeakDanish.Domain.Services
         public Task<int> DeleteRecordingAsync(Recording recording)
         {
             return _database.DeleteItemAsync(recording.ToRecordingEntity());
+        }
+
+        public Task<Response<string>> TranscribeDanishSpeechToText(string filepath)
+        {
+            return _speechService.TranscribeDanishSpeechToText(filepath);
         }
     }
 }

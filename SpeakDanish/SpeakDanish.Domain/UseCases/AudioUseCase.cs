@@ -9,6 +9,7 @@ using Xamarin.Essentials.Interfaces;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Contracts;
 using Xamarin.Essentials;
+using SpeakDanish.Contracts.Shared;
 
 namespace SpeakDanish.Domain.UseCases
 {
