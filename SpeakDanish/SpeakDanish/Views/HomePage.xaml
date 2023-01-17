@@ -6,6 +6,7 @@
              xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
              xmlns:gestureRecognizers="clr-namespace:SpeakDanish.Controls.GestureRecognizers"
              xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
+             xmlns:checkboxes="clr-namespace:SpeakDanish.Controls.Checkboxes"
              xmlns:buttons="clr-namespace:SpeakDanish.Controls.Buttons"
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
              xmlns:resources="clr-namespace:SpeakDanish.Resources"
@@ -18,6 +19,7 @@
         <ResourceDictionary>
             <Color x:Key="BlueColor">#0000FF</Color>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:PercentageConverter x:Key="PercentageConverter" />
             <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
             <converters:DisabledColorConverter x:Key="DisabledColorConverter" />
         </ResourceDictionary>
@@ -87,32 +89,61 @@
                 VerticalOptions="Center" />
         </Grid>
 
-        <contentViews:CircleIcon
-            Grid.Row="2"
-            IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
-            LabelFontSize="200"
-            LabelTextColor="White"
-            FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
-            FrameSize="250">
+        <Grid x:Name="CircleIconGrid"
+            Grid.Row="2">
+            <contentViews:CircleIcon
+                
+                IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
+                LabelFontSize="{Binding Source={x:Reference Name=CircleIconGrid}, Path=Width, Converter={StaticResource PercentageConverter}, ConverterParameter=0.55}"
+                LabelTextColor="White"
+                FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
+                FrameSize="{Binding Source={x:Reference Name=CircleIconGrid}, Path=Width, Converter={StaticResource PercentageConverter}, ConverterParameter=0.7}">
 
-            <contentViews:CircleIcon.FrameGestureRecognizers>
-                <gestureRecognizers:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
-                <gestureRecognizers:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
-            </contentViews:CircleIcon.FrameGestureRecognizers>
+                <contentViews:CircleIcon.FrameGestureRecognizers>
+                    <gestureRecognizers:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
+                    <gestureRecognizers:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
+                </contentViews:CircleIcon.FrameGestureRecognizers>
 
-        </contentViews:CircleIcon>
+            </contentViews:CircleIcon>
+        </Grid>
 
         <StackLayout Grid.Row="3">
 
             <Label
                 FontAttributes="Bold"
+                Text="Your Transcription" />
+
+            <Grid
+                Margin="0,5,0,10"
+                ColumnDefinitions="*,50">
+
+                <contentViews:EntryOutlined
+                    Grid.Column="0"
+                    HeightRequest="{OnPlatform iOS=40}"
+                    VerticalOptions="Center"
+                    Placeholder="Transciption"
+                    PlaceholderColor="SlateGray"
+                 />
+
+                <CheckBox
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    IsChecked="{Binding AcceptedTranscribe, Mode=OneWayToSource}" />
+            </Grid>
+
+            <Label
+                FontAttributes="Bold"
                 Text="{x:Static resources:AppResources.Home_YourRecording}" />
 
-            <Grid HeightRequest="50">
+            <Grid
+                HeightRequest="50"
+                ColumnDefinitions="*,50">
+
                 <Grid
+                    Grid.Column="0"
                     IsVisible="{Binding CanSave}"
                     VerticalOptions="Start"
-                    Grid.Column="0"
                     ColumnDefinitions="50, *"
                     Margin="0,0,0,30">
 
@@ -138,6 +169,13 @@
                         HorizontalOptions="Start"
                         VerticalOptions="Center" />
                 </Grid>
+
+                <CheckBox
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    IsChecked="{Binding AcceptedTranscribe, Mode=OneWayToSource}"
+                    IsVisible="{Binding CanSave}"/>
             </Grid>
             
 

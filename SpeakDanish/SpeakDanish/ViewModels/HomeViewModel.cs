@@ -40,6 +40,8 @@ namespace SpeakDanish.ViewModels
 
         private SubscriptionToken _recordingSelectedEvent;
         private bool _isTranscribing;
+        private bool _acceptedRecording;
+        private bool _acceptedTranscribe;
 
         public HomeViewModel(
             IAudioUseCase audioUseCase,
@@ -154,10 +156,26 @@ namespace SpeakDanish.ViewModels
             set => SetProperty(ref _recordingLength, value);
         }
 
+        public bool AcceptedTranscribe
+        {
+            get => _acceptedTranscribe;
+            set => SetProperty(ref _acceptedTranscribe, value);
+        }
+        public bool AcceptedRecording
+        {
+            get => _acceptedRecording;
+            set
+            {
+                SetProperty(ref _acceptedRecording, value);
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
         public bool CanSave
         {
-            get => !string.IsNullOrEmpty(Filepath);
+            get => !string.IsNullOrEmpty(Filepath) && AcceptedRecording;
         }
+
         public string TranscribedText { get; private set; }
 
         public async Task LoadRandomSentence()

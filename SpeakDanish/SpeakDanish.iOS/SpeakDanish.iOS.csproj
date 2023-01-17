@@ -74,6 +74,7 @@
     <Compile Include="Services\AlertService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Initializers\PlatformInitializer.cs" />
+    <Compile Include="Renderers\BorderlessEntryRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -131,6 +132,9 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
+    <PackageReference Include="Microsoft.CognitiveServices.Speech">
+      <Version>1.24.2</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
