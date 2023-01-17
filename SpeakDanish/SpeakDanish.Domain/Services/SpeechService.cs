@@ -6,17 +6,57 @@ using Microsoft.CognitiveServices.Speech.Audio;
 using SpeakDanish.Contracts;
 using SpeakDanish.Contracts.Data;
 using SpeakDanish.Contracts.Shared;
+using SpeakDanish.Domain.Models;
 using static SQLite.SQLite3;
 
 namespace SpeakDanish.Data.Api
 {
-	public class SpeechService : ISpeechService
+	public class SpeechService : ISpeechService<TranscriptionResult>
     {
 		public SpeechService()
 		{
 		}
 
-        public async Task<Response<string>> TranscribeDanishSpeechToText(string filepath)
+        private SpeechRecognizer _recognizer;
+        private EventHandler<TranscriptionResult> Recognized;
+        private bool _isTranscribing;
+
+        public void StartTranscribingDanish(Action<TranscriptionResult> recognizedCallback)
+        {
+            if (_isTranscribing)
+                return;
+
+            var speechConfig = SpeechConfig.FromSubscription(Secrets.SPEECH_SUBSCRIPTION_KEY, AppSettings.SPEECH_REGION);
+            var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+
+            _recognizer = new SpeechRecognizer(speechConfig, audioConfig);
+            _recognizer.Recognized += (s, e) =>
+            {
+                recognizedCallback(new TranscriptionResult
+                {
+                    Text = e.Result.Text,
+                    Reason = e.Result.Reason,
+                    Properties = e.Result.Properties,
+                    OffsetInTicks = e.Result.OffsetInTicks,
+                    Duration = e.Result.Duration
+                });
+            };
+
+            _recognizer.StartContinuousRecognitionAsync();
+            _isTranscribing = true;
+        }
+
+        public void StopTranscribingDanish()
+        {
+            if (!_isTranscribing)
+                return;
+
+            _recognizer.StopContinuousRecognitionAsync();
+            _isTranscribing = false;
+            _recognizer.Dispose();
+        }
+
+        public async Task<Response<string>> TranscribeDanishSpeechFromFile(string filepath)
         {
             using (var fileStream = System.IO.File.OpenRead(filepath))
             {

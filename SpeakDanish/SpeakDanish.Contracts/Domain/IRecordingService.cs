@@ -33,8 +33,6 @@ namespace SpeakDanish.Contracts.Domain
         /// <param name="recording">The recording to delete.</param>
         /// <returns>The number of rows affected by the delete operation.</returns>
         Task<int> DeleteRecordingAsync(T recording);
-
-        Task<Response<string>> TranscribeDanishSpeechToText(string filepath);
     }
 }
 

@@ -4,9 +4,13 @@ using System.Threading.Tasks;
 
 namespace SpeakDanish.Contracts.Data
 {
-	public interface ISpeechService
+	public interface ISpeechService<T> where T: class
 	{
-        Task<Response<string>> TranscribeDanishSpeechToText(string filepath);
+        Task<Response<string>> TranscribeDanishSpeechFromFile(string filepath);
+
+        public void StartTranscribingDanish(Action<T> recognizedCallback);
+
+        public void StopTranscribingDanish();
     }
 }
 

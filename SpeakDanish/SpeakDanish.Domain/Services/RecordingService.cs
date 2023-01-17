@@ -19,11 +19,11 @@ namespace SpeakDanish.Domain.Services
     public class RecordingService : IRecordingService<Recording>
     {
         private ISpeakDanishDatabase _database;
-        private ISpeechService _speechService;
+        private ISpeechService<TranscriptionResult> _speechService;
 
         public RecordingService(
             ISpeakDanishDatabase speakDanishDatabase,
-            ISpeechService speechService)
+            ISpeechService<TranscriptionResult> speechService)
         {
             _database = speakDanishDatabase;
             _speechService = speechService;
@@ -53,11 +53,6 @@ namespace SpeakDanish.Domain.Services
         public Task<int> DeleteRecordingAsync(Recording recording)
         {
             return _database.DeleteItemAsync(recording.ToRecordingEntity());
-        }
-
-        public Task<Response<string>> TranscribeDanishSpeechToText(string filepath)
-        {
-            return _speechService.TranscribeDanishSpeechToText(filepath);
         }
     }
 }

@@ -2,11 +2,14 @@
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.CognitiveServices.Speech;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Navigation;
+using SpeakDanish.Contracts.Data;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Contracts.Platform;
+using SpeakDanish.Data.Api;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Helpers;
 using SpeakDanish.ViewModels.Base;
@@ -22,6 +25,7 @@ namespace SpeakDanish.ViewModels
         private ISentenceService _sentenceService;
         private IRecordingService<Recording> _recordingService;
         private IAlertService _alertService;
+        private ISpeechService<TranscriptionResult> _speechServices;
         private IEventAggregator _eventAggregator;
         private INavigationService _navigation;
 
@@ -35,12 +39,14 @@ namespace SpeakDanish.ViewModels
         private string _filepathCache;
 
         private SubscriptionToken _recordingSelectedEvent;
+        private bool _isTranscribing;
 
         public HomeViewModel(
             IAudioUseCase audioUseCase,
             ISentenceService sentenceService,
             IRecordingService<Recording> recordingService,
             IAlertService alertService,
+            ISpeechService<TranscriptionResult> speechServices,
             IEventAggregator eventAggregator,
             INavigationService navigation)
         {
@@ -48,6 +54,7 @@ namespace SpeakDanish.ViewModels
             _sentenceService = sentenceService;
             _recordingService = recordingService;
             _alertService = alertService;
+            _speechServices = speechServices;
             _eventAggregator = eventAggregator;
             _navigation = navigation;
 
@@ -85,7 +92,7 @@ namespace SpeakDanish.ViewModels
             NewSentenceCommand = new DelegateCommand(() => NewSentenceAsync().Await(HandleException))
                 .ObservesCanExecute(() => CanSave);
 
-            TranscribeRecordingCommand = new DelegateCommand(() => TranscribeRecordingAsync().Await(HandleException))
+            ToggleTranscribingCommand = new DelegateCommand(() => ToggleTranscribingAsync().Await(HandleException))
                 .ObservesCanExecute(() => IsNotRecording);
 
             NavigateToRecordingsCommand = new DelegateCommand(() => NavigateToRecordingsAsync().Await(HandleException))
@@ -105,7 +112,7 @@ namespace SpeakDanish.ViewModels
         public DelegateCommand StartRecordingCommand { get; set; }
         public DelegateCommand StopRecordingCommand { get; set; }
         public DelegateCommand NewSentenceCommand { get; set; }
-        public DelegateCommand TranscribeRecordingCommand { get; set; }
+        public DelegateCommand ToggleTranscribingCommand { get; set; }
         public DelegateCommand NavigateToRecordingsCommand { get; set; }
 
         public string Filepath { get; set; }
@@ -151,6 +158,7 @@ namespace SpeakDanish.ViewModels
         {
             get => !string.IsNullOrEmpty(Filepath);
         }
+        public string TranscribedText { get; private set; }
 
         public async Task LoadRandomSentence()
         {
@@ -273,19 +281,27 @@ namespace SpeakDanish.ViewModels
             }
         }
 
-        public async Task TranscribeRecordingAsync()
+        public async Task ToggleTranscribingAsync()
         {
             try
             {
-                var response = await _recordingService.TranscribeDanishSpeechToText(Filepath);
-                if (response.Success)
+                if (!_isTranscribing)
                 {
-                    await _alertService.ShowToast(response.Data);
+                    _isTranscribing = true;
+                    _speechServices.StartTranscribingDanish((result) =>
+                    {
+                        if(result.Reason == ResultReason.RecognizedSpeech)
+                        {
+                            TranscribedText = result.Text;
+                        }
+                    });
                 }
                 else
                 {
-                    await _alertService.ShowToast(response.Message);
+                    _isTranscribing = false;
+                    _speechServices.StopTranscribingDanish();
                 }
+                
             }
             catch (Exception e)
             {

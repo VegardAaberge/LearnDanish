@@ -37,7 +37,7 @@ namespace SpeakDanish
             container.RegisterForNavigation<RootPage>();
 
             container.RegisterSingleton<ISpeakDanishDatabase, SpeakDanishDatabase>();
-            container.RegisterSingleton<ISpeechService, SpeechService>();
+            container.RegisterSingleton<ISpeechService<TranscriptionResult>, SpeechService>();
             container.RegisterSingleton<ISentenceService, SentenceService>();
             container.RegisterSingleton<IRecordingService<Recording>, RecordingService>();
 
