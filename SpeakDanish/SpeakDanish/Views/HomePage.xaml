@@ -119,9 +119,10 @@
 
                 <contentViews:EntryOutlined
                     Grid.Column="0"
+                    Text="{Binding TranscribedText}"
                     HeightRequest="{OnPlatform iOS=40}"
                     VerticalOptions="Center"
-                    Placeholder="Transciption"
+                    Placeholder=""
                     PlaceholderColor="SlateGray"
                  />
 

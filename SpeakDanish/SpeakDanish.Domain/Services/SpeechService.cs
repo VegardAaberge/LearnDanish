@@ -20,13 +20,15 @@ namespace SpeakDanish.Data.Api
         private SpeechRecognizer _recognizer;
         private EventHandler<TranscriptionResult> Recognized;
         private bool _isTranscribing;
+        private TaskCompletionSource<int> stopRecognition = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        public void StartTranscribingDanish(Action<TranscriptionResult> recognizedCallback)
+        public async Task StartTranscribingDanish(Action<TranscriptionResult> recognizedCallback)
         {
             if (_isTranscribing)
                 return;
 
             var speechConfig = SpeechConfig.FromSubscription(Secrets.SPEECH_SUBSCRIPTION_KEY, AppSettings.SPEECH_REGION);
+            speechConfig.SpeechRecognitionLanguage = AppSettings.SPEECH_RECOGNITION_LANGUAGE;
             var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
 
             _recognizer = new SpeechRecognizer(speechConfig, audioConfig);
@@ -41,19 +43,32 @@ namespace SpeakDanish.Data.Api
                     Duration = e.Result.Duration
                 });
             };
+            _recognizer.SessionStopped += (s, e) =>
+            {
+                stopRecognition.TrySetResult(0);
+            };
+            _recognizer.Canceled += (s, e) =>
+            {
+                stopRecognition.TrySetResult(0);
+            };
 
-            _recognizer.StartContinuousRecognitionAsync();
+            await _recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
             _isTranscribing = true;
+
+            Task.Run(() =>
+            {
+                Task.WaitAny(new[] { stopRecognition.Task });  
+                _isTranscribing = false;
+                _recognizer.Dispose();
+            });
         }
 
-        public void StopTranscribingDanish()
+        public async Task StopTranscribingDanish()
         {
             if (!_isTranscribing)
                 return;
 
-            _recognizer.StopContinuousRecognitionAsync();
-            _isTranscribing = false;
-            _recognizer.Dispose();
+            await _recognizer.StopContinuousRecognitionAsync();
         }
 
         public async Task<Response<string>> TranscribeDanishSpeechFromFile(string filepath)

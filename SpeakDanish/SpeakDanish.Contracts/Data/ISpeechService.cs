@@ -8,9 +8,9 @@ namespace SpeakDanish.Contracts.Data
 	{
         Task<Response<string>> TranscribeDanishSpeechFromFile(string filepath);
 
-        public void StartTranscribingDanish(Action<T> recognizedCallback);
+        Task StartTranscribingDanish(Action<T> recognizedCallback);
 
-        public void StopTranscribingDanish();
+        Task StopTranscribingDanish();
     }
 }
 

@@ -42,6 +42,7 @@ namespace SpeakDanish.ViewModels
         private bool _isTranscribing;
         private bool _acceptedRecording;
         private bool _acceptedTranscribe;
+        private string _transcribedText;
 
         public HomeViewModel(
             IAudioUseCase audioUseCase,
@@ -176,7 +177,10 @@ namespace SpeakDanish.ViewModels
             get => !string.IsNullOrEmpty(Filepath) && AcceptedRecording;
         }
 
-        public string TranscribedText { get; private set; }
+        public string TranscribedText {
+            get => _transcribedText;
+            set => SetProperty(ref _transcribedText, value);
+        }
 
         public async Task LoadRandomSentence()
         {
@@ -245,24 +249,30 @@ namespace SpeakDanish.ViewModels
 
         public async Task StartRecordingAsync()
         {
-            try
+            IsRecording = true;
+            await _speechServices.StartTranscribingDanish(result =>
             {
-                IsBusy = true;
-                var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
-                if (response.Success)
-                {
-                    _filepathCache = response.Data;
-                    IsRecording = true;
-                }
-                else
-                {
-                    await _alertService.ShowToast(response.Message);
-                }
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                TranscribedText = result.Text;
+            });
+
+            //try
+            //{
+            //    IsBusy = true;
+            //    var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
+            //    if (response.Success)
+            //    {
+            //        _filepathCache = response.Data;
+            //        IsRecording = true;
+            //    }
+            //    else
+            //    {
+            //        await _alertService.ShowToast(response.Message);
+            //    }
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
         }
 
         private void CountdownTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -276,27 +286,30 @@ namespace SpeakDanish.ViewModels
 
         public async Task StopRecordingAsync()
         {
-            try
-            {
-                IsBusy = true;
-                var response = await _audioUseCase.StopRecordingAsync(_filepathCache);
-                if (response.Success)
-                {
-                    Filepath = _filepathCache;
-                    RecordingLength = CountSeconds;
-                    OnPropertyChanged(nameof(CanSave));
-                }
-                else
-                {
-                    await _alertService.ShowToast(response.Message);
-                }
-            }
-            finally
-            {
-                IsBusy = false;
-                CountSeconds = 0;
-                IsRecording = false;
-            }
+            IsRecording = false;
+            await _speechServices.StopTranscribingDanish();
+
+            //try
+            //{
+            //    IsBusy = true;
+            //    var response = await _audioUseCase.StopRecordingAsync(_filepathCache);
+            //    if (response.Success)
+            //    {
+            //        Filepath = _filepathCache;
+            //        RecordingLength = CountSeconds;
+            //        OnPropertyChanged(nameof(CanSave));
+            //    }
+            //    else
+            //    {
+            //        await _alertService.ShowToast(response.Message);
+            //    }
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //    CountSeconds = 0;
+            //    IsRecording = false;
+            //}
         }
 
         public async Task ToggleTranscribingAsync()
