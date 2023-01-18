@@ -57,9 +57,6 @@ namespace SpeakDanish.iOS.Services
             _audioRecorder.Dispose();
             _audioRecorder = null;
 
-            // Replay the audio
-            PlayAudio(filepath);
-
             return Task.CompletedTask;
         }
 

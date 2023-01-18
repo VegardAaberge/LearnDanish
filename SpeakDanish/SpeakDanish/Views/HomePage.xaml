@@ -6,7 +6,6 @@
              xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
              xmlns:gestureRecognizers="clr-namespace:SpeakDanish.Controls.GestureRecognizers"
              xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
-             xmlns:checkboxes="clr-namespace:SpeakDanish.Controls.Checkboxes"
              xmlns:buttons="clr-namespace:SpeakDanish.Controls.Buttons"
              xmlns:converters="clr-namespace:SpeakDanish.Converters"
              xmlns:resources="clr-namespace:SpeakDanish.Resources"
@@ -19,6 +18,7 @@
         <ResourceDictionary>
             <Color x:Key="BlueColor">#0000FF</Color>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
             <converters:PercentageConverter x:Key="PercentageConverter" />
             <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
             <converters:DisabledColorConverter x:Key="DisabledColorConverter" />
@@ -130,6 +130,7 @@
                     Grid.Column="1"
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
+                    IsEnabled="{Binding TranscribedText, Converter={StaticResource StringToBoolConverter } }"
                     IsChecked="{Binding AcceptedTranscribe, Mode=OneWayToSource}" />
             </Grid>
 

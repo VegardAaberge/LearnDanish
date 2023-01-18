@@ -43,13 +43,9 @@ namespace SpeakDanish.Droid.Services
 
         public Task StopRecordingAudio(string filepath)
         {
-            // Stop the recorder
             _mediaRecorder.Stop();
             _mediaRecorder.Reset();
             _mediaRecorder.Release();
-
-            // Replay the audio
-            PlayAudio(filepath);
 
             return Task.FromResult(0);
         }

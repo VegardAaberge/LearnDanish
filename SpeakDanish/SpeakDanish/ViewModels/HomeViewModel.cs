@@ -208,9 +208,9 @@ namespace SpeakDanish.ViewModels
                     Console.WriteLine(IsBusy);
                     Console.WriteLine(!IsRecording);
                     if(Sentence != null && IsBusy && !IsRecording)
-                        return MaterialDesignIconsFont.More;
+                        return MaterialDesignIconsFont.DotsHorizontal;
                     else
-                        return MaterialDesignIconsFont.Microphone;
+                        return MaterialDesignIconsFont.MicrophoneMessage;
                 }
                 else
                 {
@@ -303,35 +303,32 @@ namespace SpeakDanish.ViewModels
             {
                 IsBusy = true;
                 IsRecording = true;
-                await _speechServices.StartTranscribingDanish(result =>
+
+                if (!AcceptedTranscribe)
                 {
-                    TranscribedText = result.Text;
-                });
+                    await _speechServices.StartTranscribingDanish(result =>
+                    {
+                        TranscribedText = result.Text;
+                    });
+                }
+                else
+                {
+                    var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
+                    if (response.Success)
+                    {
+                        _filepathCache = response.Data;
+                        IsRecording = true;
+                    }
+                    else
+                    {
+                        await _alertService.ShowToast(response.Message);
+                    }
+                }
             }
             finally
             {
                 IsBusy = false;
             }
-            
-
-            //try
-            //{
-            //    IsBusy = true;
-            //    var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
-            //    if (response.Success)
-            //    {
-            //        _filepathCache = response.Data;
-            //        IsRecording = true;
-            //    }
-            //    else
-            //    {
-            //        await _alertService.ShowToast(response.Message);
-            //    }
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
         }
 
         private void CountdownTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -349,37 +346,34 @@ namespace SpeakDanish.ViewModels
             {
                 IsBusy = true;
                 IsRecording = false;
-                await _speechServices.StopTranscribingDanish();
+
+                if (!AcceptedTranscribe)
+                {
+                    await _speechServices.StopTranscribingDanish();
+                }
+                else
+                {
+                    var response = await _audioUseCase.StopRecordingAsync(_filepathCache);
+                    if (response.Success)
+                    {
+                        Filepath = _filepathCache;
+                        RecordingLength = CountSeconds;
+
+                        await _audioUseCase.PlayAudioAsync(_filepathCache);
+                    }
+                    else
+                    {
+                        await _alertService.ShowToast(response.Message);
+                    }
+                }
             }
             finally
             {
                 IsBusy = false;
                 OnPropertyChanged(nameof(CircleColor));
                 OnPropertyChanged(nameof(CircleIcon));
+                OnPropertyChanged(nameof(CanSave));
             }
-            
-
-            //try
-            //{
-            //    IsBusy = true;
-            //    var response = await _audioUseCase.StopRecordingAsync(_filepathCache);
-            //    if (response.Success)
-            //    {
-            //        Filepath = _filepathCache;
-            //        RecordingLength = CountSeconds;
-            //        OnPropertyChanged(nameof(CanSave));
-            //    }
-            //    else
-            //    {
-            //        await _alertService.ShowToast(response.Message);
-            //    }
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //    CountSeconds = 0;
-            //    IsRecording = false;
-            //}
         }
 
         public async Task NewSentenceAsync()
