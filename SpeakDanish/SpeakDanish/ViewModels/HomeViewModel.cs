@@ -6,6 +6,7 @@ using Microsoft.CognitiveServices.Speech;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Navigation;
+using SpeakDanish.Extensions;
 using SpeakDanish.Contracts.Data;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Contracts.Platform;
@@ -95,9 +96,6 @@ namespace SpeakDanish.ViewModels
             NewSentenceCommand = new DelegateCommand(() => NewSentenceAsync().Await(HandleException))
                 .ObservesCanExecute(() => CanSave);
 
-            ToggleTranscribingCommand = new DelegateCommand(() => ToggleTranscribingAsync().Await(HandleException))
-                .ObservesCanExecute(() => IsNotRecording);
-
             NavigateToRecordingsCommand = new DelegateCommand(() => NavigateToRecordingsAsync().Await(HandleException))
                 .ObservesCanExecute(() => IsNotRecording);
         }
@@ -115,7 +113,6 @@ namespace SpeakDanish.ViewModels
         public DelegateCommand StartRecordingCommand { get; set; }
         public DelegateCommand StopRecordingCommand { get; set; }
         public DelegateCommand NewSentenceCommand { get; set; }
-        public DelegateCommand ToggleTranscribingCommand { get; set; }
         public DelegateCommand NavigateToRecordingsCommand { get; set; }
 
         public string Filepath { get; set; }
@@ -147,7 +144,11 @@ namespace SpeakDanish.ViewModels
         public bool IsRecording
         {
             get => _isRecording;
-            set => SetProperty(ref _isRecording, value);
+            set {
+                SetProperty(ref _isRecording, value);
+                OnPropertyChanged(nameof(CircleColor));
+                OnPropertyChanged(nameof(CircleIcon));
+            }
         }
         public bool IsNotRecording => !IsRecording;
 
@@ -160,7 +161,11 @@ namespace SpeakDanish.ViewModels
         public bool AcceptedTranscribe
         {
             get => _acceptedTranscribe;
-            set => SetProperty(ref _acceptedTranscribe, value);
+            set {
+                SetProperty(ref _acceptedTranscribe, value);
+                OnPropertyChanged(nameof(CircleColor));
+                OnPropertyChanged(nameof(CircleIcon));
+            }
         }
         public bool AcceptedRecording
         {
@@ -169,6 +174,51 @@ namespace SpeakDanish.ViewModels
             {
                 SetProperty(ref _acceptedRecording, value);
                 OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
+        public Color CircleColor
+        {
+            get
+            {
+                if (AcceptedTranscribe)
+                {
+                    var color = Color.Green;
+                    if (IsRecording)
+                        color = color.Darker(0.7f);
+                    return color;
+                }
+                else
+                {
+                    var color = Color.Blue;
+                    if (IsRecording)
+                        color = color.Darker(0.7f);
+                    return color;
+                }
+            }
+        }
+
+        public string CircleIcon
+        {
+            get
+            {
+                if (!AcceptedTranscribe)
+                {
+                    Console.WriteLine(Sentence);
+                    Console.WriteLine(IsBusy);
+                    Console.WriteLine(!IsRecording);
+                    if(Sentence != null && IsBusy && !IsRecording)
+                        return MaterialDesignIconsFont.More;
+                    else
+                        return MaterialDesignIconsFont.Microphone;
+                }
+                else
+                {
+                    if (IsBusy && !IsRecording)
+                        return MaterialDesignIconsFont.VolumeHigh;
+                    else
+                        return MaterialDesignIconsFont.Microphone;
+                }
             }
         }
 
@@ -249,11 +299,20 @@ namespace SpeakDanish.ViewModels
 
         public async Task StartRecordingAsync()
         {
-            IsRecording = true;
-            await _speechServices.StartTranscribingDanish(result =>
+            try
             {
-                TranscribedText = result.Text;
-            });
+                IsBusy = true;
+                IsRecording = true;
+                await _speechServices.StartTranscribingDanish(result =>
+                {
+                    TranscribedText = result.Text;
+                });
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+            
 
             //try
             //{
@@ -286,8 +345,19 @@ namespace SpeakDanish.ViewModels
 
         public async Task StopRecordingAsync()
         {
-            IsRecording = false;
-            await _speechServices.StopTranscribingDanish();
+            try
+            {
+                IsBusy = true;
+                IsRecording = false;
+                await _speechServices.StopTranscribingDanish();
+            }
+            finally
+            {
+                IsBusy = false;
+                OnPropertyChanged(nameof(CircleColor));
+                OnPropertyChanged(nameof(CircleIcon));
+            }
+            
 
             //try
             //{
@@ -310,34 +380,6 @@ namespace SpeakDanish.ViewModels
             //    CountSeconds = 0;
             //    IsRecording = false;
             //}
-        }
-
-        public async Task ToggleTranscribingAsync()
-        {
-            try
-            {
-                if (!_isTranscribing)
-                {
-                    _isTranscribing = true;
-                    _speechServices.StartTranscribingDanish((result) =>
-                    {
-                        if(result.Reason == ResultReason.RecognizedSpeech)
-                        {
-                            TranscribedText = result.Text;
-                        }
-                    });
-                }
-                else
-                {
-                    _isTranscribing = false;
-                    _speechServices.StopTranscribingDanish();
-                }
-                
-            }
-            catch (Exception e)
-            {
-                await _alertService.ShowToast(e.Message);
-            }
         }
 
         public async Task NewSentenceAsync()

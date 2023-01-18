@@ -93,10 +93,10 @@
             Grid.Row="2">
             <contentViews:CircleIcon
                 
-                IconText="{x:Static helpers:MaterialDesignIconsFont.Microphone}"
+                IconText="{Binding CircleIcon}"
                 LabelFontSize="{Binding Source={x:Reference Name=CircleIconGrid}, Path=Width, Converter={StaticResource PercentageConverter}, ConverterParameter=0.55}"
                 LabelTextColor="White"
-                FrameColor="{Binding IsRecording, Converter={StaticResource DarkerColorConverter}, ConverterParameter={StaticResource BlueColor}}"
+                FrameColor="{Binding CircleColor}"
                 FrameSize="{Binding Source={x:Reference Name=CircleIconGrid}, Path=Width, Converter={StaticResource PercentageConverter}, ConverterParameter=0.7}">
 
                 <contentViews:CircleIcon.FrameGestureRecognizers>

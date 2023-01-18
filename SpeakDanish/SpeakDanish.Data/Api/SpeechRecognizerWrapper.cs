@@ -17,7 +17,7 @@ namespace SpeakDanish.Data.Api
 
         public SpeechRecognizerWrapper()
         {
-            var speechConfig = SpeechConfig.FromSubscription(Secrets.SPEECH_SUBSCRIPTION_KEY, AppSettings.SPEECH_REGION)
+            var speechConfig = SpeechConfig.FromSubscription(Secrets.SPEECH_SUBSCRIPTION_KEY, AppSettings.SPEECH_REGION);
             //speechConfig.SpeechRecognitionLanguage = AppSettings.SPEECH_RECOGNITION_LANGUAGE;
             var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
 
