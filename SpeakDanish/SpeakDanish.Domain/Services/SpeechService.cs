@@ -30,6 +30,7 @@ namespace SpeakDanish.Data.Api
 
             _recognizer.Recognized += (s, e) =>
             {
+                Console.WriteLine("Recognized " + e.Result.Text);
                 recognizedCallback(new TranscriptionResult
                 {
                     Text = e.Result.Text,
@@ -47,7 +48,8 @@ namespace SpeakDanish.Data.Api
 
             await Task.Run(() =>
             {
-                Task.WaitAny(new[] { stopRecognition.Task });  
+                Task.WaitAny(new[] { stopRecognition.Task });
+                Console.WriteLine("Recognizition Complete");
             }).ConfigureAwait(false);
         }
 
