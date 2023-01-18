@@ -18,6 +18,7 @@
     <None Remove="Xamarin.Essentials.Interfaces" />
     <None Remove="Data\" />
     <None Remove="Shared\" />
+    <None Remove="Microsoft.CognitiveServices.Speech" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
@@ -28,5 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.7.4" />
+    <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.24.2" />
   </ItemGroup>
 </Project>

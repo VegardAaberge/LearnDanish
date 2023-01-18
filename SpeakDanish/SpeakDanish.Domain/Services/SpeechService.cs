@@ -1,24 +1,25 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
-using SpeakDanish.Contracts;
 using SpeakDanish.Contracts.Data;
 using SpeakDanish.Contracts.Shared;
 using SpeakDanish.Domain.Models;
-using static SQLite.SQLite3;
 
 namespace SpeakDanish.Data.Api
 {
-	public class SpeechService : ISpeechService<TranscriptionResult>
+    public class SpeechService : ISpeechService<TranscriptionResult>
     {
-		public SpeechService()
-		{
-		}
+        private ISpeechRecognizer _recognizer;
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
-        private SpeechRecognizer _recognizer;
-        private EventHandler<TranscriptionResult> Recognized;
+        public SpeechService(ISpeechRecognizer recognizer)
+		{
+            _recognizer = recognizer;
+        }
+
         private bool _isTranscribing;
         private TaskCompletionSource<int> stopRecognition = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -27,11 +28,6 @@ namespace SpeakDanish.Data.Api
             if (_isTranscribing)
                 return;
 
-            var speechConfig = SpeechConfig.FromSubscription(Secrets.SPEECH_SUBSCRIPTION_KEY, AppSettings.SPEECH_REGION);
-            speechConfig.SpeechRecognitionLanguage = AppSettings.SPEECH_RECOGNITION_LANGUAGE;
-            var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
-
-            _recognizer = new SpeechRecognizer(speechConfig, audioConfig);
             _recognizer.Recognized += (s, e) =>
             {
                 recognizedCallback(new TranscriptionResult
@@ -43,32 +39,34 @@ namespace SpeakDanish.Data.Api
                     Duration = e.Result.Duration
                 });
             };
-            _recognizer.SessionStopped += (s, e) =>
-            {
-                stopRecognition.TrySetResult(0);
-            };
-            _recognizer.Canceled += (s, e) =>
-            {
-                stopRecognition.TrySetResult(0);
-            };
+            _recognizer.SessionStopped += async (s, e) => await StopTranscribingDanish();
+            _recognizer.Canceled += async (s, e) => await StopTranscribingDanish();
 
             await _recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
             _isTranscribing = true;
 
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 Task.WaitAny(new[] { stopRecognition.Task });  
-                _isTranscribing = false;
-                _recognizer.Dispose();
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task StopTranscribingDanish()
         {
-            if (!_isTranscribing)
-                return;
+            await _semaphore.WaitAsync();
+            try
+            {
+                if (!_isTranscribing)
+                    return;
 
-            await _recognizer.StopContinuousRecognitionAsync();
+                await _recognizer.StopContinuousRecognitionAsync();
+                stopRecognition.TrySetResult(0);
+                _isTranscribing = false;
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public async Task<Response<string>> TranscribeDanishSpeechFromFile(string filepath)
