@@ -30,6 +30,10 @@ namespace SpeakDanish.Contracts.Domain
         Task<Response> StopRecordingAsync(string filepath);
 
         Task<Response> PlayAudioAsync(string filepath);
+
+        Task StartTranscribingDanish(ElapsedEventHandler countTimer, Action<string> recognizedCallback);
+
+        Task StopTranscribingDanish();
     }
 }
 

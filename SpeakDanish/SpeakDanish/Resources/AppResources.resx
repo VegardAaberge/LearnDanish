@@ -31,6 +31,15 @@
 	<data name="Home_SaveRecording" xml:space="preserve">
         <value>Save Recording</value>
     </data>
+	<data name="Home_RecordingsWithSeconds" xml:space="preserve">
+        <value>Recording ({0} seconds)</value>
+    </data>
+	<data name="Home_TranscribeWithSeconds" xml:space="preserve">
+        <value>Transcribing ({0} seconds)</value>
+    </data>
+	<data name="Home_YourTranscription" xml:space="preserve">
+        <value>Your Transcription</value>
+    </data>
 	<data name="Recording_Title" xml:space="preserve">
         <value>Recordings</value>
     </data>

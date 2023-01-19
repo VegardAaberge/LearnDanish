@@ -23,11 +23,11 @@ namespace SpeakDanish.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
+        #region Private Fields
         private IAudioUseCase _audioUseCase;
         private ISentenceService _sentenceService;
         private IRecordingService<Recording> _recordingService;
         private IAlertService _alertService;
-        private ISpeechService<TranscriptionResult> _speechServices;
         private IEventAggregator _eventAggregator;
         private INavigationService _navigation;
 
@@ -41,18 +41,18 @@ namespace SpeakDanish.ViewModels
         private string _filepathCache;
         private string _filepath;
         private bool _isTranscribing;
-        private bool _acceptedRecording;
-        private bool _acceptedTranscribe;
+        private bool _isRecordingAccepted;
+        private bool _isTranscribingAccepted;
         private string _transcribedText;
 
         private SubscriptionToken _recordingSelectedEvent;
+        #endregion
 
         public HomeViewModel(
             IAudioUseCase audioUseCase,
             ISentenceService sentenceService,
             IRecordingService<Recording> recordingService,
             IAlertService alertService,
-            ISpeechService<TranscriptionResult> speechServices,
             IEventAggregator eventAggregator,
             INavigationService navigation)
         {
@@ -60,7 +60,6 @@ namespace SpeakDanish.ViewModels
             _sentenceService = sentenceService;
             _recordingService = recordingService;
             _alertService = alertService;
-            _speechServices = speechServices;
             _eventAggregator = eventAggregator;
             _navigation = navigation;
 
@@ -69,8 +68,11 @@ namespace SpeakDanish.ViewModels
             SetupCommands();
 
             LoadRandomSentence().Await(HandleException);
+
+            RecordingLength = 5;
         }
 
+        #region Setup
         public override void Destroy()
         {
             _recordingSelectedEvent.Dispose();
@@ -110,7 +112,9 @@ namespace SpeakDanish.ViewModels
                 await _alertService.ShowToast(e.Message);
             });
         }
+        #endregion
 
+        #region Public Fields
         public DelegateCommand SpeakSentenceCommand { get; set; }
         public DelegateCommand StartRecordingCommand { get; set; }
         public DelegateCommand StopRecordingCommand { get; set; }
@@ -164,21 +168,21 @@ namespace SpeakDanish.ViewModels
             set => SetProperty(ref _recordingLength, value);
         }
 
-        public bool AcceptedTranscribe
+        public bool IsTranscribingAccepted
         {
-            get => _acceptedTranscribe;
+            get => _isTranscribingAccepted;
             set {
-                SetProperty(ref _acceptedTranscribe, value);
+                SetProperty(ref _isTranscribingAccepted, value);
                 OnPropertyChanged(nameof(CircleColor));
                 OnPropertyChanged(nameof(CircleIcon));
             }
         }
-        public bool AcceptedRecording
+        public bool IsRecordingAccepted
         {
-            get => _acceptedRecording;
+            get => _isRecordingAccepted;
             set
             {
-                SetProperty(ref _acceptedRecording, value);
+                SetProperty(ref _isRecordingAccepted, value);
                 OnPropertyChanged(nameof(CanSave));
             }
         }
@@ -187,7 +191,7 @@ namespace SpeakDanish.ViewModels
         {
             get
             {
-                if (AcceptedTranscribe)
+                if (IsTranscribingAccepted)
                 {
                     var color = Color.Green;
                     if (IsRecording)
@@ -208,7 +212,7 @@ namespace SpeakDanish.ViewModels
         {
             get
             {
-                if (!AcceptedTranscribe)
+                if (!IsTranscribingAccepted)
                 {
                     if(Sentence != null && TranscribedText == null && IsBusy && !IsRecording)
                         return MaterialDesignIconsFont.DotsHorizontal;
@@ -227,36 +231,26 @@ namespace SpeakDanish.ViewModels
 
         public bool CanSave
         {
-            get => !string.IsNullOrEmpty(Filepath) && AcceptedRecording;
+            get => !string.IsNullOrEmpty(Filepath) && IsRecordingAccepted;
         }
 
         public string TranscribedText {
             get => _transcribedText;
             set => SetProperty(ref _transcribedText, value);
         }
+        #endregion
 
+        #region Methods
         public async Task LoadRandomSentence()
         {
             try
             {
                 IsBusy = true;
-                Sentence = await _sentenceService.GetRandomSentence(Sentence, LoadFile());
+                Sentence = await _sentenceService.GetRandomSentence<HomeViewModel>(Sentence);
             }
             finally
             {
                 IsBusy = false;
-            }
-        }
-
-        Task<string> LoadFile()
-        {
-            var assembly = typeof(HomeViewModel).GetTypeInfo().Assembly;
-            using (Stream stream = assembly.GetManifestResourceStream("SpeakDanish.Resources.sentences.txt"))
-            {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    return Task.FromResult(reader.ReadToEnd());
-                }
             }
         }
 
@@ -307,12 +301,12 @@ namespace SpeakDanish.ViewModels
                 IsBusy = true;
                 IsRecording = true;
 
-                if (!AcceptedTranscribe)
+                if (!IsTranscribingAccepted)
                 {
                     TranscribedText = null;
-                    await _speechServices.StartTranscribingDanish(result =>
+                    await _audioUseCase.StartTranscribingDanish(CountdownTimer_Elapsed, result =>
                     {
-                        TranscribedText = result.Text;
+                        TranscribedText = result;
                     });
                 }
                 else
@@ -351,9 +345,9 @@ namespace SpeakDanish.ViewModels
                 IsBusy = true;
                 IsRecording = false;
 
-                if (!AcceptedTranscribe)
+                if (!IsTranscribingAccepted)
                 {
-                    await _speechServices.StopTranscribingDanish();
+                    await _audioUseCase.StopTranscribingDanish();
                 }
                 else
                 {
@@ -411,5 +405,6 @@ namespace SpeakDanish.ViewModels
         {
             Sentence = recording.Sentence;
         }
+        #endregion
     }
 }

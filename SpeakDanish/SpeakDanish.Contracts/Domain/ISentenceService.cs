@@ -11,7 +11,7 @@ namespace SpeakDanish.Contracts.Domain
         /// <param name="previousSentence">The previous sentence to exclude from the list of choices.</param>
         /// <param name="getSentencesFromResources">A task that returns the list of sentences to choose from.</param>
         /// <returns>A task that returns a random sentence from the list of sentences, excluding the previous sentence.</returns>
-        Task<string> GetRandomSentence(string previousSentence, Task<string> getSentencesFromResources);
+        Task<string> GetRandomSentence<T>(string previousSentence);
     }
 }
 

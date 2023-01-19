@@ -76,6 +76,15 @@ namespace SpeakDanish.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opptak ({0} sekunder).
+        /// </summary>
+        internal static string Home_RecordingsWithSeconds {
+            get {
+                return ResourceManager.GetString("Home_RecordingsWithSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lagre opptak.
         /// </summary>
         internal static string Home_SaveRecording {
@@ -103,11 +112,29 @@ namespace SpeakDanish.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transkriberer ({0} sekunder).
+        /// </summary>
+        internal static string Home_TranscribeWithSeconds {
+            get {
+                return ResourceManager.GetString("Home_TranscribeWithSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ditt opptak.
         /// </summary>
         internal static string Home_YourRecording {
             get {
                 return ResourceManager.GetString("Home_YourRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Din transkripsjon.
+        /// </summary>
+        internal static string Home_YourTranscription {
+            get {
+                return ResourceManager.GetString("Home_YourTranscription", resourceCulture);
             }
         }
         

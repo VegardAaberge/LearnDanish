@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.CognitiveServices.Speech;
 using Xamarin.Forms;
 
 namespace SpeakDanish.Controls.ContentViews
@@ -96,6 +97,7 @@ namespace SpeakDanish.Controls.ContentViews
             {
                 frame.GestureRecognizers.Add(recognizer);
             }
+            frame.InputTransparent = frame.GestureRecognizers.Count == 0;
         }
     }
 }

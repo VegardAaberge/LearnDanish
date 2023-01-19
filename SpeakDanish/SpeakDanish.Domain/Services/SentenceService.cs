@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Data.Database;
@@ -17,12 +19,13 @@ namespace SpeakDanish.Domain.Services
         }
 
 
-        public async Task<string> GetRandomSentence(string previousSentence, Task<string> getSentencesFromResources)
+        public async Task<string> GetRandomSentence<T>(string previousSentence)
         {
             var sentences = await _database.GetItemsAsync<SentenceEntity>();
             if (sentences.Count < 100)
             {
-                var lines = (await getSentencesFromResources).Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
+                var sentencesData = await LoadSentences<T>();
+                var lines = sentencesData.Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
                 sentences = lines.Select(line => new SentenceEntity
                 {
                     Sentence = line
@@ -44,6 +47,18 @@ namespace SpeakDanish.Domain.Services
 
                     if (previousSentence != newSentence)
                         return sentences[index].Sentence;
+                }
+            }
+        }
+
+        Task<string> LoadSentences<T>()
+        {
+            var assembly = typeof(T).GetTypeInfo().Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("SpeakDanish.Resources.sentences.txt"))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return Task.FromResult(reader.ReadToEnd());
                 }
             }
         }

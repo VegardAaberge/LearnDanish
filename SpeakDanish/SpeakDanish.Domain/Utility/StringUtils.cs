@@ -5,7 +5,7 @@ namespace SpeakDanish.Domain.Utility
 	{
         public static double LevenshteinSimilarity(string referenceString, string inputString)
         {
-            return (double)LevenshteinDistance(referenceString, inputString) / referenceString.Length;
+            return 1 - (double)LevenshteinDistance(referenceString, inputString) / referenceString.Length;
         }
 
         static int LevenshteinDistance(string referenceString, string inputString)

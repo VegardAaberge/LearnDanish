@@ -10,6 +10,9 @@ using SpeakDanish.Domain.Models;
 using SpeakDanish.Contracts;
 using Xamarin.Essentials;
 using SpeakDanish.Contracts.Shared;
+using SpeakDanish.Contracts.Data;
+using SpeakDanish.Data.Api;
+using Microsoft.CognitiveServices.Speech;
 
 namespace SpeakDanish.Domain.UseCases
 {
@@ -18,6 +21,7 @@ namespace SpeakDanish.Domain.UseCases
         private IPermissions _permissions;
         private ITtsDataInstaller _ttsDataInstaller;
         private IAudioRecorder _audioRecorder;
+        private ISpeechService<TranscriptionResult> _speechServices;
         private ITextToSpeech _textToSpeech;
 
         private CancellationTokenSource _cancelSpeakTokenSource = new CancellationTokenSource();
@@ -28,11 +32,13 @@ namespace SpeakDanish.Domain.UseCases
             IPermissions permissions,
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
+            ISpeechService<TranscriptionResult> speechServices,
             ITextToSpeech textToSpeech)
 		{
             _permissions = permissions;
             _ttsDataInstaller = ttsDataInstaller;
             _audioRecorder = audioRecorder;
+            _speechServices = speechServices;
             _textToSpeech = textToSpeech;
         }
 
@@ -90,9 +96,7 @@ namespace SpeakDanish.Domain.UseCases
             }
 
             var filepath = await _audioRecorder.StartRecordingAudio("recording");
-            _countTimer = new Timer(1000);
-            _countTimer.Elapsed += countTimer;
-            _countTimer.Start();
+            StartTimer(countTimer);
 
             return new Response<string>
             {
@@ -105,7 +109,7 @@ namespace SpeakDanish.Domain.UseCases
         {
             await _audioRecorder.StopRecordingAudio(filepath);
 
-            _countTimer.Stop();
+            StopTimer();
 
             return new Response(true);
         }
@@ -115,6 +119,38 @@ namespace SpeakDanish.Domain.UseCases
             await _audioRecorder.PlayAudio(filepath);
 
             return new Response(true);
+        }
+
+        public async Task StartTranscribingDanish(ElapsedEventHandler countTimer, Action<string> recognizedCallback)
+        {
+            StartTimer(countTimer);
+
+            await _speechServices.StartTranscribingDanish(result =>
+            {
+                if(result.Reason == ResultReason.RecognizedSpeech)
+                {
+                    recognizedCallback(result.Text);
+                }
+            });
+        }
+
+        public async Task StopTranscribingDanish()
+        {
+            StopTimer();
+
+            await _speechServices.StopTranscribingDanish();
+        }
+
+        private void StartTimer(ElapsedEventHandler countTimer)
+        {
+            _countTimer = new Timer(1000);
+            _countTimer.Elapsed += countTimer;
+            _countTimer.Start();
+        }
+
+        private void StopTimer()
+        {
+            _countTimer.Stop();
         }
     }
 }

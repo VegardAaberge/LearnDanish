@@ -19,6 +19,7 @@
             <Color x:Key="BlueColor">#0000FF</Color>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <converters:BoolAppResourcesWithDataConverter x:Key="BoolAppResourcesWithDataConverter" />
             <converters:SizePercentageConverter x:Key="SizePercentageConverter" />
             <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
             <converters:DisabledColorConverter x:Key="DisabledColorConverter" />
@@ -31,66 +32,77 @@
 
     <Grid
         Padding="16, 8"
-        RowDefinitions="40,Auto,*,Auto">
+        RowDefinitions="Auto,*,Auto">
 
-        <StackLayout
-            Grid.Row="0"
-            Spacing="8"
-            Orientation="Horizontal"
-            IsVisible="{Binding IsRecording}">
+        <StackLayout Grid.Row="0">
+            <StackLayout
+                Spacing="8"
+                Orientation="Horizontal"
+                IsVisible="{Binding IsRecording}">
 
-            <Grid
-                VerticalOptions="Center"
-                HeightRequest="20"
-                WidthRequest="20">
+                <Grid
+                    VerticalOptions="Center"
+                    HeightRequest="20"
+                    WidthRequest="20">
 
-                <Frame
-                    CornerRadius="10"
-                    BackgroundColor="Red" />
-            </Grid>
+                    <Frame
+                        CornerRadius="10"
+                        BackgroundColor="Red" />
+                </Grid>
 
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label.Text>
+                        <MultiBinding Converter="{StaticResource BoolAppResourcesWithDataConverter}">
+                            <Binding Path="IsTranscribingAccepted" />
+                            <Binding Path="CountSeconds" />
+                            <Binding Source="{x:Static resources:AppResources.Home_RecordingsWithSeconds}"/>
+                            <Binding Source="{x:Static resources:AppResources.Home_TranscribeWithSeconds}"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+
+            </StackLayout>
 
             <Label
-                Text="{Binding CountSeconds, StringFormat='Recording ({0} seconds)'}"
+                Grid.Row="0"
+                IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
+                Text="{x:Static resources:AppResources.Home_SpeakThisSentence }"
                 FontAttributes="Bold"
                 FontSize="18"
-                VerticalOptions="CenterAndExpand" />
+                VerticalOptions="Center" />
+
+            <Grid
+                ColumnDefinitions="50, *"
+                Padding="0, 10">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
+                </Grid.GestureRecognizers>
+
+                <contentViews:CircleIcon
+                    InputTransparent="True"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    FrameColor="Blue"
+                    LabelTextColor="White"
+                    FrameSize="35"
+                    LabelFontSize="22"
+                    IconText="{Binding VolumeIcon}" />
+                
+                <Label
+                    Grid.Column="1"
+                    Text="{Binding Sentence}"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center" />
+            </Grid>
 
         </StackLayout>
 
-        <Label
-            Grid.Row="0"
-            IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
-            Text="{x:Static resources:AppResources.Home_SpeakThisSentence }"
-            FontAttributes="Bold"
-            FontSize="18"
-            VerticalOptions="Center" />
-
-        <Grid
-            Grid.Row="1"
-            ColumnDefinitions="50, *">
-            <Grid.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
-            </Grid.GestureRecognizers>
-
-            <contentViews:CircleIcon
-                Grid.Column="0"
-                HorizontalOptions="Start"
-                FrameColor="Blue"
-                LabelTextColor="White"
-                FrameSize="35"
-                LabelFontSize="22"
-                IconText="{Binding VolumeIcon}" />
-                
-            <Label
-                Grid.Column="1"
-                Text="{Binding Sentence}"
-                HorizontalOptions="Start"
-                VerticalOptions="Center" />
-        </Grid>
-
         <Grid x:Name="CircleIconGrid"
-            Grid.Row="2">
+            Grid.Row="1">
             <contentViews:CircleIcon
                 
                 IconText="{Binding CircleIcon}"
@@ -120,11 +132,11 @@
             </contentViews:CircleIcon>
         </Grid>
 
-        <StackLayout Grid.Row="3">
+        <StackLayout Grid.Row="2">
 
             <Label
                 FontAttributes="Bold"
-                Text="Your Transcription" />
+                Text="{x:Static resources:AppResources.Home_YourTranscription}" />
 
             <Grid
                 Margin="0,5,0,10"
@@ -144,7 +156,7 @@
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
                     IsEnabled="{Binding TranscribedText, Converter={StaticResource StringToBoolConverter } }"
-                    IsChecked="{Binding AcceptedTranscribe, Mode=OneWayToSource}" />
+                    IsChecked="{Binding IsTranscribingAccepted, Mode=OneWayToSource}" />
             </Grid>
 
             <Label
@@ -153,14 +165,14 @@
 
             <Grid
                 HeightRequest="50"
-                ColumnDefinitions="*,50">
+                ColumnDefinitions="*,50"
+                Margin="0,0,0,10">
 
                 <Grid
                     Grid.Column="0"
                     IsVisible="{Binding Filepath, Converter={StaticResource StringToBoolConverter}}"
-                    VerticalOptions="Start"
-                    ColumnDefinitions="50, *"
-                    Margin="0,0,0,30">
+                    VerticalOptions="FillAndExpand"
+                    ColumnDefinitions="50, *">
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer
@@ -190,7 +202,7 @@
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
                     IsVisible="{Binding Filepath, Converter={StaticResource StringToBoolConverter}}"
-                    IsChecked="{Binding AcceptedRecording, Mode=OneWayToSource}"/>
+                    IsChecked="{Binding IsRecordingAccepted, Mode=OneWayToSource}"/>
             </Grid>
             
 
