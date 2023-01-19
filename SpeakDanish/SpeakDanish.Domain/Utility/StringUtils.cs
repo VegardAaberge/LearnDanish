@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+
 namespace SpeakDanish.Domain.Utility
 {
 	public class StringUtils
@@ -36,6 +38,17 @@ namespace SpeakDanish.Domain.Utility
 
             // The distance is the last element in the distance matrix
             return distanceMatrix[referenceStringLength, inputStringLength];
+        }
+
+        public static string CreateUniqueFileName(string sentence)
+        {
+            DateTime now = DateTime.Now;
+
+            string cleanedSentence = System.Text.RegularExpressions.Regex.Replace(sentence.Replace(" ", "_"), @"[^a-zA-Z_0-9]", string.Empty).Trim();
+
+            string fileName = now.ToString("yyyyMMdd_HHmmss") + "_" + cleanedSentence;
+
+            return fileName;
         }
     }
 }

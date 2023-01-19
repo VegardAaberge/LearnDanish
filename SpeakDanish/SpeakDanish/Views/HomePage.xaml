@@ -90,7 +90,7 @@
                     LabelTextColor="White"
                     FrameSize="35"
                     LabelFontSize="22"
-                    IconText="{Binding VolumeIcon}" />
+                    IconText="{Binding VolumeIconSentence}" />
                 
                 <Label
                     Grid.Column="1"
@@ -176,7 +176,7 @@
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer
-                            Command="{Binding Path=PlaySentenceCommand, Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}}"
+                            Command="{Binding PlayAudioCommand}"
                             CommandParameter="{Binding .}">
                         </TapGestureRecognizer>
                     </Grid.GestureRecognizers>
@@ -188,7 +188,7 @@
                         LabelTextColor="White"
                         FrameSize="35"
                         LabelFontSize="22"
-                        IconText="{Binding VolumeIcon}" />
+                        IconText="{Binding VolumeIconRecording}" />
 
                     <Label
                         Grid.Column="1"

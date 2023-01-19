@@ -50,7 +50,7 @@ namespace SpeakDanish.Droid.Services
             return Task.FromResult(0);
         }
 
-        public Task PlayAudio(string filepath)
+        public async Task PlayAudio(string filepath)
         {
             _mediaPlayer = new MediaPlayer();
             _mediaPlayer.SetDataSource(filepath);
@@ -58,13 +58,15 @@ namespace SpeakDanish.Droid.Services
 
             _mediaPlayer.Start();
 
+            var mediaPlayerTask = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
             _mediaPlayer.Completion += (sender, e) =>
             {
                 _mediaPlayer.Release();
                 _mediaPlayer = null;
+                mediaPlayerTask.SetResult(0);
             };
 
-            return Task.CompletedTask;
+            await mediaPlayerTask.Task;
         }
     }
 }

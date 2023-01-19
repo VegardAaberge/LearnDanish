@@ -118,7 +118,7 @@ namespace SpeakDanish.ViewModels
             try
             {
                 IsBusy = true;
-                var response = await _audioUseCase.PlayAudioAsync(recording.FilePath);
+                var response = await _audioUseCase.PlayAudioAsync(recording.FilePath, (s, e) => { });
                 if (!response.Success)
                 {
                     await _alertService.ShowToast(response.Message);

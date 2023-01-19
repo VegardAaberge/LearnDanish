@@ -35,7 +35,8 @@ namespace SpeakDanish.ViewModels
         private int _countSeconds;
         private string _sentence;
         private bool _isRecording;
-        private string _volumeIcon;
+        private string _volumeIconSentence = MaterialDesignIconsFont.VolumeHigh;
+        private string _volumeIconRecording = MaterialDesignIconsFont.VolumeHigh;
         private int _volumeCounter = 1;
         private int _recordingLength;
         private string _filepathCache;
@@ -45,6 +46,7 @@ namespace SpeakDanish.ViewModels
         private bool _isTranscribingAccepted;
         private string _transcribedText;
 
+        private string _filename;
         private SubscriptionToken _recordingSelectedEvent;
         #endregion
 
@@ -63,13 +65,9 @@ namespace SpeakDanish.ViewModels
             _eventAggregator = eventAggregator;
             _navigation = navigation;
 
-            VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
-
             SetupCommands();
 
             LoadRandomSentence().Await(HandleException);
-
-            RecordingLength = 5;
         }
 
         #region Setup
@@ -90,6 +88,9 @@ namespace SpeakDanish.ViewModels
         {
             SpeakSentenceCommand = new DelegateCommand(() => SpeakSentenceAsync().Await(HandleException))
                 .ObservesCanExecute(() => IsNotRecording);
+
+            PlayAudioCommand = new DelegateCommand(() => PlayAudioAsync().Await(HandleException))
+                .ObservesCanExecute(() => IsNotBusy);
 
             StartRecordingCommand = new DelegateCommand(() => StartRecordingAsync().Await(HandleException))
                 .ObservesCanExecute(() => IsNotRecording);
@@ -112,25 +113,32 @@ namespace SpeakDanish.ViewModels
                 await _alertService.ShowToast(e.Message);
             });
         }
-        #endregion
-
-        #region Public Fields
+        
         public DelegateCommand SpeakSentenceCommand { get; set; }
+        public DelegateCommand PlayAudioCommand { get; set; }
         public DelegateCommand StartRecordingCommand { get; set; }
         public DelegateCommand StopRecordingCommand { get; set; }
         public DelegateCommand NewSentenceCommand { get; set; }
         public DelegateCommand NavigateToRecordingsCommand { get; set; }
+        #endregion
 
+        #region Public Fields
         public string Filepath
         {
             get => _filepath;
             set => SetProperty(ref _filepath, value);
         }
 
-        public string VolumeIcon
+        public string VolumeIconSentence
         {
-            get => _volumeIcon;
-            set => SetProperty(ref _volumeIcon, value);
+            get => _volumeIconSentence;
+            set => SetProperty(ref _volumeIconSentence, value);
+        }
+
+        public string VolumeIconRecording
+        {
+            get => _volumeIconRecording;
+            set => SetProperty(ref _volumeIconRecording, value);
         }
 
         public bool IsSpeaking
@@ -247,6 +255,7 @@ namespace SpeakDanish.ViewModels
             {
                 IsBusy = true;
                 Sentence = await _sentenceService.GetRandomSentence<HomeViewModel>(Sentence);
+                _filename = StringUtils.CreateUniqueFileName(Sentence);
             }
             finally
             {
@@ -258,8 +267,12 @@ namespace SpeakDanish.ViewModels
         {
             try
             {
-                IsBusy = true; 
-                var response = await _audioUseCase.SpeakSentenceAsync(Sentence, VolumeTimer_Elapsed);
+                IsBusy = true;
+                var response = await _audioUseCase.SpeakSentenceAsync(Sentence, (s, e) => VolumeTimer_Elapsed(newValue =>
+                {
+                    VolumeIconSentence = newValue;
+                }));
+
                 if (!response.Success)
                 {
                     await _alertService.ShowToast(response.Message);
@@ -268,22 +281,44 @@ namespace SpeakDanish.ViewModels
             finally
             {
                 IsBusy = false;
-                VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
+                VolumeIconSentence = MaterialDesignIconsFont.VolumeHigh;
             }
         }
 
-        private void VolumeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        public async Task PlayAudioAsync()
+        {
+            try
+            {
+                IsBusy = true;
+                var response = await _audioUseCase.PlayAudioAsync(Filepath, (s, e) => VolumeTimer_Elapsed(newValue =>
+                {
+                    VolumeIconRecording = newValue;
+                }));
+
+                if (!response.Success)
+                {
+                    await _alertService.ShowToast(response.Message);
+                }
+            }
+            finally
+            {
+                IsBusy = false;
+                VolumeIconRecording = MaterialDesignIconsFont.VolumeHigh;
+            }
+        }
+
+        private void VolumeTimer_Elapsed(Action<string> setValue)
         {
             switch (_volumeCounter)
             {
                 case 1:
-                    VolumeIcon = MaterialDesignIconsFont.VolumeLow;
+                    setValue(MaterialDesignIconsFont.VolumeLow);
                     break;
                 case 2:
-                    VolumeIcon = MaterialDesignIconsFont.VolumeMedium;
+                    setValue(MaterialDesignIconsFont.VolumeMedium);
                     break;
                 case 3:
-                    VolumeIcon = MaterialDesignIconsFont.VolumeHigh;
+                    setValue(MaterialDesignIconsFont.VolumeHigh);
                     break;
             }
 
@@ -311,7 +346,7 @@ namespace SpeakDanish.ViewModels
                 }
                 else
                 {
-                    var response = await _audioUseCase.StartRecordingAsync(CountdownTimer_Elapsed);
+                    var response = await _audioUseCase.StartRecordingAsync(_filename, CountdownTimer_Elapsed);
                     if (response.Success)
                     {
                         _filepathCache = response.Data;
@@ -357,7 +392,7 @@ namespace SpeakDanish.ViewModels
                         Filepath = _filepathCache;
                         RecordingLength = CountSeconds;
 
-                        await _audioUseCase.PlayAudioAsync(_filepathCache);
+                        await PlayAudioAsync();
                     }
                     else
                     {

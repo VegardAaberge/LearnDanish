@@ -20,6 +20,7 @@ namespace SpeakDanish.Droid.Renderers
             if (Control != null)
             {
                 Control.Background = null;
+                Control.SetHintTextColor(Color.Black.ToAndroid());
             }
         }
     }

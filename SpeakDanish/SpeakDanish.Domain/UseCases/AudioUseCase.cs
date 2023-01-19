@@ -25,7 +25,6 @@ namespace SpeakDanish.Domain.UseCases
         private ITextToSpeech _textToSpeech;
 
         private CancellationTokenSource _cancelSpeakTokenSource = new CancellationTokenSource();
-        private Timer _volumeTimer = new Timer();
         private Timer _countTimer = new Timer();
 
         public AudioUseCase(
@@ -63,22 +62,19 @@ namespace SpeakDanish.Domain.UseCases
             }
 
             _cancelSpeakTokenSource = new CancellationTokenSource();
-            _volumeTimer.Stop();
-            _volumeTimer = new Timer(300);
-            _volumeTimer.Elapsed += volumeTimerCallback;
-            _volumeTimer.Start();
+            StartTimer(volumeTimerCallback, 300);
 
             await _textToSpeech.SpeakAsync(sentence, new SpeechOptions
             {
                 Locale = locale
             }, _cancelSpeakTokenSource.Token);
 
-            _volumeTimer.Stop();
+            StopTimer();
 
             return new Response(true);
         }
 
-        public async Task<Response<string>> StartRecordingAsync(ElapsedEventHandler countTimer)
+        public async Task<Response<string>> StartRecordingAsync(string filename, ElapsedEventHandler countTimer)
         {
             if (_countTimer.Enabled)
                 return new Response<string>(false, "Already recording");
@@ -95,8 +91,8 @@ namespace SpeakDanish.Domain.UseCases
                 return new Response<string>(false, "Permission denied");
             }
 
-            var filepath = await _audioRecorder.StartRecordingAudio("recording");
-            StartTimer(countTimer);
+            var filepath = await _audioRecorder.StartRecordingAudio(filename);
+            StartTimer(countTimer, 1000);
 
             return new Response<string>
             {
@@ -114,16 +110,18 @@ namespace SpeakDanish.Domain.UseCases
             return new Response(true);
         }
 
-        public async Task<Response> PlayAudioAsync(string filepath)
+        public async Task<Response> PlayAudioAsync(string filepath, ElapsedEventHandler volumeTimerCallback)
         {
+            StartTimer(volumeTimerCallback, 300);
             await _audioRecorder.PlayAudio(filepath);
+            StopTimer();
 
             return new Response(true);
         }
 
         public async Task StartTranscribingDanish(ElapsedEventHandler countTimer, Action<string> recognizedCallback)
         {
-            StartTimer(countTimer);
+            StartTimer(countTimer, 1000);
 
             await _speechServices.StartTranscribingDanish(result =>
             {
@@ -141,9 +139,10 @@ namespace SpeakDanish.Domain.UseCases
             await _speechServices.StopTranscribingDanish();
         }
 
-        private void StartTimer(ElapsedEventHandler countTimer)
+        private void StartTimer(ElapsedEventHandler countTimer, int duration)
         {
-            _countTimer = new Timer(1000);
+            _countTimer.Stop();
+            _countTimer = new Timer(duration);
             _countTimer.Elapsed += countTimer;
             _countTimer.Start();
         }
