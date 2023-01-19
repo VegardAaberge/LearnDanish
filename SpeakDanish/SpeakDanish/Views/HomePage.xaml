@@ -134,9 +134,17 @@
 
         <StackLayout Grid.Row="2">
 
-            <Label
-                FontAttributes="Bold"
-                Text="{x:Static resources:AppResources.Home_YourTranscription}" />
+            <StackLayout Orientation="Horizontal" Spacing="8">
+                <Label
+                    FontAttributes="Bold"
+                    Text="{x:Static resources:AppResources.Home_YourTranscription}" />
+
+                <Label
+                    TextColor="Green"
+                    Text="{Binding Similarity, StringFormat='{0}%'}" />
+
+            </StackLayout>
+            
 
             <Grid
                 Margin="0,5,0,10"

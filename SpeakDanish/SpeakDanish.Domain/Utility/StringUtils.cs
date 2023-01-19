@@ -5,9 +5,13 @@ namespace SpeakDanish.Domain.Utility
 {
 	public class StringUtils
 	{
-        public static double LevenshteinSimilarity(string referenceString, string inputString)
+        public static int LevenshteinSimilarity(string referenceString, string inputString)
         {
-            return 1 - (double)LevenshteinDistance(referenceString, inputString) / referenceString.Length;
+            var similarityFraction = 1 - (double)LevenshteinDistance(referenceString, inputString) / referenceString.Length;
+
+            var adjustedSimilarity = Math.Max(0, (similarityFraction - 1/4) * (4/3));
+
+            return (int)Math.Round(adjustedSimilarity * 100);
         }
 
         static int LevenshteinDistance(string referenceString, string inputString)

@@ -48,6 +48,7 @@ namespace SpeakDanish.ViewModels
 
         private string _filename;
         private SubscriptionToken _recordingSelectedEvent;
+        private int _similarity;
         #endregion
 
         public HomeViewModel(
@@ -151,6 +152,12 @@ namespace SpeakDanish.ViewModels
         {
             get => _countSeconds;
             set => SetProperty(ref _countSeconds, value);
+        }
+
+        public int Similarity
+        {
+            get => _similarity;
+            set => SetProperty(ref _similarity, value);
         }
 
         public string Sentence
@@ -342,6 +349,7 @@ namespace SpeakDanish.ViewModels
                     await _audioUseCase.StartTranscribingDanish(CountdownTimer_Elapsed, result =>
                     {
                         TranscribedText = result;
+                        Similarity = StringUtils.LevenshteinSimilarity(Sentence, result);
                     });
                 }
                 else
@@ -411,8 +419,6 @@ namespace SpeakDanish.ViewModels
 
         public async Task NewSentenceAsync()
         {
-            var similarity = StringUtils.LevenshteinSimilarity(Sentence, TranscribedText);
-
             await _recordingService.InsertRecordingAsync(
                 new Recording
                 {
@@ -420,7 +426,7 @@ namespace SpeakDanish.ViewModels
                     Sentence = _sentence,
                     Created = DateTime.Now,
                     TranscribedText = _transcribedText,
-                    Similarity = similarity
+                    Similarity = _similarity
                 }
             );
 
