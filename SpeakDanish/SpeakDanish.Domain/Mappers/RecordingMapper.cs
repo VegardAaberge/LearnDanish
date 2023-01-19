@@ -13,7 +13,9 @@ namespace SpeakDanish.Data.Mappers
                 Id = recording.Id,
                 Sentence = recording.Sentence,
                 FilePath = recording.FilePath,
-                Created = recording.Created
+                Created = recording.Created,
+                TranscribedText = recording.TranscribedText,
+                Similarity = recording.Similarity
             };
         }
 
@@ -24,7 +26,9 @@ namespace SpeakDanish.Data.Mappers
                 Id = entity.Id,
                 Sentence = entity.Sentence,
                 FilePath = entity.FilePath,
-                Created = entity.Created
+                Created = entity.Created,
+                TranscribedText = entity.TranscribedText,
+                Similarity = entity.Similarity
             };
         }
     }

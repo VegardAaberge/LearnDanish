@@ -10,6 +10,8 @@ namespace SpeakDanish.Data.Models
         public string Sentence { get; set; }
         public string FilePath { get; set; }
         public DateTime Created { get; set; }
+        public string TranscribedText { get; set; }
+        public double Similarity { get; set; }
     }
 }
 

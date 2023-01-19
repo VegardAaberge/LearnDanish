@@ -19,6 +19,10 @@ namespace SpeakDanish.Domain.Models
         public DateTime Created { get; set; }
 
         public string VolumeIcon { get; set; }
+
+        public string TranscribedText { get; set; }
+
+        public double Similarity { get; set; }
     }
 }
 

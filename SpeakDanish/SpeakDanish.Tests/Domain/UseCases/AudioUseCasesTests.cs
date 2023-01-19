@@ -14,6 +14,7 @@ using System.Timers;
 using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Tests.ViewModels;
 using SpeakDanish.Contracts;
+using SpeakDanish.Contracts.Shared;
 
 namespace SpeakDanish.Tests.Domain.UseCases
 {

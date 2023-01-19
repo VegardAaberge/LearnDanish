@@ -17,6 +17,7 @@ using SpeakDanish.ViewModels.Base;
 using SpeakDanish.Views;
 using Xamarin.Forms;
 using static SpeakDanish.Helpers.AppEvents;
+using SpeakDanish.Domain.Utility;
 
 namespace SpeakDanish.ViewModels
 {
@@ -38,12 +39,13 @@ namespace SpeakDanish.ViewModels
         private int _volumeCounter = 1;
         private int _recordingLength;
         private string _filepathCache;
-
-        private SubscriptionToken _recordingSelectedEvent;
+        private string _filepath;
         private bool _isTranscribing;
         private bool _acceptedRecording;
         private bool _acceptedTranscribe;
         private string _transcribedText;
+
+        private SubscriptionToken _recordingSelectedEvent;
 
         public HomeViewModel(
             IAudioUseCase audioUseCase,
@@ -115,7 +117,11 @@ namespace SpeakDanish.ViewModels
         public DelegateCommand NewSentenceCommand { get; set; }
         public DelegateCommand NavigateToRecordingsCommand { get; set; }
 
-        public string Filepath { get; set; }
+        public string Filepath
+        {
+            get => _filepath;
+            set => SetProperty(ref _filepath, value);
+        }
 
         public string VolumeIcon
         {
@@ -204,10 +210,7 @@ namespace SpeakDanish.ViewModels
             {
                 if (!AcceptedTranscribe)
                 {
-                    Console.WriteLine(Sentence);
-                    Console.WriteLine(IsBusy);
-                    Console.WriteLine(!IsRecording);
-                    if(Sentence != null && IsBusy && !IsRecording)
+                    if(Sentence != null && TranscribedText == null && IsBusy && !IsRecording)
                         return MaterialDesignIconsFont.DotsHorizontal;
                     else
                         return MaterialDesignIconsFont.MicrophoneMessage;
@@ -306,6 +309,7 @@ namespace SpeakDanish.ViewModels
 
                 if (!AcceptedTranscribe)
                 {
+                    TranscribedText = null;
                     await _speechServices.StartTranscribingDanish(result =>
                     {
                         TranscribedText = result.Text;
@@ -370,7 +374,7 @@ namespace SpeakDanish.ViewModels
             finally
             {
                 IsBusy = false;
-                OnPropertyChanged(nameof(CircleColor));
+                CountSeconds = 0;
                 OnPropertyChanged(nameof(CircleIcon));
                 OnPropertyChanged(nameof(CanSave));
             }
@@ -378,12 +382,16 @@ namespace SpeakDanish.ViewModels
 
         public async Task NewSentenceAsync()
         {
+            var similarity = StringUtils.LevenshteinSimilarity(Sentence, TranscribedText);
+
             await _recordingService.InsertRecordingAsync(
                 new Recording
                 {
-                    FilePath = Filepath,
+                    FilePath = _filepath,
                     Sentence = _sentence,
-                    Created = DateTime.Now
+                    Created = DateTime.Now,
+                    TranscribedText = _transcribedText,
+                    Similarity = similarity
                 }
             );
 

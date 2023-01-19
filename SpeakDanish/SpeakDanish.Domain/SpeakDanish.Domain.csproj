@@ -12,12 +12,14 @@
     <None Remove="Services\" />
     <None Remove="UseCases\" />
     <None Remove="Xamarin.Essentials.Interfaces" />
+    <None Remove="Utility\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Mappers\" />
     <Folder Include="Services\" />
     <Folder Include="UseCases\" />
+    <Folder Include="Utility\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Linq" Version="4.3.0" />

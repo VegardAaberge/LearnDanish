@@ -19,7 +19,7 @@
             <Color x:Key="BlueColor">#0000FF</Color>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
-            <converters:PercentageConverter x:Key="PercentageConverter" />
+            <converters:SizePercentageConverter x:Key="SizePercentageConverter" />
             <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
             <converters:DisabledColorConverter x:Key="DisabledColorConverter" />
         </ResourceDictionary>
@@ -30,7 +30,7 @@
     </ContentPage.ToolbarItems>
 
     <Grid
-        Padding="16"
+        Padding="16, 8"
         RowDefinitions="40,Auto,*,Auto">
 
         <StackLayout
@@ -94,10 +94,23 @@
             <contentViews:CircleIcon
                 
                 IconText="{Binding CircleIcon}"
-                LabelFontSize="{Binding Source={x:Reference Name=CircleIconGrid}, Path=Width, Converter={StaticResource PercentageConverter}, ConverterParameter=0.55}"
                 LabelTextColor="White"
-                FrameColor="{Binding CircleColor}"
-                FrameSize="{Binding Source={x:Reference Name=CircleIconGrid}, Path=Width, Converter={StaticResource PercentageConverter}, ConverterParameter=0.7}">
+                FrameColor="{Binding CircleColor}">
+
+                <contentViews:CircleIcon.FrameSize>
+                    <MultiBinding Converter="{StaticResource SizePercentageConverter}" ConverterParameter="0.8">
+                        <Binding Source="{x:Reference CircleIconGrid}" Path="Width" />
+                        <Binding Source="{x:Reference CircleIconGrid}" Path="Height" />
+                    </MultiBinding>
+                </contentViews:CircleIcon.FrameSize>
+
+                <contentViews:CircleIcon.LabelFontSize>
+                    <MultiBinding Converter="{StaticResource SizePercentageConverter}" ConverterParameter="0.55">
+                        <Binding Source="{x:Reference CircleIconGrid}" Path="Width" />
+                        <Binding Source="{x:Reference CircleIconGrid}" Path="Height" />
+                    </MultiBinding>
+                </contentViews:CircleIcon.LabelFontSize>
+
 
                 <contentViews:CircleIcon.FrameGestureRecognizers>
                     <gestureRecognizers:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
@@ -119,7 +132,7 @@
 
                 <contentViews:EntryOutlined
                     Grid.Column="0"
-                    Text="{Binding TranscribedText}"
+                    Text="{Binding TranscribedText, Mode=TwoWay}"
                     HeightRequest="{OnPlatform iOS=40}"
                     VerticalOptions="Center"
                     Placeholder=""
@@ -144,7 +157,7 @@
 
                 <Grid
                     Grid.Column="0"
-                    IsVisible="{Binding CanSave}"
+                    IsVisible="{Binding Filepath, Converter={StaticResource StringToBoolConverter}}"
                     VerticalOptions="Start"
                     ColumnDefinitions="50, *"
                     Margin="0,0,0,30">
@@ -174,10 +187,10 @@
 
                 <CheckBox
                     Grid.Column="1"
-                    VerticalOptions="Center"
+                    VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    IsChecked="{Binding AcceptedTranscribe, Mode=OneWayToSource}"
-                    IsVisible="{Binding CanSave}"/>
+                    IsVisible="{Binding Filepath, Converter={StaticResource StringToBoolConverter}}"
+                    IsChecked="{Binding AcceptedRecording, Mode=OneWayToSource}"/>
             </Grid>
             
 
