@@ -349,7 +349,7 @@ namespace SpeakDanish.ViewModels
                     await _audioUseCase.StartTranscribingDanish(CountdownTimer_Elapsed, result =>
                     {
                         TranscribedText = result;
-                        Similarity = StringUtils.LevenshteinSimilarity(Sentence, result);
+                        Similarity = StringUtils.JaroWinklerDistanceSimilarity(Sentence, result);
                     });
                 }
                 else
