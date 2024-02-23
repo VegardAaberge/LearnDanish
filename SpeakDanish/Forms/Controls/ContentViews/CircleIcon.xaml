@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="SpeakDanish.Controls.ContentViews.CircleIcon"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:SpeakDanish.Converters"
+    xmlns:frames="clr-namespace:SpeakDanish.Forms.Controls.Frames"
+    x:Name="circleIcon">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:HalfConverter x:Key="HalfConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <Grid
+        HeightRequest="{Binding FrameSize, Source={x:Reference circleIcon}}"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        WidthRequest="{Binding FrameSize, Source={x:Reference circleIcon}}">
+
+        <Frame
+            x:Name="circleFrame"
+            BackgroundColor="{Binding FrameColor, Source={x:Reference circleIcon}}"
+            CornerRadius="{Binding FrameSize, Source={x:Reference circleIcon}, Converter={StaticResource HalfConverter}}"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand" />
+
+        <Label
+            FontFamily="MaterialDesignIcons"
+            FontSize="{Binding LabelFontSize, Source={x:Reference circleIcon}}"
+            HorizontalOptions="CenterAndExpand"
+            InputTransparent="True"
+            Text="{Binding IconText, Source={x:Reference circleIcon}}"
+            TextColor="{Binding LabelTextColor, Source={x:Reference circleIcon}}"
+            VerticalOptions="CenterAndExpand" />
+
+    </Grid>
+
+
+
+</ContentView>
+

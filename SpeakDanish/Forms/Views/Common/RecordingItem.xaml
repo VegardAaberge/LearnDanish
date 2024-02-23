@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SwipeView
+    x:Class="SpeakDanish.Forms.Views.Common.RecordingItem"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
+    xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
+    xmlns:models="clr-namespace:SpeakDanish.Domain.Models"
+    xmlns:resources="clr-namespace:SpeakDanish.Resources.Translations"
+    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
+    x:DataType="models:Recording">
+
+    <SwipeView.RightItems>
+        <SwipeItems Mode="Reveal">
+            <SwipeItem
+                BackgroundColor="Red"
+                Command="{Binding Path=DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
+                CommandParameter="{Binding .}"
+                Text="{x:Static resources:AppResources.Recording_Delete}" />
+        </SwipeItems>
+    </SwipeView.RightItems>
+
+    <Grid RowDefinitions="*, 1">
+        <Grid
+            Grid.Row="0"
+            Margin="12,10"
+            ColumnDefinitions="*,40,40"
+            ColumnSpacing="6">
+
+            <Grid Grid.Column="0" ColumnDefinitions="50, *">
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Path=PlaySentenceCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}" CommandParameter="{Binding .}" />
+                </Grid.GestureRecognizers>
+
+                <contentViews:CircleIcon
+                    Grid.Column="0"
+                    FrameColor="Blue"
+                    FrameSize="35"
+                    HorizontalOptions="Start"
+                    IconText="{Binding VolumeIcon}"
+                    LabelFontSize="22"
+                    LabelTextColor="White" />
+
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Start"
+                    Text="{Binding Sentence}"
+                    VerticalOptions="Center" />
+            </Grid>
+
+
+            <Button
+                Grid.Column="1"
+                BackgroundColor="LightBlue"
+                Command="{Binding Path=PlayAudioCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
+                CommandParameter="{Binding .}">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialDesignIcons"
+                        Glyph="{x:Static helpers:MaterialDesignIconsFont.PlayCircleOutline}"
+                        Size="30"
+                        Color="Green" />
+                </Button.ImageSource>
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                BackgroundColor="LightBlue"
+                Command="{Binding Path=RedoCommand, Source={RelativeSource AncestorType={x:Type viewmodel:RecordingsViewModel}}}"
+                CommandParameter="{Binding .}">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialDesignIcons"
+                        Glyph="{x:Static helpers:MaterialDesignIconsFont.Refresh}"
+                        Size="30"
+                        Color="OrangeRed" />
+                </Button.ImageSource>
+            </Button>
+        </Grid>
+
+        <BoxView
+            Grid.Row="1"
+            Margin="0"
+            HeightRequest="1"
+            VerticalOptions="FillAndExpand"
+            Color="LightGray" />
+
+    </Grid>
+</SwipeView>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SpeakDanish.Forms.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:SpeakDanish.Controls.Buttons"
+    xmlns:contentViews="clr-namespace:SpeakDanish.Controls.ContentViews"
+    xmlns:converters="clr-namespace:SpeakDanish.Converters"
+    xmlns:effects="clr-namespace:SpeakDanish.Forms.Effects"
+    xmlns:gestureRecognizers="clr-namespace:SpeakDanish.Controls.GestureRecognizers"
+    xmlns:helpers="clr-namespace:SpeakDanish.Helpers"
+    xmlns:resources="clr-namespace:SpeakDanish.Resources.Translations"
+    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
+    Title="{x:Static resources:AppResources.Home_Title}"
+    x:DataType="viewmodel:HomeViewModel">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False" />
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="BlueColor">#0000FF</Color>
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <converters:BoolAppResourcesWithDataConverter x:Key="BoolAppResourcesWithDataConverter" />
+            <converters:SizePercentageConverter x:Key="SizePercentageConverter" />
+            <converters:DarkerColorConverter x:Key="DarkerColorConverter" />
+            <converters:DisabledColorConverter x:Key="DisabledColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding NavigateToRecordingsCommand}" Text="{x:Static resources:AppResources.Home_Recordings}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid Padding="16,8" RowDefinitions="Auto,*,Auto">
+
+        <VerticalStackLayout Grid.Row="0">
+            <HorizontalStackLayout IsVisible="{Binding IsRecording}" Spacing="8">
+
+                <Grid
+                    HeightRequest="20"
+                    VerticalOptions="Center"
+                    WidthRequest="20">
+
+                    <Frame BackgroundColor="Red" CornerRadius="10" />
+                </Grid>
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Label.Text>
+                        <MultiBinding Converter="{StaticResource BoolAppResourcesWithDataConverter}">
+                            <Binding Path="IsTranscribingAccepted" />
+                            <Binding Path="CountSeconds" />
+                            <Binding Source="{x:Static resources:AppResources.Home_RecordingsWithSeconds}" />
+                            <Binding Source="{x:Static resources:AppResources.Home_TranscribeWithSeconds}" />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+
+            </HorizontalStackLayout>
+
+            <Label
+                Grid.Row="0"
+                FontAttributes="Bold"
+                FontSize="18"
+                IsVisible="{Binding IsRecording, Converter={StaticResource InvertedBoolConverter}}"
+                Text="{x:Static resources:AppResources.Home_SpeakThisSentence}"
+                VerticalOptions="Center" />
+
+            <Grid Padding="0,10" ColumnDefinitions="50, *">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SpeakSentenceCommand}" />
+                </Grid.GestureRecognizers>
+
+                <contentViews:CircleIcon
+                    Grid.Column="0"
+                    FrameColor="{StaticResource Primary}"
+                    FrameSize="35"
+                    HorizontalOptions="Start"
+                    IconText="{Binding VolumeIconSentence}"
+                    InputTransparent="True"
+                    LabelFontSize="22"
+                    LabelTextColor="White" />
+
+                <Label
+                    Grid.Column="1"
+                    HorizontalOptions="Start"
+                    Text="{Binding Sentence}"
+                    VerticalOptions="Center" />
+            </Grid>
+
+        </VerticalStackLayout>
+
+        <Grid x:Name="CircleIconGrid" Grid.Row="1">
+            <contentViews:CircleIcon
+                FrameColor="{Binding CircleColor}"
+                FrameSize="200"
+                HeightRequest="250"
+                IconText="{Binding CircleIcon}"
+                LabelFontSize="140"
+                LabelTextColor="White"
+                WidthRequest="250">
+
+                <contentViews:CircleIcon.Effects>
+                    <effects:LongPressEffect Pressed="LongPressEffect_Pressed" Released="LongPressEffect_Released" />
+                </contentViews:CircleIcon.Effects>
+
+
+                <!--<Button.FrameSize>
+                    <MultiBinding Converter="{StaticResource SizePercentageConverter}" ConverterParameter="0.8">
+                        <Binding Path="Width" Source="{x:Reference CircleIconGrid}" />
+                        <Binding Path="Height" Source="{x:Reference CircleIconGrid}" />
+                    </MultiBinding>
+                </Button.FrameSize>
+
+                <Button.LabelFontSize>
+                    <MultiBinding Converter="{StaticResource SizePercentageConverter}" ConverterParameter="0.55">
+                        <Binding Path="Width" Source="{x:Reference CircleIconGrid}" />
+                        <Binding Path="Height" Source="{x:Reference CircleIconGrid}" />
+                    </MultiBinding>
+                </Button.LabelFontSize>
+
+
+                <contentViews:CircleIcon.FrameGestureRecognizers>
+                    <gestureRecognizers:PressedGestureRecognizer Command="{Binding StartRecordingCommand}" />
+                    <gestureRecognizers:ReleasedGestureRecognizer Command="{Binding StopRecordingCommand}" />
+                </contentViews:CircleIcon.FrameGestureRecognizers>-->
+
+            </contentViews:CircleIcon>
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="2">
+
+            <HorizontalStackLayout Spacing="8">
+                <Label FontAttributes="Bold" Text="{x:Static resources:AppResources.Home_YourTranscription}" />
+
+                <Label Text="{Binding Similarity, StringFormat='{0}%'}" TextColor="Green" />
+
+            </HorizontalStackLayout>
+
+
+            <Grid Margin="0,5,0,10" ColumnDefinitions="*,50">
+
+                <contentViews:EntryOutlined
+                    Grid.Column="0"
+                    HeightRequest="{OnPlatform iOS=40}"
+                    Placeholder=""
+                    PlaceholderColor="SlateGray"
+                    Text="{Binding TranscribedText, Mode=TwoWay}"
+                    VerticalOptions="Center" />
+
+                <CheckBox
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    IsChecked="{Binding IsTranscribingAccepted, Mode=OneWayToSource}"
+                    IsEnabled="{Binding TranscribedText, Converter={StaticResource StringToBoolConverter}}"
+                    VerticalOptions="Center" />
+            </Grid>
+
+            <Label FontAttributes="Bold" Text="{x:Static resources:AppResources.Home_YourRecording}" />
+
+            <Grid
+                Margin="0,0,0,10"
+                ColumnDefinitions="*,50"
+                HeightRequest="50">
+
+                <Grid
+                    Grid.Column="0"
+                    ColumnDefinitions="50, *"
+                    IsVisible="{Binding Filepath, Converter={StaticResource StringToBoolConverter}}"
+                    VerticalOptions="FillAndExpand">
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PlayAudioCommand}" CommandParameter="{Binding .}" />
+                    </Grid.GestureRecognizers>
+
+                    <contentViews:CircleIcon
+                        Grid.Column="0"
+                        FrameColor="{StaticResource Primary}"
+                        FrameSize="35"
+                        HorizontalOptions="Start"
+                        IconText="{Binding VolumeIconRecording}"
+                        LabelFontSize="22"
+                        LabelTextColor="White" />
+
+                    <Label
+                        Grid.Column="1"
+                        HorizontalOptions="Start"
+                        Text="{Binding RecordingLength, StringFormat={x:Static resources:AppResources.Home_MyRecordingWithSeconds}}"
+                        VerticalOptions="Center" />
+                </Grid>
+
+                <CheckBox
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    IsChecked="{Binding IsRecordingAccepted, Mode=OneWayToSource}"
+                    IsVisible="{Binding Filepath, Converter={StaticResource StringToBoolConverter}}"
+                    VerticalOptions="Start" />
+            </Grid>
+
+
+            <buttons:MaterialsButton
+                BackgroundColor="{Binding CanSave, Converter={StaticResource DisabledColorConverter}, ConverterParameter={StaticResource BlueColor}}"
+                Command="{Binding NewSentenceCommand}"
+                IsEnabled="{Binding CanSave}"
+                Text="{x:Static resources:AppResources.Home_SaveRecording}" />
+
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

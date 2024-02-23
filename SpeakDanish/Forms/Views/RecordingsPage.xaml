@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SpeakDanish.Forms.Views.RecordingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:common="clr-namespace:SpeakDanish.Forms.Views.Common"
+    xmlns:resources="clr-namespace:SpeakDanish.Resources.Translations"
+    xmlns:viewmodel="clr-namespace:SpeakDanish.ViewModels"
+    Title="{x:Static resources:AppResources.Recording_Title}"
+    x:DataType="viewmodel:RecordingsViewModel">
+
+    <CollectionView
+        x:Name="MyCollectionView"
+        Grid.Row="1"
+        ItemSizingStrategy="MeasureFirstItem"
+        ItemsSource="{Binding Recordings}"
+        SelectionChanged="MyCollectionView_SelectionChanged"
+        SelectionMode="Single">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <common:RecordingItem />
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+
+
+</ContentPage>

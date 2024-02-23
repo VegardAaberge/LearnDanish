@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="SpeakDanish.Controls.ContentViews.EntryOutlined"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:entries="clr-namespace:SpeakDanish.Controls.Entries"
+    x:Name="entryOutlined">
+
+    <VerticalStackLayout Margin="3,0,3,5">
+
+        <Grid>
+            <Frame
+                x:Name="EntryFrame"
+                Margin="0"
+                Padding="5,0,5,0"
+                BorderColor="{Binding BorderColor, Source={x:Reference entryOutlined}}"
+                CornerRadius="3"
+                HasShadow="False" />
+
+            <Label
+                x:Name="PlaceHolderLabel"
+                Margin="10,0,0,0"
+                BackgroundColor="White"
+                HorizontalOptions="Start"
+                Text="{Binding Placeholder, Source={x:Reference entryOutlined}}"
+                TextColor="{Binding PlaceholderColor, Source={Reference entryOutlined}}"
+                VerticalOptions="Center" />
+
+            <entries:BorderlessEntry
+                x:Name="TextBox"
+                Margin="10,0,0,0"
+                Focused="TextBox_Focused"
+                Text="{Binding Text, Source={x:Reference entryOutlined}, Mode=TwoWay}"
+                Unfocused="TextBox_Unfocused"
+                VerticalOptions="FillAndExpand" />
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>
+

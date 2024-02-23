@@ -1,0 +1,25 @@
+﻿using System;
+using System.Globalization;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
+
+namespace SpeakDanish.Converters
+{
+    public class InvertedBoolConverter : IValueConverter
+    {
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if (value is bool valueBool)
+                return !valueBool;
+            return value;
+        }
+
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if (value is bool valueBool)
+                return !valueBool;
+            return value;
+        }
+    }
+}
+
