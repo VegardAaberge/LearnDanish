@@ -6,8 +6,8 @@ namespace SpeakDanish.Contracts.Platform
 	public interface IAudioRecorder
 	{
         Task PlayAudio(string filepath);
-        Task<String> StartRecordingAudio(string filename);
-        Task StopRecordingAudio(string filepath);
+        Task<string?> StartRecordingAudio(string filename);
+        Task StopRecordingAudio(string filepath, int attempt = 0);
     }
 }
 

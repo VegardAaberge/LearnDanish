@@ -36,6 +36,12 @@ public partial class HomePage : ContentPage
     private async void LongPressEffect_Released(object sender, EventArgs e)
     {
         if (ViewModel != null)
-            await ViewModel.StopRecordingAsync();
+            await ViewModel.StopRecordingAsync(false);
+    }
+
+    private async void LongPressEffect_Cancelled(object sender, EventArgs e)
+    {
+        if (ViewModel != null)
+            await ViewModel.StopRecordingAsync(true);
     }
 }

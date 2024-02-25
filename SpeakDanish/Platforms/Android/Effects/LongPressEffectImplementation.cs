@@ -6,6 +6,7 @@ using SpeakDanish.Platforms.Android.Effects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,9 @@ namespace SpeakDanish.Platforms.Android.Effects
 {
     public class LongPressEffectImplementation : PlatformEffect
     {
+        private const int LongPressThreshold = 500;
+        private readonly Stopwatch stopwatch = new Stopwatch();
+
         protected override void OnAttached()
         {
             if (Container != null)
@@ -43,9 +47,18 @@ namespace SpeakDanish.Platforms.Android.Effects
                 {
                     case MotionEventActions.Down:
                         effect?.OnPressed();
+                        stopwatch.Reset();
+                        stopwatch.Start();
                         break;
                     case MotionEventActions.Up:
-                        effect?.OnReleased();
+                        if(stopwatch.ElapsedMilliseconds > LongPressThreshold)
+                            effect?.OnReleased();
+                        else
+                            effect?.OnCancelled();
+                        break;
+                    case MotionEventActions.Cancel:
+                        effect?.OnCancelled();
+                        stopwatch.Stop();
                         break;
                 }
             }

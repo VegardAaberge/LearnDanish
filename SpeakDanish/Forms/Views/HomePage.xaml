@@ -107,7 +107,10 @@
                 WidthRequest="250">
 
                 <contentViews:CircleIcon.Effects>
-                    <effects:LongPressEffect Pressed="LongPressEffect_Pressed" Released="LongPressEffect_Released" />
+                    <effects:LongPressEffect
+                        Cancelled="LongPressEffect_Cancelled"
+                        Pressed="LongPressEffect_Pressed"
+                        Released="LongPressEffect_Released" />
                 </contentViews:CircleIcon.Effects>
 
 
@@ -146,12 +149,12 @@
 
             <Grid Margin="0,5,0,10" ColumnDefinitions="*,50">
 
-                <contentViews:EntryOutlined
+                <Entry
                     Grid.Column="0"
                     HeightRequest="{OnPlatform iOS=40}"
                     Placeholder=""
                     PlaceholderColor="SlateGray"
-                    Text="{Binding TranscribedText, Mode=TwoWay}"
+                    Text="{Binding TranscribedText, Mode=OneWay}"
                     VerticalOptions="Center" />
 
                 <CheckBox

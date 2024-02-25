@@ -6,11 +6,9 @@ namespace SpeakDanish.Contracts.Data
 {
 	public interface ISpeechService<T> where T: class
 	{
-        Task<Response<string>> TranscribeDanishSpeechFromFile(string filepath);
-
         Task StartTranscribingDanish(Action<T> recognizedCallback);
 
-        Task StopTranscribingDanish();
+        Task StopTranscribingDanish(bool isCancelled);
     }
 }
 

@@ -16,6 +16,7 @@ using static SpeakDanish.Helpers.AppEvents;
 using SpeakDanish.Domain.Utility;
 using SpeakDanish.Forms.Services;
 using SpeakDanish.Forms.Views;
+using CommunityToolkit.Maui.Alerts;
 
 namespace SpeakDanish.ViewModels
 {
@@ -331,8 +332,24 @@ namespace SpeakDanish.ViewModels
                     TranscribedText = null;
                     await _audioUseCase.StartTranscribingDanish(CountdownTimer_Elapsed, result =>
                     {
-                        TranscribedText = result;
-                        Similarity = StringUtils.JaroWinklerDistanceSimilarity(Sentence, result);
+                        if (result.Success)
+                        {
+                            TranscribedText = result.Data?.ToString() ?? "";
+
+                            var trimmedSentence = Sentence.Trim(new char[] { ' ', '.', '!', '?' }).ToLower();
+                            Similarity = StringUtils.GetSimilarity(trimmedSentence, TranscribedText.ToLower());
+                        }
+                        else
+                        {
+                            TranscribedText = "";
+                            Similarity = 0;
+                            Toast.Make("Failed: " + result.Message, CommunityToolkit.Maui.Core.ToastDuration.Short);
+                        }
+                        
+                        IsBusy = false;
+                        CountSeconds = 0;
+                        OnPropertyChanged(nameof(CircleIcon));
+                        OnPropertyChanged(nameof(CanSave));
                     });
                 }
                 else
@@ -360,11 +377,11 @@ namespace SpeakDanish.ViewModels
             CountSeconds = CountSeconds + 1;
             if (_countSeconds > 20)
             {
-                await StopRecordingAsync();
+                await StopRecordingAsync(false);
             }
         }
 
-        public async Task StopRecordingAsync()
+        public async Task StopRecordingAsync(bool isCancelled)
         {
             try
             {
@@ -373,12 +390,15 @@ namespace SpeakDanish.ViewModels
 
                 if (!IsTranscribingAccepted)
                 {
-                    await _audioUseCase.StopTranscribingDanish();
+                    await _audioUseCase.StopTranscribingDanish(isCancelled);
                 }
                 else
                 {
                     var response = await _audioUseCase.StopRecordingAsync(_filepathCache);
-                    if (response.Success)
+                    if (isCancelled)
+                    {
+                    }
+                    else if (response.Success)
                     {
                         Filepath = _filepathCache;
                         RecordingLength = CountSeconds;

@@ -31,9 +31,9 @@ namespace SpeakDanish.Contracts.Domain
 
         Task<Response> PlayAudioAsync(string filepath, ElapsedEventHandler volumeTimerCallback);
 
-        Task StartTranscribingDanish(ElapsedEventHandler countTimer, Action<string> recognizedCallback);
+        Task StartTranscribingDanish(ElapsedEventHandler countTimer, Action<Response<string>> recognizedCallback);
 
-        Task StopTranscribingDanish();
+        Task StopTranscribingDanish(bool isCancelled);
     }
 }
 

@@ -13,17 +13,18 @@ using SpeakDanish.Contracts.Domain;
 using SpeakDanish.Contracts.Shared;
 using SpeakDanish.Contracts.Data;
 using SpeakDanish.Data.Api;
+using CommunityToolkit.Maui.Media;
 
 namespace SpeakDanish.Domain.Services
 {
     public class RecordingService : IRecordingService<Recording>
     {
         private ISpeakDanishDatabase _database;
-        private ISpeechService<TranscriptionResult> _speechService;
+        private ISpeechService<SpeechToTextResult> _speechService;
 
         public RecordingService(
             ISpeakDanishDatabase speakDanishDatabase,
-            ISpeechService<TranscriptionResult> speechService)
+            ISpeechService<SpeechToTextResult> speechService)
         {
             _database = speakDanishDatabase;
             _speechService = speechService;

@@ -11,6 +11,7 @@ namespace SpeakDanish.Forms.Effects
     {
         public event EventHandler Pressed;
         public event EventHandler Released;
+        public event EventHandler Cancelled;
 
         public LongPressEffect() 
         {
@@ -24,6 +25,11 @@ namespace SpeakDanish.Forms.Effects
         internal void OnReleased()
         {
             Released?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnCancelled()
+        {
+            Cancelled?.Invoke(this, EventArgs.Empty);
         }
     }
 }

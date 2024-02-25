@@ -13,6 +13,10 @@ using Xamarin.Essentials.Interfaces;
 using SpeakDanish.Forms.Services;
 using SpeakDanish.Controls.Entries;
 using SpeakDanish.Forms.Effects;
+using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Media;
+
+
 
 
 #if ANDROID
@@ -30,6 +34,7 @@ namespace SpeakDanish
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .RegisterTypes()
                 .RegisterPlatformTypes()
                 .RegisterPlatformHandlers()
@@ -53,13 +58,14 @@ namespace SpeakDanish
             mauiAppBuilder.Services.AddSingleton<INavigationService, NavigationService>();
             mauiAppBuilder.Services.AddSingleton<ISpeakDanishDatabase, SpeakDanishDatabase>();
             mauiAppBuilder.Services.AddSingleton<ISpeechRecognizer, SpeechRecognizerWrapper>();
-            mauiAppBuilder.Services.AddSingleton<ISpeechService<TranscriptionResult>, SpeechService>();
+            mauiAppBuilder.Services.AddSingleton<ISpeechService<SpeechToTextResult>, ToolkitSpeechService>();
             mauiAppBuilder.Services.AddSingleton<ISentenceService, SentenceService>();
             mauiAppBuilder.Services.AddSingleton<IRecordingService<Recording>, RecordingService>();
 
             mauiAppBuilder.Services.AddTransient<IAudioUseCase, AudioUseCase>();
             mauiAppBuilder.Services.AddTransient<Microsoft.Maui.Media.ITextToSpeech, TextToSpeechImplementation>();
             mauiAppBuilder.Services.AddTransient<IPermissions, PermissionsImplementation>();
+            mauiAppBuilder.Services.AddSingleton<ISpeechToText>(SpeechToText.Default);
 
             mauiAppBuilder.Services.AddTransient<HomeViewModel>();
             mauiAppBuilder.Services.AddTransient<RecordingsViewModel>();

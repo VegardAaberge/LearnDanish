@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.ML.Data;
+using Microsoft.ML;
+using System;
 using System.IO;
 
 namespace SpeakDanish.Domain.Utility
@@ -44,67 +46,94 @@ namespace SpeakDanish.Domain.Utility
             return distanceMatrix[referenceStringLength, inputStringLength];
         }
 
-        public static int JaroWinklerDistanceSimilarity(string referenceString, string inputString)
+        public static int GetSimilarity(string referenceString, string inputString)
         {
-            var similarityFraction = 1 - (double)JaroWinklerDistance(referenceString, inputString) / referenceString.Length;
+            // Initialize ML.NET context
+            var mlContext = new MLContext();
 
-            //var adjustedSimilarity = Math.Max(0, (similarityFraction - 1 / 4) * (4 / 3));
+            // Define data structure for input data
+            var data = new[] {
+                new TextData { Text = referenceString },
+                new TextData { Text = inputString }
+            };
 
-            return (int)Math.Round(similarityFraction * 20) * 5;
+            // Load data into IDataView
+            var dataView = mlContext.Data.LoadFromEnumerable(data);
+
+            // Create a text featurizing pipeline
+            var textPipeline = mlContext.Transforms.Text.FeaturizeText("Features", nameof(TextData.Text));
+
+            // Transform the text data to numeric vectors
+            var transformedData = textPipeline.Fit(dataView).Transform(dataView);
+
+            // Extract the feature vectors
+            VBuffer<float>[] features = mlContext.Data.CreateEnumerable<TransformedTextData>(transformedData, reuseRowObject: false)
+                                                       .Select(x => x.Features)
+                                                       .ToArray();
+
+            // Compute cosine similarity
+            var similarity = CosineSimilarity(features[0], features[1]);
+
+            // Scale to 0-100 range
+            int similarityScore = (int)(similarity * 100);
+
+            return similarityScore;
         }
 
-        public static double JaroWinklerDistance(string referenceString, string inputString)
+        private static double CosineSimilarity(VBuffer<float> vector1, VBuffer<float> vector2)
         {
-            int m = 0;
-            int t = 0;
-            int l1 = referenceString.Length;
-            int l2 = inputString.Length;
-            int range = Math.Max(0, Math.Max(l1, l2) / 2 - 1);
+            double dotProduct = 0.0;
+            double magnitude1 = 0.0;
+            double magnitude2 = 0.0;
 
-            bool[] referenceStringFlags = new bool[l1];
-            bool[] inputStringFlags = new bool[l2];
+            var indices1 = vector1.GetIndices();
+            var values1 = vector1.GetValues();
+            var indices2 = vector2.GetIndices();
+            var values2 = vector2.GetValues();
 
-            for (int i = 0; i < l1; i++)
+            // Calculate dot product
+            for (int i = 0; i < values1.Length; i++)
             {
-                int start = Math.Max(0, i - range);
-                int end = Math.Min(i + range + 1, l2);
-                for (int j = start; j < end; j++)
+                int index1 = indices1.Length > i ? indices1[i] : i;
+                for (int j = 0; j < values2.Length; j++)
                 {
-                    if (inputStringFlags[j]) continue;
-                    if (referenceString[i] != inputString[j]) continue;
-                    referenceStringFlags[i] = true;
-                    inputStringFlags[j] = true;
-                    m++;
-                    break;
+                    int index2 = indices2.Length > j ? indices2[j] : j;
+                    if (index1 == index2)
+                    {
+                        dotProduct += values1[i] * values2[j];
+                        break;
+                    }
                 }
             }
 
-            if (m == 0)
+            // Calculate magnitudes
+            for (int i = 0; i < values1.Length; i++)
+            {
+                magnitude1 += values1[i] * values1[i];
+            }
+            for (int j = 0; j < values2.Length; j++)
+            {
+                magnitude2 += values2[j] * values2[j];
+            }
+
+            // Avoid division by zero
+            if (magnitude1 == 0 || magnitude2 == 0)
+            {
                 return 0;
-
-            int k = 0;
-            for (int i = 0; i < l1; i++)
-            {
-                if (!referenceStringFlags[i]) continue;
-                while (!inputStringFlags[k]) k++;
-                if (referenceString[i] != inputString[k]) t++;
-                k++;
             }
 
-            double mRatio = (double)m / l1;
-            double tRatio = (double)t / m;
-            double jaro = (mRatio + (1 - tRatio) * mRatio);
-            double prefix = 0;
+            // Calculate and return cosine similarity
+            return dotProduct / (Math.Sqrt(magnitude1) * Math.Sqrt(magnitude2));
+        }
 
-            int minLength = Math.Min(4, l1);
-            for (int i = 0; i < minLength; i++)
-            {
-                if (referenceString[i] != inputString[i])
-                    break;
-                prefix++;
-            }
+        private class TextData
+        {
+            public string Text { get; set; }
+        }
 
-            return jaro + (prefix * 0.1 * (1 - jaro));
+        private class TransformedTextData
+        {
+            public VBuffer<float> Features { get; set; }
         }
 
         public static string CreateUniqueFileName(string sentence)

@@ -10,12 +10,12 @@ using SpeakDanish.Domain.Models;
 
 namespace SpeakDanish.Data.Api
 {
-    public class SpeechService : ISpeechService<TranscriptionResult>
+    public class MicrosoftSpeechService : ISpeechService<TranscriptionResult>
     {
         private ISpeechRecognizer _recognizer;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
-        public SpeechService(ISpeechRecognizer recognizer)
+        public MicrosoftSpeechService(ISpeechRecognizer recognizer)
 		{
             _recognizer = recognizer;
         }
@@ -40,8 +40,8 @@ namespace SpeakDanish.Data.Api
                     Duration = e.Result.Duration
                 });
             };
-            _recognizer.SessionStopped += async (s, e) => await StopTranscribingDanish();
-            _recognizer.Canceled += async (s, e) => await StopTranscribingDanish();
+            _recognizer.SessionStopped += async (s, e) => await StopTranscribingDanish(false);
+            _recognizer.Canceled += async (s, e) => await StopTranscribingDanish(true);
 
             await _recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
             _isTranscribing = true;
@@ -53,7 +53,7 @@ namespace SpeakDanish.Data.Api
             }).ConfigureAwait(false);
         }
 
-        public async Task StopTranscribingDanish()
+        public async Task StopTranscribingDanish(bool isCancelled)
         {
             await _semaphore.WaitAsync();
             try

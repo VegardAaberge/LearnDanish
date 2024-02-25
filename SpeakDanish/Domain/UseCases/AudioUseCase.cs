@@ -10,6 +10,7 @@ using SpeakDanish.Contracts.Shared;
 using SpeakDanish.Contracts.Data;
 using SpeakDanish.Data.Api;
 using Microsoft.CognitiveServices.Speech;
+using CommunityToolkit.Maui.Media;
 
 namespace SpeakDanish.Domain.UseCases
 {
@@ -18,7 +19,7 @@ namespace SpeakDanish.Domain.UseCases
         private EI.IPermissions _permissions;
         private ITtsDataInstaller _ttsDataInstaller;
         private IAudioRecorder _audioRecorder;
-        private ISpeechService<TranscriptionResult> _speechServices;
+        private ISpeechService<SpeechToTextResult> _speechServices;
         private ITextToSpeech _textToSpeech;
 
         private CancellationTokenSource _cancelSpeakTokenSource = new CancellationTokenSource();
@@ -27,7 +28,7 @@ namespace SpeakDanish.Domain.UseCases
             EI.IPermissions permissions,
             ITtsDataInstaller ttsDataInstaller,
             IAudioRecorder audioRecorder,
-            ISpeechService<TranscriptionResult> speechServices,
+            ISpeechService<SpeechToTextResult> speechServices,
             ITextToSpeech textToSpeech)
 		{
             _permissions = permissions;
@@ -103,8 +104,10 @@ namespace SpeakDanish.Domain.UseCases
                 return response;
 
             var filepath = await _audioRecorder.StartRecordingAudio(filename);
-            StartTimer(countTimer, 1000);
+            if (filepath == null)
+                return new Response<string>(false, "Failed to record audio");
 
+            StartTimer(countTimer, 1000);
             return new Response<string>
             {
                 Success = true,
@@ -130,7 +133,7 @@ namespace SpeakDanish.Domain.UseCases
             return new Response(true);
         }
 
-        public async Task StartTranscribingDanish(ElapsedEventHandler countTimer, Action<string> recognizedCallback)
+        public async Task StartTranscribingDanish(ElapsedEventHandler countTimer, Action<Response<string>> recognizedCallback)
         {
             var response = await VerifyUserPermissions();
             if (!response.Success)
@@ -140,18 +143,25 @@ namespace SpeakDanish.Domain.UseCases
 
             await _speechServices.StartTranscribingDanish(result =>
             {
-                if(result.Reason == ResultReason.RecognizedSpeech)
+                if (result.IsSuccessful)
                 {
-                    recognizedCallback(result.Text);
+                    recognizedCallback(new Response<string> { 
+                        Success = true, 
+                        Data = result.Text 
+                    });
+                }
+                else
+                {
+                    recognizedCallback(new Response<string>(false, "Failed to transcribe"));
                 }
             });
         }
 
-        public async Task StopTranscribingDanish()
+        public async Task StopTranscribingDanish(bool isCancelled)
         {
             StopTimer();
 
-            await _speechServices.StopTranscribingDanish();
+            await _speechServices.StopTranscribingDanish(isCancelled);
         }
 
         private void StartTimer(ElapsedEventHandler countTimer, int duration)
