@@ -1,33 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Threading.Tasks;
-using SpeakDanish.Data;
-using SpeakDanish.Data.Mappers;
+﻿using SpeakDanish.Data.Mappers;
 using SpeakDanish.Data.Models;
-using SpeakDanish.Domain;
 using SpeakDanish.Domain.Models;
 using SpeakDanish.Data.Database;
 using SpeakDanish.Contracts.Domain;
-using SpeakDanish.Contracts.Shared;
-using SpeakDanish.Contracts.Data;
-using SpeakDanish.Data.Api;
-using CommunityToolkit.Maui.Media;
 
 namespace SpeakDanish.Domain.Services
 {
     public class RecordingService : IRecordingService<Recording>
     {
         private ISpeakDanishDatabase _database;
-        private ISpeechService<SpeechToTextResult> _speechService;
 
         public RecordingService(
-            ISpeakDanishDatabase speakDanishDatabase,
-            ISpeechService<SpeechToTextResult> speechService)
+            ISpeakDanishDatabase speakDanishDatabase)
         {
             _database = speakDanishDatabase;
-            _speechService = speechService;
         }
 
         public async Task<List<Recording>> GetRecordingsAsync()

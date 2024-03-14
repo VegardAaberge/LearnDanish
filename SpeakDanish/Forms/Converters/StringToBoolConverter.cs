@@ -11,7 +11,7 @@ namespace SpeakDanish.Converters
         {
             if (value?.ToString() is string valueString)
                 return valueString.Trim().Length > 0;
-            return value;
+            return false;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

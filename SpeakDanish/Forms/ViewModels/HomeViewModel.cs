@@ -230,7 +230,7 @@ namespace SpeakDanish.ViewModels
 
         public bool CanSave
         {
-            get => !string.IsNullOrEmpty(Filepath) && IsRecordingAccepted;
+            get => IsRecordingAccepted;
         }
 
         public string TranscribedText {
